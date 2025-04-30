@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_rigidbody;
     private Vector3 destPos;
     private Quaternion lookTarget;
+
     private bool move = false;
 
     void Start()
