@@ -4,63 +4,72 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    Vector3 destPos;
-    Vector3 dir;
-    Quaternion lookTarget;
-    public float speed = 1.0f;
+    public float speed = 3f;
     public LayerMask groundMask;
 
-    bool move = false;
-
-    Animator m_Animator;
+    private Animator m_animator;
+    private Rigidbody m_rigidbody;
+    private Vector3 destPos;
+    private Quaternion lookTarget;
+    private bool move = false;
 
     void Start()
     {
-        m_Animator = GetComponent<Animator>();
+        m_rigidbody = GetComponent<Rigidbody>();
+        m_animator = GetComponent<Animator>();
     }
+
     void Update()
     {
-        // 왼쪽 마우스 버튼 클릭시
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;       
-            
-            
-            // ray와 닿은 물체가 있는지 검사
-            if(Physics.Raycast(ray, out hit, 100f, groundMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundMask))
             {
-                print("Ground clicked" + hit.transform.name);
-
-                // hit.point는 마우스 클릭한 곳의 월드 좌표
-                destPos = new Vector3(hit.point.x, transform.position.y, hit.point.z);
-                
+                destPos = hit.point;
                 move = true;
             }
         }
-        Move();
+        m_animator.SetBool("isRunning", move);
     }
-    void Move()
-    {
-        if (move)
-        {
-            // 현재 위치와 목표 위치의 방향 벡터
-            dir = destPos - transform.position;
-            // 바라 보아야 할 곳의 Quaternion
-            lookTarget = Quaternion.LookRotation(dir);
-            // 플레이어가 이동할 방향으로 Time.deltaTime * speed의 속도로 움직임
-            transform.position += dir.normalized * Time.deltaTime * speed;
-            // 현재 방향에서 움직여야 할 방향으로 부드럽게 회전
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookTarget, 0.25f);
-            
-            // 일정 거리 이내면 목표 도달로 간주
-            if(dir.magnitude <= 0.05f)
-            {
-                move = false;
-            }
 
-            // isRunning 애니메이션
-            m_Animator.SetBool("isRunning", move);
+    void FixedUpdate()
+    {
+        if (!move) return;
+
+        Vector3 dir = destPos - transform.position;
+        Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
+
+        // 회전: 바라보는 방향으로 부드럽게 회전
+        if (flatDir.sqrMagnitude > 0.001f)  // 방향이 0이 아닐 때만 회전
+        {
+            lookTarget = Quaternion.LookRotation(flatDir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, lookTarget, Time.deltaTime * 10f); // 회전 속도 조절
         }
+
+        // 이동
+        transform.position += flatDir.normalized * speed * Time.deltaTime;
+
+        // 목적지 도착 시 멈춤
+        if (flatDir.magnitude <= 0.05f)
+        {
+            move = false;
+            return;
+        }
+
+      
+    }
+
+    void OnCollisionEnter(Collision collision)
+    {
+        if ((groundMask.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            // 바닥이므로 충돌 무시
+            return;
+        }
+        // 어떤 물체와 부딪히든 멈춤
+        move = false;
+        m_animator.SetBool("isRunning", false);
+        print("충돌");
     }
 }
