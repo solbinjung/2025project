@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Quaternion lookTarget;
 
     private bool move = false;
+    public bool canControl = true;
 
     void Start()
     {
@@ -22,6 +23,8 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (!canControl) return;
+
         if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -72,5 +75,10 @@ public class PlayerController : MonoBehaviour
         move = false;
         m_animator.SetBool("isRunning", false);
         print("Ãæµ¹");
+    }
+    public void StopMovement()
+    {
+        move = false;
+        m_animator.SetBool("isRunning", false);
     }
 }
