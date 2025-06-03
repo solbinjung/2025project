@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
@@ -15,15 +16,34 @@ public class PlayerController : MonoBehaviour
     private bool move = false;
     public bool canControl = true;
 
+    private PlayerSkillManager skillManager;
+
     void Start()
     {
+        skillManager = GetComponent<PlayerSkillManager>();
+
         m_rigidbody = GetComponent<Rigidbody>();
         m_animator = GetComponent<Animator>();
     }
-
     void Update()
     {
+        HandleMovement();
+        HandleSkillInput();
+    }
+    void HandleSkillInput()
+    {
+        if (Input.GetKeyDown(KeyCode.Q)) skillManager.UseSkill(KeyCode.Q);
+        if (Input.GetKeyDown(KeyCode.W)) skillManager.UseSkill(KeyCode.W);
+        if (Input.GetKeyDown(KeyCode.E)) skillManager.UseSkill(KeyCode.E);
+        if (Input.GetKeyDown(KeyCode.R)) skillManager.UseSkill(KeyCode.R);
+        if (Input.GetKeyDown(KeyCode.T)) skillManager.UseSkill(KeyCode.T);
+    }
+    void HandleMovement()
+    {
         if (!canControl) return;
+
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -60,8 +80,6 @@ public class PlayerController : MonoBehaviour
             move = false;
             return;
         }
-
-      
     }
 
     void OnCollisionEnter(Collision collision)
