@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a8bdafce7da269843a40f6674e8f5ece, type: 3}
+  m_Script: {fileID: 11500000, guid: a9228a3d674c59b40a68b84c6e6c0f26, type: 3}
   m_Name: Lightning Bolt
   m_EditorClassIdentifier: 
   skillName: Lightning Bolt
-  skillDescription: Skill Description
-  icon: {fileID: 0}
+  skillDescription: skill description
+  icon: {fileID: 21300000, guid: 2cefe264b16e6254aa3fbc539d91bdc5, type: 3}
+  animationTriggerName: LightningBolt

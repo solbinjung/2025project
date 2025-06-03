@@ -3464,6 +3464,7 @@ MonoBehaviour:
   player: {fileID: 1722599600}
   mainCamera: {fileID: 330585543}
   virtualCamera: {fileID: 509565785}
+  uiRoot: {fileID: 1631069442}
 --- !u!4 &280575320
 Transform:
   m_ObjectHideFlags: 0
@@ -6531,7 +6532,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 871885163}
-  m_Father: {fileID: 1719630295}
+  m_Father: {fileID: 1631069446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -13287,7 +13288,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1015555478}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -13297,7 +13298,7 @@ RectTransform:
   - {fileID: 2133724119}
   - {fileID: 1570846703}
   - {fileID: 1994924145}
-  m_Father: {fileID: 1719630295}
+  m_Father: {fileID: 1631069446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -20367,6 +20368,8 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1719630295}
+  - {fileID: 491747346}
+  - {fileID: 1015555479}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -21627,7 +21630,7 @@ GameObject:
   - component: {fileID: 1719630296}
   - component: {fileID: 1719630298}
   m_Layer: 5
-  m_Name: Game Panel
+  m_Name: Card Panel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21645,8 +21648,6 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 491747346}
-  - {fileID: 1015555479}
   - {fileID: 300699165}
   m_Father: {fileID: 1631069446}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27995,6 +27996,12 @@ CapsuleCollider:
   m_Height: 1.9202694
   m_Direction: 1
   m_Center: {x: 0, y: 0.9322931, z: 0.040037155}
+--- !u!95 &829134890926028393 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 990803751556671489, guid: c089cb84799b0cf4f97272cc0d823481,
+    type: 3}
+  m_PrefabInstance: {fileID: 6066668387652807775}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &829134890926028396
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -28007,6 +28014,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d87f1be9b3d12942b4996a7fe6a8da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 829134890926028393}
+  QSlotImage: {fileID: 1757573417}
+  WSlotImage: {fileID: 1604198662}
+  ESlotImage: {fileID: 2133724120}
+  RSlotImage: {fileID: 1570846704}
+  TSlotImage: {fileID: 1994924146}
 --- !u!1001 &6066668387652807775
 PrefabInstance:
   m_ObjectHideFlags: 0

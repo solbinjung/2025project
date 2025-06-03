@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public GameObject player;
     public GameObject mainCamera;
     public GameObject virtualCamera;
+    public GameObject uiRoot;
 
     void Awake()
     {
@@ -19,7 +20,6 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // 플레이어와 카메라도 DontDestroy 설정
             if (player != null)
                 DontDestroyOnLoad(player);
 
@@ -28,6 +28,9 @@ public class GameManager : MonoBehaviour
 
             if (virtualCamera != null)
                 DontDestroyOnLoad(virtualCamera);
+
+            if (uiRoot != null)
+                DontDestroyOnLoad(uiRoot);
 
             // 씬 로드 이벤트 등록
             SceneManager.sceneLoaded += OnSceneLoaded;
