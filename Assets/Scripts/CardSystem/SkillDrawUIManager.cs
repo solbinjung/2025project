@@ -23,13 +23,11 @@ public class SkillDrawUIManager : MonoBehaviour
 
         if (player != null)
             player.canControl = false;
-
-        // 기존 카드 제거 (중복 방지)
+        // 기존 카드 제거(중복 방지)
         foreach (Transform child in skillCards)
         {
             Destroy(child.gameObject);
         }
-
         // 랜덤 카드 생성
         for (int i = 0; i < 3; i++)
         {

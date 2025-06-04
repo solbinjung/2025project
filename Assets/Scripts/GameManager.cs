@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
+        Debug.Log("OnSceneLoaded 호출됨");
         // 씬 내 SpawnPoint 찾기
         GameObject spawn = GameObject.Find("SpawnPoint");
         if (spawn != null && player != null)
@@ -60,7 +61,7 @@ public class GameManager : MonoBehaviour
             PlayerController controller = player.GetComponent<PlayerController>();
             if (controller != null)
             {
-                controller.StopMovement();
+                //controller.StopMovement();
                 controller.canControl = false;  // 3초간 입력 막기
                 StartCoroutine(ReenableControl(controller, 3f)); // 3초 후 재활성화
             }
@@ -72,10 +73,13 @@ public class GameManager : MonoBehaviour
         if (Instance == this)
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
+
     IEnumerator ReenableControl(PlayerController controller, float delay)
     {
+        Debug.Log("캐릭터 입력 재활성화 대기 시작");
         yield return new WaitForSeconds(delay);
         controller.canControl = true;
+        Debug.Log("캐릭터 입력 가능해짐");
     }
 }
 

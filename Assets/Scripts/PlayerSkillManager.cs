@@ -58,7 +58,6 @@ public class PlayerSkillManager : MonoBehaviour
             }
         }
     }
-
     public void UseSkill(KeyCode key)
     {
         if (skillMap.TryGetValue(key, out SkillData skill))

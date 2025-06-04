@@ -12,11 +12,13 @@ public class PlayerController : MonoBehaviour
     private Rigidbody m_rigidbody;
     private Vector3 destPos;
     private Quaternion lookTarget;
+    private PlayerCombat m_playerCombat;
 
     private bool move = false;
     public bool canControl = true;
 
     private PlayerSkillManager skillManager;
+
 
     void Start()
     {
@@ -24,6 +26,7 @@ public class PlayerController : MonoBehaviour
 
         m_rigidbody = GetComponent<Rigidbody>();
         m_animator = GetComponent<Animator>();
+        m_playerCombat = GetComponent<PlayerCombat>();
     }
     void Update()
     {
@@ -40,13 +43,12 @@ public class PlayerController : MonoBehaviour
     }
     void HandleMovement()
     {
-        if (!canControl) return;
-
-        if (EventSystem.current.IsPointerOverGameObject())
-            return;
+        if (!canControl || m_playerCombat.IsBlocking()) return;
 
         if (Input.GetMouseButtonDown(0))
-        {
+        {  
+            //if (EventSystem.current.IsPointerOverGameObject())
+            //    return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundMask))
             {
@@ -94,9 +96,9 @@ public class PlayerController : MonoBehaviour
         m_animator.SetBool("isRunning", false);
         print("Ãæµ¹");
     }
-    public void StopMovement()
-    {
-        move = false;
-        m_animator.SetBool("isRunning", false);
-    }
+    //public void StopMovement()
+    //{
+    //    move = false;
+    //    m_animator.SetBool("isRunning", false);
+    //}
 }
