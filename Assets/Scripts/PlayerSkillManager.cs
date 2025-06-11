@@ -51,7 +51,7 @@ public class PlayerSkillManager : MonoBehaviour
                 if (keyToSlotImage.TryGetValue(key, out var slotImage) && skill.icon != null)
                 {
                     slotImage.sprite = skill.icon;
-                    slotImage.color = Color.white; // 혹시 기본적으로 투명하거나 꺼진 상태였다면
+                    slotImage.color = Color.white; 
                 }
 
                 return;

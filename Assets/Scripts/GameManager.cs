@@ -61,7 +61,7 @@ public class GameManager : MonoBehaviour
             PlayerController controller = player.GetComponent<PlayerController>();
             if (controller != null)
             {
-                //controller.StopMovement();
+                controller.StopMovement();
                 controller.canControl = false;  // 3초간 입력 막기
                 StartCoroutine(ReenableControl(controller, 3f)); // 3초 후 재활성화
             }
@@ -69,7 +69,6 @@ public class GameManager : MonoBehaviour
     }
     void OnDestroy()
     {
-        // 메모리 누수 방지
         if (Instance == this)
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
