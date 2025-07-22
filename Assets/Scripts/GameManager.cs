@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour
     public GameObject mainCamera;
     public GameObject virtualCamera;
     public GameObject uiRoot;
+    public GameObject eventSystem;
 
     void Awake()
     {
@@ -31,6 +32,9 @@ public class GameManager : MonoBehaviour
 
             if (uiRoot != null)
                 DontDestroyOnLoad(uiRoot);
+            
+            if (eventSystem != null)
+                DontDestroyOnLoad(eventSystem);
 
             // 씬 로드 이벤트 등록
             SceneManager.sceneLoaded += OnSceneLoaded;

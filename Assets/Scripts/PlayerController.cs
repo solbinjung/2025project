@@ -45,10 +45,8 @@ public class PlayerController : MonoBehaviour
     {
         if (!canControl || m_playerCombat.IsBlocking()) return;
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {  
-            if (EventSystem.current.IsPointerOverGameObject())
-                return;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundMask))
             {
