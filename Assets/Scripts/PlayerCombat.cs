@@ -1,50 +1,71 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 public class PlayerCombat : MonoBehaviour
 {
-    private Queue<Action> inputQueue = new Queue<Action>();
+    // 필드
+    private readonly Queue<Action> _inputQueue = new Queue<Action>();
 
     [Header("Settings")]
-    public bool canCombat = true;
-    public float attackCooldown = 0.5f;
-    public float dodgeDistance = 2f;
-    public float dodgeDuration = 0.3f;
-    public float blockDuration = 1.0f;
+    [SerializeField] private bool canCombat = true;
+    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float dodgeDistance = 2f;
+    [SerializeField] private float dodgeDuration = 0.3f;
+    [SerializeField] private float blockDuration = 1.0f;
+    [SerializeField] private int damage = 10;
 
+    private bool isAttackActive = false;
     private bool isDodging = false;
     private bool isBlocking = false;
     private float lastAttackTime = -Mathf.Infinity;
     private Vector3 dodgeDirection;
 
-    private PlayerController m_playerController;
-    private Animator m_animator;
+    private PlayerController playerController;
+    private Animator animator;
+    private CharacterStats stats;
+    private MeleeHitBox hitbox;
 
-    public enum PlayerState // 행동 중첩 방지
+    public enum PlayerState
     {
         Idle,
         Attacking,
         Dodging,
         Blocking
     }
-    
+
     private PlayerState currentState = PlayerState.Idle;
 
-    void Start()
+
+    // 프로퍼티
+    public bool CanCombat => canCombat;
+    public float AttackCooldown => attackCooldown;
+    public float DodgeDistance => dodgeDistance;
+    public float DodgeDuration => dodgeDuration;
+    public float BlockDuration => blockDuration;
+    public int Damage => damage;
+    public bool IsAttackActive => isAttackActive;
+    public CharacterStats Stats => stats;
+
+    private void Start()
     {
-        m_playerController = GetComponent<PlayerController>();
-        m_animator = GetComponent<Animator>();
+        playerController = GetComponent<PlayerController>();
+        animator = GetComponent<Animator>();
+        stats = GetComponent<CharacterStats>();
+
+        if (hitbox != null)
+            hitbox.Initialize(this);
     }
-    void Update()
+
+    private void Update()
     {
         if (!canCombat) return;
 
-        // 상태가 Idle이면 입력 큐 먼저 확인
-        if (currentState == PlayerState.Idle && inputQueue.Count > 0)
+        // Idle 상태일 때만 입력 처리
+        if (currentState == PlayerState.Idle && _inputQueue.Count > 0)
         {
-            var nextAction = inputQueue.Dequeue();
+            var nextAction = _inputQueue.Dequeue();
             nextAction?.Invoke();
             return;
         }
@@ -54,45 +75,62 @@ public class PlayerCombat : MonoBehaviour
         HandleInput();
     }
 
-    void HandleInput()
+    // 입력
+    private void HandleInput()
     {
-        if (Input.GetMouseButtonDown(1)) // 우클릭: 공격
-        {
+        if (Input.GetMouseButtonDown(1))                // 우클릭: 공격
             QueueAction(TryAttack);
-        }
-        if (Input.GetKeyDown(KeyCode.Space)) // 스페이스: 회피
-        {
+
+        if (Input.GetKeyDown(KeyCode.Space))            // 스페이스: 회피
             QueueAction(() => StartCoroutine(Dodge()));
-        }
-        if (Input.GetKeyDown(KeyCode.LeftShift)) // 좌쉬프트: 방어
-        {
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))        // 좌쉬프트: 방어
             QueueAction(() => StartCoroutine(Block()));
-        }
     }
-    void QueueAction(Action action)
+
+    private void QueueAction(Action action)
     {
         if (currentState == PlayerState.Idle)
+        {
             action?.Invoke();
-        else if (inputQueue.Count < 1)  // 이미 하나 대기 중이면 더 안 넣음
-            inputQueue.Enqueue(action);
+        }
+        else if (_inputQueue.Count < 1)
+        {
+            _inputQueue.Enqueue(action);
+        }
     }
-    void TryAttack()
+
+    private void TryAttack()
     {
         if (Time.time - lastAttackTime < attackCooldown) return;
+
         currentState = PlayerState.Attacking;
         lastAttackTime = Time.time;
 
-        m_animator.SetTrigger("Attack0");
+        animator.SetTrigger("Attack0");
         Debug.Log("기본 공격");
 
-        StartCoroutine(ResetStateAfter(attackCooldown)); // 쿨타임 동안 Idle 전환 대기
+        StartCoroutine(ResetStateAfter(attackCooldown));
     }
-    IEnumerator Dodge() 
+
+    public void AttackStart()
+    {
+        isAttackActive = true;
+        hitbox?.ResetHitCache();
+    }
+
+    public void AttackEnd()
+    {
+        isAttackActive = false;
+    }
+
+    private IEnumerator Dodge()
     {
         currentState = PlayerState.Dodging;
         isDodging = true;
-        Vector3 cachedDirection = transform.forward; // 캐릭터 회전이 변하기 전에 방향을 캐싱
-        m_animator.SetTrigger("isDodging");
+
+        Vector3 cachedDirection = transform.forward;
+        animator.SetTrigger("isDodging");
 
         float elapsed = 0f;
         while (elapsed < dodgeDuration)
@@ -101,29 +139,35 @@ public class PlayerCombat : MonoBehaviour
             elapsed += Time.deltaTime;
             yield return null;
         }
+
         isDodging = false;
         currentState = PlayerState.Idle;
     }
-    IEnumerator Block()
+
+    private IEnumerator Block()
     {
         currentState = PlayerState.Blocking;
         isBlocking = true;
-        m_animator.SetBool("isBlocking", true);
+
+        animator.SetBool("isBlocking", true);
         Debug.Log("방어 시작");
 
         yield return new WaitForSeconds(blockDuration);
 
         isBlocking = false;
-        m_animator.SetBool("isBlocking", false);
+        animator.SetBool("isBlocking", false);
         Debug.Log("방어 종료");
 
         currentState = PlayerState.Idle;
     }
-    IEnumerator ResetStateAfter(float delay)
+
+    private IEnumerator ResetStateAfter(float delay)
     {
         yield return new WaitForSeconds(delay);
         currentState = PlayerState.Idle;
     }
+
     public bool IsBlocking() => isBlocking;
     public bool IsDodging() => isDodging;
 }
+

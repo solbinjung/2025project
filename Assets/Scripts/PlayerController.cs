@@ -8,11 +8,11 @@ public class PlayerController : MonoBehaviour
     public float speed = 3f;
     public LayerMask groundMask;
 
-    private Animator m_animator;
-    private Rigidbody m_rigidbody;
+    private Animator _animator;
+    private Rigidbody _rigidbody;
     private Vector3 destPos;
     private Quaternion lookTarget;
-    private PlayerCombat m_playerCombat;
+    private PlayerCombat _playerCombat;
 
     private bool move = false;
     public bool canControl = true;
@@ -24,9 +24,9 @@ public class PlayerController : MonoBehaviour
     {
         skillManager = GetComponent<PlayerSkillManager>();
 
-        m_rigidbody = GetComponent<Rigidbody>();
-        m_animator = GetComponent<Animator>();
-        m_playerCombat = GetComponent<PlayerCombat>();
+        _rigidbody = GetComponent<Rigidbody>();
+        _animator = GetComponent<Animator>();
+        _playerCombat = GetComponent<PlayerCombat>();
     }
     void Update()
     {
@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
     }
     void HandleMovement()
     {
-        if (!canControl || m_playerCombat.IsBlocking()) return;
+        if (!canControl || _playerCombat.IsBlocking()) return;
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {  
@@ -54,7 +54,7 @@ public class PlayerController : MonoBehaviour
                 move = true;
             }
         }
-        m_animator.SetBool("isRunning", move);
+        _animator.SetBool("isRunning", move);
     }
 
     void FixedUpdate()
@@ -91,12 +91,12 @@ public class PlayerController : MonoBehaviour
         }
         // ¾î¶² ¹°Ã¼¿Í ºÎµúÈ÷µç ¸ØÃã
         move = false;
-        m_animator.SetBool("isRunning", false);
+        _animator.SetBool("isRunning", false);
         print("Ãæµ¹");
     }
     public void StopMovement()
     {
         move = false;
-        m_animator.SetBool("isRunning", false);
+        _animator.SetBool("isRunning", false);
     }
 }
