@@ -15,6 +15,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float dodgeDuration = 0.3f;
     [SerializeField] private float blockDuration = 1.0f;
     [SerializeField] private int damage = 10;
+    [SerializeField] private MeleeHitBox hitbox;
 
     private bool isAttackActive = false;
     private bool isDodging = false;
@@ -25,7 +26,7 @@ public class PlayerCombat : MonoBehaviour
     private PlayerController playerController;
     private Animator animator;
     private CharacterStats stats;
-    private MeleeHitBox hitbox;
+    
 
     public enum PlayerState
     {
@@ -36,7 +37,6 @@ public class PlayerCombat : MonoBehaviour
     }
 
     private PlayerState currentState = PlayerState.Idle;
-
 
     // 프로퍼티
     public bool CanCombat => canCombat;
@@ -54,8 +54,13 @@ public class PlayerCombat : MonoBehaviour
         animator = GetComponent<Animator>();
         stats = GetComponent<CharacterStats>();
 
-        if (hitbox != null)
-            hitbox.Initialize(this);
+        if (hitbox == null)
+        hitbox = GetComponentInChildren<MeleeHitBox>();
+
+    if (hitbox != null)
+        hitbox.Initialize(this);
+    else
+        Debug.LogError("Hitbox가 연결되지 않았습니다!");
     }
 
     private void Update()
@@ -110,18 +115,35 @@ public class PlayerCombat : MonoBehaviour
         animator.SetTrigger("Attack0");
         Debug.Log("기본 공격");
 
+        StartCoroutine(PerformAttack());
+
         StartCoroutine(ResetStateAfter(attackCooldown));
     }
+    private IEnumerator PerformAttack()
+    {
+        // 공격 시작 전 딜레이 (애니메이션 타이밍 맞춤)
+        yield return new WaitForSeconds(0.1f); // 필요에 따라 조절 가능
 
+        // 공격 시작
+        AttackStart();
+
+        // 공격 활성화 지속 시간
+        yield return new WaitForSeconds(1f); // 필요에 따라 조절 가능
+
+        // 공격 종료
+        AttackEnd();
+    }
     public void AttackStart()
     {
         isAttackActive = true;
         hitbox?.ResetHitCache();
+        Debug.Log("공격 시작!");
     }
 
     public void AttackEnd()
     {
         isAttackActive = false;
+        Debug.Log("공격 종료!");
     }
 
     private IEnumerator Dodge()

@@ -5014,6 +5014,7 @@ MonoBehaviour:
   dodgeDuration: 0.3
   blockDuration: 1
   damage: 10
+  hitbox: {fileID: 2025479915343212810}
 --- !u!114 &2621767844426805520
 MonoBehaviour:
   m_ObjectHideFlags: 0

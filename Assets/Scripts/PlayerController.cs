@@ -92,7 +92,7 @@ public class PlayerController : MonoBehaviour
         // 어떤 물체와 부딪히든 멈춤
         move = false;
         _animator.SetBool("isRunning", false);
-        print("충돌");
+        //print("충돌");
     }
     public void StopMovement()
     {

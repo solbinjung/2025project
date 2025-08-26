@@ -5,18 +5,24 @@ using UnityEngine;
 public class EnemyCombat : MonoBehaviour
 {
     public CharacterStats Stats { get; private set; }
-    public int damage = 10;
+    [SerializeField] private int damage = 10;
+
+    private CharacterStats playerStats; 
 
     private void Awake()
     {
         Stats = GetComponent<CharacterStats>();
+
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+            playerStats = playerObj.GetComponent<CharacterStats>();
+        else
+            Debug.LogError("Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
     }
 
-    public void Attack(CharacterStats target)
+    public void Attack()
     {
-        if (target != null)
-        {
-            target.TakeDamage(damage);
-        }
+        if (playerStats != null)
+            playerStats.TakeDamage(damage);
     }
 }
