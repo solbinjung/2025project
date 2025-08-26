@@ -4,25 +4,33 @@ using UnityEngine;
 
 public class EnemyCombat : MonoBehaviour
 {
-    public CharacterStats Stats { get; private set; }
     [SerializeField] private int damage = 10;
+    [SerializeField] private float attackCooldown = 2f;
+    private float lastAttackTime;
 
-    private CharacterStats playerStats; 
+    private Animator animator;
 
     private void Awake()
     {
-        Stats = GetComponent<CharacterStats>();
-
-        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
-        if (playerObj != null)
-            playerStats = playerObj.GetComponent<CharacterStats>();
-        else
-            Debug.LogError("Player 태그를 가진 오브젝트를 찾을 수 없습니다!");
+        animator = GetComponent<Animator>();
     }
 
+    // 공격 실행 (거리/충돌 체크는 HitBox에서 처리)
     public void Attack()
     {
+        if (Time.time - lastAttackTime >= attackCooldown)
+        {
+            //animator.SetTrigger("doAttack");
+            lastAttackTime = Time.time;
+        }
+    }
+
+    // 애니메이션 이벤트에서 호출
+    public void DealDamage(PlayerStats playerStats)
+    {
         if (playerStats != null)
+        {
             playerStats.TakeDamage(damage);
+        }
     }
 }

@@ -4862,9 +4862,9 @@ GameObject:
   - component: {fileID: 8065941298958236617}
   - component: {fileID: 990803751556671489}
   - component: {fileID: 5582417323547982682}
-  - component: {fileID: 6220381891873051010}
-  - component: {fileID: 2621767844426805520}
   - component: {fileID: 1021785256128063408}
+  - component: {fileID: 6544700685630267579}
+  - component: {fileID: 2282902339230102073}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4996,39 +4996,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &6220381891873051010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5925489639057200854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 93f6603939b63f34cbb51e403506561e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canCombat: 1
-  attackCooldown: 0.5
-  dodgeDistance: 2
-  dodgeDuration: 0.3
-  blockDuration: 1
-  damage: 10
-  hitbox: {fileID: 2025479915343212810}
---- !u!114 &2621767844426805520
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5925489639057200854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4be58ea13e4a7dc4394d33cf527fe88d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHp: 100
-  _maxMp: 100
 --- !u!136 &1021785256128063408
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5052,6 +5019,39 @@ CapsuleCollider:
   m_Height: 1.8328732
   m_Direction: 1
   m_Center: {x: 0.0049752593, y: 0.92615515, z: -0.0008663535}
+--- !u!114 &6544700685630267579
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5925489639057200854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 747ee1dc4e50afa44b96199728996231, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHp: 100
+  _maxMp: 100
+--- !u!114 &2282902339230102073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5925489639057200854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dfa88aae8b8506342aa627bdbe08ecb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canCombat: 1
+  attackCooldown: 0.5
+  dodgeDistance: 2
+  dodgeDuration: 0.3
+  blockDuration: 1
+  damage: 10
+  hitbox: {fileID: 2025479915343212810}
 --- !u!1 &6053396040631332859
 GameObject:
   m_ObjectHideFlags: 0

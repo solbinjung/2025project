@@ -1004,10 +1004,12 @@ GameObject:
   m_Component:
   - component: {fileID: 4406899438610886770}
   - component: {fileID: 1935661690954717701}
-  - component: {fileID: 1764092262718584141}
-  - component: {fileID: 156381586297574987}
   - component: {fileID: 2778991031210102108}
   - component: {fileID: 6850690889741177142}
+  - component: {fileID: 4869734914614276308}
+  - component: {fileID: 8711136861031461483}
+  - component: {fileID: 6264551702569682300}
+  - component: {fileID: 6116217445877135928}
   m_Layer: 0
   m_Name: BlueDragon
   m_TagString: Untagged
@@ -1054,32 +1056,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &1764092262718584141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6787346476084806416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4be58ea13e4a7dc4394d33cf527fe88d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _maxHp: 100
-  _maxMp: 100
---- !u!114 &156381586297574987
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6787346476084806416}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2daf4e1e02b22c24da3ed02c840816bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &2778991031210102108
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1128,6 +1104,69 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &4869734914614276308
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787346476084806416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c7d63014f474b8418491f1f45a02688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _maxHp: 100
+  destroyDelay: 3
+--- !u!114 &8711136861031461483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787346476084806416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdffc2171670b634a900cc80d4ebbc78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 10
+  attackCooldown: 2
+--- !u!114 &6264551702569682300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787346476084806416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: efed078e9f8d21a4a89cf142cd415c59, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyCombat: {fileID: 8711136861031461483}
+--- !u!195 &6116217445877135928
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6787346476084806416}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 0
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!1 &6865185357581901672
 GameObject:
   m_ObjectHideFlags: 0

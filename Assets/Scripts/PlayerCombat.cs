@@ -25,7 +25,7 @@ public class PlayerCombat : MonoBehaviour
 
     private PlayerController playerController;
     private Animator animator;
-    private CharacterStats stats;
+    private EnemyStats stats;
     
 
     public enum PlayerState
@@ -46,13 +46,13 @@ public class PlayerCombat : MonoBehaviour
     public float BlockDuration => blockDuration;
     public int Damage => damage;
     public bool IsAttackActive => isAttackActive;
-    public CharacterStats Stats => stats;
+    public EnemyStats Stats => stats;
 
     private void Start()
     {
         playerController = GetComponent<PlayerController>();
         animator = GetComponent<Animator>();
-        stats = GetComponent<CharacterStats>();
+        stats = GetComponent<EnemyStats>();
 
         if (hitbox == null)
         hitbox = GetComponentInChildren<MeleeHitBox>();
@@ -113,7 +113,7 @@ public class PlayerCombat : MonoBehaviour
         lastAttackTime = Time.time;
 
         animator.SetTrigger("Attack0");
-        Debug.Log("기본 공격");
+        //Debug.Log("기본 공격");
 
         StartCoroutine(PerformAttack());
 
@@ -137,13 +137,13 @@ public class PlayerCombat : MonoBehaviour
     {
         isAttackActive = true;
         hitbox?.ResetHitCache();
-        Debug.Log("공격 시작!");
+        //Debug.Log("공격 시작!");
     }
 
     public void AttackEnd()
     {
         isAttackActive = false;
-        Debug.Log("공격 종료!");
+        //Debug.Log("공격 종료!");
     }
 
     private IEnumerator Dodge()
