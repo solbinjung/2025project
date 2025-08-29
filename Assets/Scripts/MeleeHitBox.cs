@@ -22,7 +22,7 @@ public class MeleeHitBox : MonoBehaviour
         if (_owner == null || !_owner.IsAttackActive) return;
         if (_hitThisSwing.Contains(other)) return;
 
-        CharacterStats targetStats = other.GetComponentInParent<CharacterStats>();
+        EnemyStats targetStats = other.GetComponentInParent<EnemyStats>();
         if (targetStats != null && targetStats != _owner.Stats)
         {
             targetStats.TakeDamage(_owner.Damage);

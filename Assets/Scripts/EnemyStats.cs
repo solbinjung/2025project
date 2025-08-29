@@ -1,6 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemyStats : MonoBehaviour
 {
@@ -13,19 +13,26 @@ public class EnemyStats : MonoBehaviour
     public int CurrentHp => _currentHp;
 
     private Animator animator;
+    private Collider col;
+    private NavMeshAgent agent;
+    private EnemyAI ai;
 
-    void Start()
+    void Awake()
     {
         _currentHp = _maxHp;
-
         animator = GetComponent<Animator>();
+        col = GetComponent<Collider>();
+        agent = GetComponent<NavMeshAgent>();
+        ai = GetComponent<EnemyAI>();
     }
 
-    public void TakeDamage(int damage) // 적에 의해 데미지를 입을 경우
+    public void TakeDamage(int damage)
     {
         _currentHp -= damage;
-        _currentHp = Mathf.Max(_currentHp, 0); // HP가 마이너스 값이 되지 않도록 하기 위해
-        //animator.SetTrigger("GetHit");
+        _currentHp = Mathf.Max(_currentHp, 0);
+
+        animator.SetTrigger("GetHit");
+
         Debug.Log($"{gameObject.name} took {damage} damage. Current HP: {_currentHp}");
 
         if (_currentHp <= 0)
@@ -34,14 +41,15 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    private void Die() // 플레이어 사망
+    private void Die()
     {
         Debug.Log($"{gameObject.name} died!");
-        //animator.SetTrigger("Die");
-        GetComponent<UnityEngine.AI.NavMeshAgent>().enabled = false;
-        GetComponent<Collider>().enabled = false;
+        animator.SetBool("isDead", true);
 
-        // 일정 시간 후 오브젝트 제거
+        if (col != null) col.enabled = false;
+        if (agent != null) agent.enabled = false;
+        if (ai != null) ai.OnDeath();
+
         StartCoroutine(RemoveAfterDelay());
     }
 

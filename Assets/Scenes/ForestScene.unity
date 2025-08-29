@@ -121,7 +121,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: a11a1059efe050f4f99f4064dda0a3ff, type: 2}
 --- !u!1 &365200727
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: d96853d663fb28744bc6f2573ad7ea03, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 5f7f7332a4dd199418721b975d998e12, type: 2}
   m_BuildHeightMesh: 0
 --- !u!1 &1790354986
 GameObject:
@@ -775,7 +775,7 @@ PrefabInstance:
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.1
+      value: 12.01
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
@@ -785,27 +785,27 @@ PrefabInstance:
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -6.13
+      value: 12.15
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.2512701
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.967917
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
@@ -815,7 +815,7 @@ PrefabInstance:
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -150.895
       objectReference: {fileID: 0}
     - target: {fileID: 4406899438610886770, guid: 4c5a5fe75499f9a4c8884db6de342bab,
         type: 3}
@@ -837,7 +837,49 @@ PrefabInstance:
       propertyPath: m_IsKinematic
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8083050314794782100, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: attackRange
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083050314794782100, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: attackDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083050314794782100, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: contactDamage
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083050314794782100, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: detectionRange
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 8083050314794782100, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: contactDamageCooldown
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8711136861031461483, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: patrolPoints.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8711136861031461483, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: patrolPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8711136861031461483, guid: 4c5a5fe75499f9a4c8884db6de342bab,
+        type: 3}
+      propertyPath: patrolPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 6264551702569682300, guid: 4c5a5fe75499f9a4c8884db6de342bab, type: 3}
+    - {fileID: 2420954408640303199, guid: 4c5a5fe75499f9a4c8884db6de342bab, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

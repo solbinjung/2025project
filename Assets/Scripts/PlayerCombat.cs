@@ -113,6 +113,7 @@ public class PlayerCombat : MonoBehaviour
         lastAttackTime = Time.time;
 
         animator.SetTrigger("Attack0");
+
         //Debug.Log("기본 공격");
 
         StartCoroutine(PerformAttack());
