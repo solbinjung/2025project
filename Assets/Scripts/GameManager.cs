@@ -8,11 +8,8 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance;
 
     [Header("Persistent References")]
-    public GameObject player;
-    public GameObject mainCamera;
-    public GameObject virtualCamera;
-    public GameObject uiRoot;
-    public GameObject eventSystem;
+    [Tooltip("씬이 바뀌어도 유지할 오브젝트들")]
+    public List<GameObject> persistentObjects = new List<GameObject>();
 
     void Awake()
     {
@@ -21,40 +18,36 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            if (player != null)
-                DontDestroyOnLoad(player);
-
-            if (mainCamera != null)
-                DontDestroyOnLoad(mainCamera);
-
-            if (virtualCamera != null)
-                DontDestroyOnLoad(virtualCamera);
-
-            if (uiRoot != null)
-                DontDestroyOnLoad(uiRoot);
-            
-            if (eventSystem != null)
-                DontDestroyOnLoad(eventSystem);
+            // 등록된 오브젝트들을 전부 유지
+            foreach (var obj in persistentObjects)
+            {
+                if (obj != null)
+                    DontDestroyOnLoad(obj);
+            }
 
             // 씬 로드 이벤트 등록
             SceneManager.sceneLoaded += OnSceneLoaded;
         }
         else
         {
-            Destroy(gameObject); // 중복 방지
+            Destroy(gameObject);
+            return;
         }
     }
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("OnSceneLoaded 호출됨");
-        // 씬 내 SpawnPoint 찾기
-        GameObject spawn = GameObject.Find("SpawnPoint");
-        if (spawn != null && player != null)
+        Debug.Log($"[GameManager] Scene Loaded: {scene.name}");
+
+        // 태그 기반으로 SpawnPoint 찾기
+        GameObject spawn = GameObject.FindGameObjectWithTag("SpawnPoint");
+        if (spawn != null && persistentObjects.Count > 0 && persistentObjects[0] != null)
         {
+            GameObject player = persistentObjects[0]; // 리스트 첫 번째를 Player라고 가정
             player.transform.position = spawn.transform.position;
             player.transform.rotation = spawn.transform.rotation;
 
+            // 이동 관련 초기화
             Rigidbody rb = player.GetComponent<Rigidbody>();
             if (rb != null)
             {
@@ -62,27 +55,33 @@ public class GameManager : MonoBehaviour
                 rb.angularVelocity = Vector3.zero;
             }
 
+            // 입력 잠깐 막기
             PlayerController controller = player.GetComponent<PlayerController>();
             if (controller != null)
             {
                 controller.StopMovement();
-                controller.canControl = false;  // 3초간 입력 막기
-                StartCoroutine(ReenableControl(controller, 3f)); // 3초 후 재활성화
+                controller.CanControl = false;
+                StartCoroutine(ReenableControl(controller, 3f));
             }
         }
     }
+
     void OnDestroy()
     {
         if (Instance == this)
             SceneManager.sceneLoaded -= OnSceneLoaded;
     }
 
-    IEnumerator ReenableControl(PlayerController controller, float delay)
+    private IEnumerator ReenableControl(PlayerController controller, float delay)
     {
-        Debug.Log("캐릭터 입력 재활성화 대기 시작");
+        Debug.Log("[GameManager] 캐릭터 입력 재활성화 대기 시작");
         yield return new WaitForSeconds(delay);
-        controller.canControl = true;
-        Debug.Log("캐릭터 입력 가능해짐");
+
+        if (controller != null)
+        {
+            controller.CanControl = true;
+            Debug.Log("[GameManager] 캐릭터 입력 가능해짐");
+        }
     }
 }
 

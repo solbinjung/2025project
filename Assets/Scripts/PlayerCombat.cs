@@ -9,23 +9,23 @@ public class PlayerCombat : MonoBehaviour
     private readonly Queue<Action> _inputQueue = new Queue<Action>();
 
     [Header("Settings")]
-    [SerializeField] private bool canCombat = true;
-    [SerializeField] private float attackCooldown = 0.5f;
-    [SerializeField] private float dodgeDistance = 2f;
-    [SerializeField] private float dodgeDuration = 0.3f;
-    [SerializeField] private float blockDuration = 1.0f;
-    [SerializeField] private int damage = 10;
-    [SerializeField] private MeleeHitBox hitbox;
+    [SerializeField] private bool _canCombat = true;
+    [SerializeField] private float _attackCooldown = 0.5f;
+    [SerializeField] private float _dodgeDistance = 2f;
+    [SerializeField] private float _dodgeDuration = 0.3f;
+    [SerializeField] private float _blockDuration = 1.0f;
+    [SerializeField] private int _damage = 10;
+    [SerializeField] private MeleeHitBox _hitbox;
 
-    private bool isAttackActive = false;
-    private bool isDodging = false;
-    private bool isBlocking = false;
-    private float lastAttackTime = -Mathf.Infinity;
-    private Vector3 dodgeDirection;
+    private bool _isAttackActive = false;
+    private bool _isDodging = false;
+    private bool _isBlocking = false;
+    private float _lastAttackTime = -Mathf.Infinity;
+    private Vector3 _dodgeDirection;
 
-    private PlayerController playerController;
-    private Animator animator;
-    private EnemyStats stats;
+    private PlayerController _playerController;
+    private Animator _animator;
+    private EnemyStats _stats;
     
 
     public enum PlayerState
@@ -36,46 +36,46 @@ public class PlayerCombat : MonoBehaviour
         Blocking
     }
 
-    private PlayerState currentState = PlayerState.Idle;
+    private PlayerState _currentState = PlayerState.Idle;
 
     // 프로퍼티
-    public bool CanCombat => canCombat;
-    public float AttackCooldown => attackCooldown;
-    public float DodgeDistance => dodgeDistance;
-    public float DodgeDuration => dodgeDuration;
-    public float BlockDuration => blockDuration;
-    public int Damage => damage;
-    public bool IsAttackActive => isAttackActive;
-    public EnemyStats Stats => stats;
+    public bool CanCombat => _canCombat;
+    public float AttackCooldown => _attackCooldown;
+    public float DodgeDistance => _dodgeDistance;
+    public float DodgeDuration => _dodgeDuration;
+    public float BlockDuration => _blockDuration;
+    public int Damage => _damage;
+    public bool IsAttackActive => _isAttackActive;
+    public EnemyStats Stats => _stats;
 
     private void Start()
     {
-        playerController = GetComponent<PlayerController>();
-        animator = GetComponent<Animator>();
-        stats = GetComponent<EnemyStats>();
+        _playerController = GetComponent<PlayerController>();
+        _animator = GetComponent<Animator>();
+        _stats = GetComponent<EnemyStats>();
 
-        if (hitbox == null)
-        hitbox = GetComponentInChildren<MeleeHitBox>();
+        if (_hitbox == null)
+            _hitbox = GetComponentInChildren<MeleeHitBox>();
 
-    if (hitbox != null)
-        hitbox.Initialize(this);
-    else
-        Debug.LogError("Hitbox가 연결되지 않았습니다!");
+        if (_hitbox != null)
+            _hitbox.Initialize(this);
+        else
+            Debug.LogError("Hitbox가 연결되지 않았습니다!");
     }
 
     private void Update()
     {
-        if (!canCombat) return;
+        if (!_canCombat) return;
 
         // Idle 상태일 때만 입력 처리
-        if (currentState == PlayerState.Idle && _inputQueue.Count > 0)
+        if (_currentState == PlayerState.Idle && _inputQueue.Count > 0)
         {
             var nextAction = _inputQueue.Dequeue();
             nextAction?.Invoke();
             return;
         }
 
-        if (currentState != PlayerState.Idle) return;
+        if (_currentState != PlayerState.Idle) return;
 
         HandleInput();
     }
@@ -95,7 +95,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void QueueAction(Action action)
     {
-        if (currentState == PlayerState.Idle)
+        if (_currentState == PlayerState.Idle)
         {
             action?.Invoke();
         }
@@ -107,18 +107,18 @@ public class PlayerCombat : MonoBehaviour
 
     private void TryAttack()
     {
-        if (Time.time - lastAttackTime < attackCooldown) return;
+        if (Time.time - _lastAttackTime < _attackCooldown) return;
 
-        currentState = PlayerState.Attacking;
-        lastAttackTime = Time.time;
+        _currentState = PlayerState.Attacking;
+        _lastAttackTime = Time.time;
 
-        animator.SetTrigger("Attack0");
+        _animator.SetTrigger("Attack");
 
         //Debug.Log("기본 공격");
 
         StartCoroutine(PerformAttack());
 
-        StartCoroutine(ResetStateAfter(attackCooldown));
+        StartCoroutine(ResetStateAfter(_attackCooldown));
     }
     private IEnumerator PerformAttack()
     {
@@ -136,61 +136,61 @@ public class PlayerCombat : MonoBehaviour
     }
     public void AttackStart()
     {
-        isAttackActive = true;
-        hitbox?.ResetHitCache();
+        _isAttackActive = true;
+        _hitbox?.ResetHitCache();
         //Debug.Log("공격 시작!");
     }
 
     public void AttackEnd()
     {
-        isAttackActive = false;
+        _isAttackActive = false;
         //Debug.Log("공격 종료!");
     }
 
     private IEnumerator Dodge()
     {
-        currentState = PlayerState.Dodging;
-        isDodging = true;
+        _currentState = PlayerState.Dodging;
+        _isDodging = true;
 
         Vector3 cachedDirection = transform.forward;
-        animator.SetTrigger("isDodging");
+        _animator.SetTrigger("Dodge");
 
         float elapsed = 0f;
-        while (elapsed < dodgeDuration)
+        while (elapsed < _dodgeDuration)
         {
-            transform.position += dodgeDirection.normalized * (dodgeDistance / dodgeDuration) * Time.deltaTime;
+            transform.position += _dodgeDirection.normalized * (_dodgeDistance / _dodgeDuration) * Time.deltaTime;
             elapsed += Time.deltaTime;
             yield return null;
         }
 
-        isDodging = false;
-        currentState = PlayerState.Idle;
+        _isDodging = false;
+        _currentState = PlayerState.Idle;
     }
 
     private IEnumerator Block()
     {
-        currentState = PlayerState.Blocking;
-        isBlocking = true;
+        _currentState = PlayerState.Blocking;
+        _isBlocking = true;
 
-        animator.SetBool("isBlocking", true);
+        _animator.SetBool("isBlocking", true);
         Debug.Log("방어 시작");
 
-        yield return new WaitForSeconds(blockDuration);
+        yield return new WaitForSeconds(_blockDuration);
 
-        isBlocking = false;
-        animator.SetBool("isBlocking", false);
+        _isBlocking = false;
+        _animator.SetBool("isBlocking", false);
         Debug.Log("방어 종료");
 
-        currentState = PlayerState.Idle;
+        _currentState = PlayerState.Idle;
     }
 
     private IEnumerator ResetStateAfter(float delay)
     {
         yield return new WaitForSeconds(delay);
-        currentState = PlayerState.Idle;
+        _currentState = PlayerState.Idle;
     }
 
-    public bool IsBlocking() => isBlocking;
-    public bool IsDodging() => isDodging;
+    public bool IsBlocking() => _isBlocking;
+    public bool IsDodging() => _isDodging;
 }
 

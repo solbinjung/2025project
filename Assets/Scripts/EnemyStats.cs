@@ -5,25 +5,25 @@ using UnityEngine.AI;
 public class EnemyStats : MonoBehaviour
 {
     [SerializeField] private int _maxHp = 100;
-    [SerializeField] private float destroyDelay = 3f;
+    [SerializeField] private float _destroyDelay = 3f;
 
     private int _currentHp;
 
     public int MaxHp => _maxHp;
     public int CurrentHp => _currentHp;
 
-    private Animator animator;
-    private Collider col;
-    private NavMeshAgent agent;
-    private EnemyAI ai;
+    private Animator _animator;
+    private Collider _collider;
+    private NavMeshAgent _agent;
+    private EnemyAI _ai;
 
     void Awake()
     {
         _currentHp = _maxHp;
-        animator = GetComponent<Animator>();
-        col = GetComponent<Collider>();
-        agent = GetComponent<NavMeshAgent>();
-        ai = GetComponent<EnemyAI>();
+        _animator = GetComponent<Animator>();
+        _collider = GetComponent<Collider>();
+        _agent = GetComponent<NavMeshAgent>();
+        _ai = GetComponent<EnemyAI>();
     }
 
     public void TakeDamage(int damage)
@@ -31,7 +31,7 @@ public class EnemyStats : MonoBehaviour
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0);
 
-        animator.SetTrigger("GetHit");
+        _animator.SetTrigger("GetHit");
 
         Debug.Log($"{gameObject.name} took {damage} damage. Current HP: {_currentHp}");
 
@@ -44,18 +44,18 @@ public class EnemyStats : MonoBehaviour
     private void Die()
     {
         Debug.Log($"{gameObject.name} died!");
-        animator.SetBool("isDead", true);
+        _animator.SetBool("isDead", true);
 
-        if (col != null) col.enabled = false;
-        if (agent != null) agent.enabled = false;
-        if (ai != null) ai.OnDeath();
+        if (_collider != null) _collider.enabled = false;
+        if (_agent != null) _agent.enabled = false;
+        if (_ai != null) _ai.OnDeath();
 
         StartCoroutine(RemoveAfterDelay());
     }
 
     IEnumerator RemoveAfterDelay()
     {
-        yield return new WaitForSeconds(destroyDelay);
+        yield return new WaitForSeconds(_destroyDelay);
         Destroy(gameObject);
     }
 }

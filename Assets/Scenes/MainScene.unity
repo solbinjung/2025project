@@ -3461,11 +3461,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fad56488f2bbc3144bcd80576e3dc6cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1722599600}
-  mainCamera: {fileID: 330585543}
-  virtualCamera: {fileID: 509565785}
-  uiRoot: {fileID: 1631069442}
-  eventSystem: {fileID: 1274882582}
+  persistentObjects:
+  - {fileID: 1722599600}
+  - {fileID: 280575318}
+  - {fileID: 330585543}
+  - {fileID: 509565785}
+  - {fileID: 1631069442}
+  - {fileID: 1274882582}
 --- !u!4 &280575320
 Transform:
   m_ObjectHideFlags: 0
@@ -28101,6 +28103,11 @@ PrefabInstance:
       objectReference: {fileID: 1277101058}
     - target: {fileID: 7122399978497676833, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
+      propertyPath: _speed
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122399978497676833, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
       propertyPath: eventSystem
       value: 
       objectReference: {fileID: 1274882584}
@@ -28109,6 +28116,11 @@ PrefabInstance:
       propertyPath: uiRaycaster
       value: 
       objectReference: {fileID: 1631069443}
+    - target: {fileID: 7122399978497676833, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: _groundMask.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
     - target: {fileID: 8065941298958236617, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: m_Constraints

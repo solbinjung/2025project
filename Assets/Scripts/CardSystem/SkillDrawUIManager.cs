@@ -22,7 +22,7 @@ public class SkillDrawUIManager : MonoBehaviour
         gameObject.SetActive(true);
 
         if (player != null)
-            player.canControl = false;
+            player.CanControl = false;
         // 기존 카드 제거(중복 방지)
         foreach (Transform child in skillCards)
         {
@@ -42,7 +42,7 @@ public class SkillDrawUIManager : MonoBehaviour
 
         // 플레이어 움직임 다시 허용
         if (player != null)
-            player.canControl = true;
+            player.CanControl = true;
     }
     void OnSkillSelected(SkillData selected)
     {

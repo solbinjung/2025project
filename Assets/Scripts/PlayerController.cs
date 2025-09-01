@@ -5,98 +5,100 @@ using UnityEngine.EventSystems;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 3f;
-    public LayerMask groundMask;
+    [SerializeField] private float _speed = 5f;
+    [SerializeField] private LayerMask _groundMask;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
-    private Vector3 destPos;
-    private Quaternion lookTarget;
+    private Vector3 _destPos;
+    private Quaternion _lookTarget;
     private PlayerCombat _playerCombat;
+    private PlayerSkillManager _skillManager;
 
-    private bool move = false;
-    public bool canControl = true;
+    private bool _move = false;
+    public bool CanControl = true;
 
-    private PlayerSkillManager skillManager;
-
-
-    void Start()
+    private void Start()
     {
-        skillManager = GetComponent<PlayerSkillManager>();
-
+        _skillManager = GetComponent<PlayerSkillManager>();
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _playerCombat = GetComponent<PlayerCombat>();
     }
-    void Update()
+
+    private void Update()
     {
         HandleMovement();
         HandleSkillInput();
     }
-    void HandleSkillInput()
+
+    private void HandleSkillInput()
     {
-        if (Input.GetKeyDown(KeyCode.Q)) skillManager.UseSkill(KeyCode.Q);
-        if (Input.GetKeyDown(KeyCode.W)) skillManager.UseSkill(KeyCode.W);
-        if (Input.GetKeyDown(KeyCode.E)) skillManager.UseSkill(KeyCode.E);
-        if (Input.GetKeyDown(KeyCode.R)) skillManager.UseSkill(KeyCode.R);
-        if (Input.GetKeyDown(KeyCode.T)) skillManager.UseSkill(KeyCode.T);
+        if (Input.GetKeyDown(KeyCode.Q)) _skillManager.UseSkill(KeyCode.Q);
+        if (Input.GetKeyDown(KeyCode.W)) _skillManager.UseSkill(KeyCode.W);
+        if (Input.GetKeyDown(KeyCode.E)) _skillManager.UseSkill(KeyCode.E);
+        if (Input.GetKeyDown(KeyCode.R)) _skillManager.UseSkill(KeyCode.R);
+        if (Input.GetKeyDown(KeyCode.T)) _skillManager.UseSkill(KeyCode.T);
     }
-    void HandleMovement()
+
+    private void HandleMovement()
     {
-        if (!canControl || _playerCombat.IsBlocking()) return;
+        if (!CanControl || _playerCombat.IsBlocking()) return;
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
-        {  
+        {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out RaycastHit hit, 100f, groundMask))
+            if (Physics.Raycast(ray, out RaycastHit hit, 100f, _groundMask))
             {
-                destPos = hit.point;
-                move = true;
+                _destPos = hit.point;
+                _move = true;
             }
         }
-        _animator.SetBool("isRunning", move);
+        _animator.SetBool("isRunning", _move);
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
-        if (!move) return;
+        if (!_move) return;
 
-        Vector3 dir = destPos - transform.position;
+        Vector3 dir = _destPos - transform.position;
         Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);
 
         // 회전: 바라보는 방향으로 부드럽게 회전
         if (flatDir.sqrMagnitude > 0.001f)  // 방향이 0이 아닐 때만 회전
         {
-            lookTarget = Quaternion.LookRotation(flatDir);
-            transform.rotation = Quaternion.Lerp(transform.rotation, lookTarget, Time.deltaTime * 10f); // 회전 속도 조절
+            _lookTarget = Quaternion.LookRotation(flatDir);
+            transform.rotation = Quaternion.Lerp(transform.rotation, _lookTarget, Time.deltaTime * 10f); // 회전 속도 조절
         }
 
         // 이동
-        transform.position += flatDir.normalized * speed * Time.deltaTime;
+        transform.position += flatDir.normalized * _speed * Time.deltaTime;
 
         // 목적지 도착 시 멈춤
         if (flatDir.magnitude <= 0.05f)
         {
-            move = false;
+            _move = false;
             return;
         }
     }
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision collision)
     {
-        if ((groundMask.value & (1 << collision.gameObject.layer)) != 0)
+        if ((_groundMask.value & (1 << collision.gameObject.layer)) != 0)
         {
             // 바닥이므로 충돌 무시
             return;
         }
         // 어떤 물체와 부딪히든 멈춤
-        move = false;
+        _move = false;
         _animator.SetBool("isRunning", false);
         //print("충돌");
     }
+
     public void StopMovement()
     {
-        move = false;
+        _move = false;
         _animator.SetBool("isRunning", false);
     }
 }
+

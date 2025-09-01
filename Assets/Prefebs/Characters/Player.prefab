@@ -4901,11 +4901,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57027b54167a744fb9b628396d530cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5
-  groundMask:
+  _speed: 3
+  _groundMask:
     serializedVersion: 2
-    m_Bits: 64
-  canControl: 1
+    m_Bits: 0
+  CanControl: 1
 --- !u!54 &8065941298958236617
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5033,6 +5033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxHp: 100
   _maxMp: 100
+  _invincibleDuration: 2
 --- !u!114 &2282902339230102073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5045,13 +5046,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dfa88aae8b8506342aa627bdbe08ecb3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canCombat: 1
-  attackCooldown: 0.5
-  dodgeDistance: 2
-  dodgeDuration: 0.3
-  blockDuration: 1
-  damage: 10
-  hitbox: {fileID: 2025479915343212810}
+  _canCombat: 1
+  _attackCooldown: 0.5
+  _dodgeDistance: 2
+  _dodgeDuration: 0.3
+  _blockDuration: 1
+  _damage: 10
+  _hitbox: {fileID: 2025479915343212810}
 --- !u!1 &6053396040631332859
 GameObject:
   m_ObjectHideFlags: 0
