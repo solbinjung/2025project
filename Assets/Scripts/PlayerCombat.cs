@@ -11,11 +11,12 @@ public class PlayerCombat : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private bool _canCombat = true;
     [SerializeField] private float _attackCooldown = 0.5f;
+    [SerializeField] private int _damage = 10;
+    [SerializeField] private MeleeHitBox _hitbox;
+
     [SerializeField] private float _dodgeDistance = 2f;
     [SerializeField] private float _dodgeDuration = 0.3f;
     [SerializeField] private float _blockDuration = 1.0f;
-    [SerializeField] private int _damage = 10;
-    [SerializeField] private MeleeHitBox _hitbox;
 
     private bool _isAttackActive = false;
     private bool _isDodging = false;
@@ -27,7 +28,6 @@ public class PlayerCombat : MonoBehaviour
     private Animator _animator;
     private EnemyStats _stats;
     
-
     public enum PlayerState
     {
         Idle,
