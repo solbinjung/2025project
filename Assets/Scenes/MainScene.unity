@@ -28021,53 +28021,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 6066668387652807775}
   m_PrefabAsset: {fileID: 0}
---- !u!136 &829134890926028390
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722599600}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.22667377
-  m_Height: 1.9202694
-  m_Direction: 1
-  m_Center: {x: 0, y: 0.9322931, z: 0.040037155}
 --- !u!95 &829134890926028393 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 990803751556671489, guid: c089cb84799b0cf4f97272cc0d823481,
     type: 3}
   m_PrefabInstance: {fileID: 6066668387652807775}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &829134890926028396
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1722599600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d87f1be9b3d12942b4996a7fe6a8da4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 829134890926028393}
-  QSlotImage: {fileID: 1757573417}
-  WSlotImage: {fileID: 1604198662}
-  ESlotImage: {fileID: 2133724120}
-  RSlotImage: {fileID: 1570846704}
-  TSlotImage: {fileID: 1994924146}
 --- !u!1001 &6066668387652807775
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -28086,6 +28045,41 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 2282902339230102073, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: _damage
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: animator
+      value: 
+      objectReference: {fileID: 829134890926028393}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: ESlotImage
+      value: 
+      objectReference: {fileID: 2133724120}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: QSlotImage
+      value: 
+      objectReference: {fileID: 1757573417}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: RSlotImage
+      value: 
+      objectReference: {fileID: 1570846704}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: TSlotImage
+      value: 
+      objectReference: {fileID: 1994924146}
+    - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: WSlotImage
+      value: 
+      objectReference: {fileID: 1604198662}
     - target: {fileID: 5582417323547982682, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: m_Enabled
@@ -28201,14 +28195,6 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5925489639057200854, guid: c089cb84799b0cf4f97272cc0d823481,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 829134890926028390}
-    - targetCorrespondingSourceObject: {fileID: 5925489639057200854, guid: c089cb84799b0cf4f97272cc0d823481,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 829134890926028396}
     - targetCorrespondingSourceObject: {fileID: 4437473562076133245, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       insertIndex: -1

@@ -38,6 +38,16 @@ public class EnemyAI : MonoBehaviour
     private void Update()
     {
         if (_isDead) return;
+        if (_player == null) return;
+
+        PlayerStats playerStats = _player.GetComponent<PlayerStats>();
+        if (playerStats != null && playerStats.IsDead)
+        {
+            // 플레이어 죽으면 그냥 대기 상태 유지
+            SetMovement(Vector3.zero, 0f, true);
+            return;
+        }
+
         float distance = Vector3.Distance(transform.position, _player.position);
 
         if (distance > _detectionRange)
@@ -113,7 +123,7 @@ public class EnemyAI : MonoBehaviour
         if (_canDealContactDamage && collision.gameObject.CompareTag("Player"))
         {
             PlayerStats playerStats = collision.gameObject.GetComponent<PlayerStats>();
-            if (playerStats != null)
+            if (playerStats != null && !playerStats.IsDead)
             {
                 Vector3 hitDirection = (playerStats.transform.position - transform.position).normalized;
                 playerStats.TakeDamage(_contactDamage, hitDirection);
@@ -148,7 +158,7 @@ public class EnemyAI : MonoBehaviour
         if (Vector3.Distance(transform.position, _player.position) <= _attackRange + 0.5f)
         {
             PlayerStats playerStats = _player.GetComponent<PlayerStats>();
-            if (playerStats != null)
+            if (playerStats != null && !playerStats.IsDead)
             {
                 Vector3 hitDirection = (playerStats.transform.position - transform.position).normalized;
                 playerStats.TakeDamage(_attackDamage, hitDirection);

@@ -4858,13 +4858,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9059288849706489097}
-  - component: {fileID: 7122399978497676833}
   - component: {fileID: 8065941298958236617}
   - component: {fileID: 990803751556671489}
   - component: {fileID: 5582417323547982682}
   - component: {fileID: 1021785256128063408}
+  - component: {fileID: 7122399978497676833}
   - component: {fileID: 6544700685630267579}
   - component: {fileID: 2282902339230102073}
+  - component: {fileID: 4046918471710944720}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4889,23 +4890,6 @@ Transform:
   - {fileID: 5807977929776867431}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7122399978497676833
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5925489639057200854}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a57027b54167a744fb9b628396d530cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _speed: 3
-  _groundMask:
-    serializedVersion: 2
-    m_Bits: 0
-  CanControl: 1
 --- !u!54 &8065941298958236617
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5019,6 +5003,23 @@ CapsuleCollider:
   m_Height: 1.8328732
   m_Direction: 1
   m_Center: {x: 0.0049752593, y: 0.92615515, z: -0.0008663535}
+--- !u!114 &7122399978497676833
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5925489639057200854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a57027b54167a744fb9b628396d530cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _speed: 3
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 0
+  CanControl: 1
 --- !u!114 &6544700685630267579
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5034,6 +5035,7 @@ MonoBehaviour:
   _maxHp: 100
   _maxMp: 100
   _invincibleDuration: 2
+  _knockbackForce: 5
 --- !u!114 &2282902339230102073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5048,11 +5050,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canCombat: 1
   _attackCooldown: 0.5
+  _damage: 10
+  _hitbox: {fileID: 2025479915343212810}
   _dodgeDistance: 2
   _dodgeDuration: 0.3
   _blockDuration: 1
-  _damage: 10
-  _hitbox: {fileID: 2025479915343212810}
+--- !u!114 &4046918471710944720
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5925489639057200854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d87f1be9b3d12942b4996a7fe6a8da4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  QSlotImage: {fileID: 0}
+  WSlotImage: {fileID: 0}
+  ESlotImage: {fileID: 0}
+  RSlotImage: {fileID: 0}
+  TSlotImage: {fileID: 0}
 --- !u!1 &6053396040631332859
 GameObject:
   m_ObjectHideFlags: 0

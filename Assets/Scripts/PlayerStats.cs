@@ -13,11 +13,13 @@ public class PlayerStats : MonoBehaviour
     private int _currentHp;
     private int _currentMp;
     private bool _isInvincible = false;
-
+    private bool _isDead = false;
+    
     public int MaxHp => _maxHp;
     public int MaxMp => _maxMp;
     public int CurrentHp => _currentHp;
     public int CurrentMp => _currentMp;
+    public bool IsDead => _isDead;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
@@ -37,16 +39,21 @@ public class PlayerStats : MonoBehaviour
 
     public void TakeDamage(int damage, Vector3 hitDirection) // 적에 의해 데미지를 입을 경우
     {
-        if (_isInvincible) return;
+        if (_isInvincible || _isDead ) return;
 
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0); // HP가 마이너스 값이 되지 않도록 하기 위해
         _animator.SetTrigger("GetHit");
 
-        // 넉백 적용
         if (_rigidbody != null)
         {
-            _rigidbody.AddForce(-hitDirection.normalized * _knockbackForce, ForceMode.Impulse);
+            Vector3 dir = hitDirection;
+            dir.y = 0f; // 위로 튀는 것 방지
+            if (dir.sqrMagnitude > 0.001f) // 0 벡터 방지
+            {
+                _rigidbody.velocity = Vector3.zero; // 기존 힘 초기화
+                _rigidbody.AddForce(dir.normalized * _knockbackForce, ForceMode.Impulse);
+            }
         }
 
         Debug.Log($"Player took {damage} damage. Current HP: {_currentHp}");
@@ -66,27 +73,27 @@ public class PlayerStats : MonoBehaviour
         _isInvincible = true;
 
         if (_playerController != null)
-            _playerController.CanControl = false; // 무적 동안 이동 막기
+            _playerController.CanControl = false;
 
-        Renderer renderer = GetComponentInChildren<Renderer>();
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
         float elapsed = 0f;
 
         while (elapsed < _invincibleDuration)
         {
-            if (renderer != null)
-                renderer.enabled = !renderer.enabled;
+            foreach (var r in renderers)
+                r.enabled = !r.enabled;
 
             yield return new WaitForSeconds(0.2f);
             elapsed += 0.2f;
         }
 
-        if (renderer != null)
-            renderer.enabled = true;
+        foreach (var r in renderers)
+            r.enabled = true;
 
         _isInvincible = false;
 
         if (_playerController != null)
-            _playerController.CanControl = true; // 제어 복구
+            _playerController.CanControl = true;
     }
 
     public void Heal(int amount) // HP 충전
@@ -95,18 +102,20 @@ public class PlayerStats : MonoBehaviour
         _currentHp = Mathf.Min(_currentHp, _maxHp); // HP가 최대 HP 값을 초과하지 않도록 하기 위해
     }
 
-    private void Die() // 플레이어 사망
+    private void Die()
     {
+        _isDead = true;
         _animator.SetBool("isDead", true);
-        Debug.Log($"{gameObject.name} died!");
+        Debug.Log(_animator.speed);
+        Debug.Log("Player died!");
 
         if (_playerController != null)
             _playerController.CanControl = false;
 
-        if (_collider != null)
-            _collider.enabled = false;
-
         if (_rigidbody != null)
-            _rigidbody.isKinematic = true; // 죽으면 물리 영향 막기
+            _rigidbody.isKinematic = true;
+
+        //if (_collider != null)
+        //    _collider.enabled = false;
     }
 }
