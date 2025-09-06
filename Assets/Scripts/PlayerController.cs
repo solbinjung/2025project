@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (!CanControl || _playerCombat.IsBlocking()) return;
+        if (_playerCombat.State != PlayerCombat.PlayerState.Idle) return;
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -59,7 +59,8 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!_move) return;
+        // 공격/회피/방어 중 이동/회전 차단
+        if (!_move || _playerCombat.State != PlayerCombat.PlayerState.Idle) return;
 
         Vector3 dir = _destPos - transform.position;
         Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);

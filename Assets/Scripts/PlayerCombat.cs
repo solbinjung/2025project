@@ -18,6 +18,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private float _dodgeDuration = 0.3f;
     [SerializeField] private float _blockDuration = 1.0f;
 
+    [SerializeField] private GameObject slashEffectPrefab;  
+    [SerializeField] private Transform effectPoint;
+
     private bool _isAttackActive = false;
     private bool _isDodging = false;
     private bool _isBlocking = false;
@@ -36,7 +39,7 @@ public class PlayerCombat : MonoBehaviour
         Blocking
     }
 
-    private PlayerState _currentState = PlayerState.Idle;
+    private PlayerState CurrentState = PlayerState.Idle;
 
     // 프로퍼티
     public bool CanCombat => _canCombat;
@@ -47,6 +50,7 @@ public class PlayerCombat : MonoBehaviour
     public int Damage => _damage;
     public bool IsAttackActive => _isAttackActive;
     public EnemyStats Stats => _stats;
+    public PlayerState State => CurrentState;
 
     private void Start()
     {
@@ -68,14 +72,14 @@ public class PlayerCombat : MonoBehaviour
         if (!_canCombat) return;
 
         // Idle 상태일 때만 입력 처리
-        if (_currentState == PlayerState.Idle && _inputQueue.Count > 0)
+        if (CurrentState == PlayerState.Idle && _inputQueue.Count > 0)
         {
             var nextAction = _inputQueue.Dequeue();
             nextAction?.Invoke();
             return;
         }
 
-        if (_currentState != PlayerState.Idle) return;
+        if (CurrentState != PlayerState.Idle) return;
 
         HandleInput();
     }
@@ -95,7 +99,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void QueueAction(Action action)
     {
-        if (_currentState == PlayerState.Idle)
+        if (CurrentState == PlayerState.Idle)
         {
             action?.Invoke();
         }
@@ -109,11 +113,10 @@ public class PlayerCombat : MonoBehaviour
     {
         if (Time.time - _lastAttackTime < _attackCooldown) return;
 
-        _currentState = PlayerState.Attacking;
+        CurrentState = PlayerState.Attacking;
         _lastAttackTime = Time.time;
 
         _animator.SetTrigger("Attack");
-
         //Debug.Log("기본 공격");
 
         StartCoroutine(PerformAttack());
@@ -127,6 +130,8 @@ public class PlayerCombat : MonoBehaviour
 
         // 공격 시작
         AttackStart();
+
+        PlaySlashEffect();
 
         // 공격 활성화 지속 시간
         yield return new WaitForSeconds(1f); // 필요에 따라 조절 가능
@@ -147,9 +152,17 @@ public class PlayerCombat : MonoBehaviour
         //Debug.Log("공격 종료!");
     }
 
+    private void PlaySlashEffect()
+    {
+        if (slashEffectPrefab != null && effectPoint != null)
+        {
+            GameObject effect = Instantiate(slashEffectPrefab, effectPoint.position, effectPoint.rotation);
+            Destroy(effect, 1f); // 2초 후 자동 삭제
+        }
+    }
     private IEnumerator Dodge()
     {
-        _currentState = PlayerState.Dodging;
+        CurrentState = PlayerState.Dodging;
         _isDodging = true;
 
         Vector3 cachedDirection = transform.forward;
@@ -164,12 +177,12 @@ public class PlayerCombat : MonoBehaviour
         }
 
         _isDodging = false;
-        _currentState = PlayerState.Idle;
+        CurrentState = PlayerState.Idle;
     }
 
     private IEnumerator Block()
     {
-        _currentState = PlayerState.Blocking;
+        CurrentState = PlayerState.Blocking;
         _isBlocking = true;
 
         _animator.SetBool("isBlocking", true);
@@ -181,13 +194,13 @@ public class PlayerCombat : MonoBehaviour
         _animator.SetBool("isBlocking", false);
         Debug.Log("방어 종료");
 
-        _currentState = PlayerState.Idle;
+        CurrentState = PlayerState.Idle;
     }
 
     private IEnumerator ResetStateAfter(float delay)
     {
         yield return new WaitForSeconds(delay);
-        _currentState = PlayerState.Idle;
+        CurrentState = PlayerState.Idle;
     }
 
     public bool IsBlocking() => _isBlocking;
