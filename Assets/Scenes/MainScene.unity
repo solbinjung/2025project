@@ -28038,7 +28038,7 @@ PrefabInstance:
     - target: {fileID: 990803751556671489, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: m_ApplyRootMotion
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1426916171347188596, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
@@ -28049,6 +28049,16 @@ PrefabInstance:
         type: 3}
       propertyPath: _damage
       value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 2282902339230102073, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: _dodgeDistance
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2282902339230102073, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: _dodgeDuration
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
