@@ -14,7 +14,9 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private MeleeHitBox _hitbox;
 
     [SerializeField] private float _dodgeDistance = 5f;
-    [SerializeField] private AnimationCurve _dodgeCurve;
+    [SerializeField] private float _dodgeDuration = 0.3f;
+    [SerializeField] private float dodgeCooldown = 1f;
+
     [SerializeField] private float _blockDuration = 1.0f;
 
     [SerializeField] private GameObject slashEffectPrefab;
@@ -27,6 +29,7 @@ public class PlayerCombat : MonoBehaviour
     private Vector3 _dodgeDirection;
 
     private PlayerController _playerController;
+    private PlayerStats _playerStats;
     private Animator _animator;
     private EnemyStats _stats;
 
@@ -54,6 +57,7 @@ public class PlayerCombat : MonoBehaviour
     private void Start()
     {
         _playerController = GetComponent<PlayerController>();
+        _playerStats = GetComponent<PlayerStats>();
         _animator = GetComponent<Animator>();
         _stats = GetComponent<EnemyStats>();
 
@@ -153,28 +157,33 @@ public class PlayerCombat : MonoBehaviour
         State = PlayerState.Dodging;
         _isDodging = true;
 
+        // 무적 상태
+        _playerStats.SetInvincible(true);
+
+        // 애니메이션 트리거 실행
         _animator.SetTrigger("Dodge");
+      
+        _dodgeDirection = transform.forward; // 현재 바라보는 방향으로 회피
+        Quaternion fixedRotation = transform.rotation; 
 
-        float duration = _animator.GetCurrentAnimatorStateInfo(0).length; // 애니메이션 길이
         float elapsed = 0f;
-
-        Vector3 startPos = transform.position;
-        Vector3 targetPos = startPos + transform.forward * _dodgeDistance;
-
-        while (elapsed < duration)
+        while (elapsed < _dodgeDuration)
         {
-            float t = elapsed / duration;             // 0 → 1
-            float curveValue = _dodgeCurve.Evaluate(t); // 가속/감속 반영
-            transform.position = Vector3.Lerp(startPos, targetPos, curveValue);
+            float speed = DodgeDistance / _dodgeDuration;
+            transform.position += _dodgeDirection * speed * Time.deltaTime;
+
+            transform.rotation = fixedRotation;
 
             elapsed += Time.deltaTime;
-            yield return null;
+            yield return null; 
         }
-
-        transform.position = targetPos; // 오차 보정
+        // 무적 해제
+        _playerStats.SetInvincible(false);
 
         _isDodging = false;
         State = PlayerState.Idle;
+
+        yield return new WaitForSeconds(dodgeCooldown);
     }
 
     private IEnumerator Block()

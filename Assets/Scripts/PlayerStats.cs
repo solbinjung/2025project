@@ -98,6 +98,11 @@ public class PlayerStats : MonoBehaviour
 
         _isInvincible = false;
     }
+    
+    public void SetInvincible(bool value)
+    {
+        _isInvincible = value;
+    }
 
     public void Heal(int amount) // HP ÃæÀü
     {

@@ -45,6 +45,9 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
+        if (_playerCombat.State == PlayerCombat.PlayerState.Dodging)
+            return;
+
         if (_playerCombat.State != PlayerCombat.PlayerState.Idle && !_playerStats.IsInvincible)
             return;
 
