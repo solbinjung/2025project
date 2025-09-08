@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    // 필드
     private readonly Queue<Action> _inputQueue = new Queue<Action>();
 
     [Header("Settings")]
@@ -14,11 +13,11 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private int _damage = 10;
     [SerializeField] private MeleeHitBox _hitbox;
 
-    [SerializeField] private float _dodgeDistance = 2f;
-    [SerializeField] private float _dodgeDuration = 0.3f;
+    [SerializeField] private float _dodgeDistance = 5f;
+    [SerializeField] private AnimationCurve _dodgeCurve;
     [SerializeField] private float _blockDuration = 1.0f;
 
-    [SerializeField] private GameObject slashEffectPrefab;  
+    [SerializeField] private GameObject slashEffectPrefab;
     [SerializeField] private Transform effectPoint;
 
     private bool _isAttackActive = false;
@@ -30,27 +29,27 @@ public class PlayerCombat : MonoBehaviour
     private PlayerController _playerController;
     private Animator _animator;
     private EnemyStats _stats;
-    
+
     public enum PlayerState
     {
         Idle,
         Attacking,
         Dodging,
-        Blocking
+        Blocking,
+        GettingHit
     }
 
-    private PlayerState CurrentState = PlayerState.Idle;
+    public PlayerState State { get; set; } = PlayerState.Idle; // 외부에서도 변경 가능
+    // 내부용 필드 필요 없음, 시스템 그대로 유지
 
     // 프로퍼티
     public bool CanCombat => _canCombat;
     public float AttackCooldown => _attackCooldown;
     public float DodgeDistance => _dodgeDistance;
-    public float DodgeDuration => _dodgeDuration;
     public float BlockDuration => _blockDuration;
     public int Damage => _damage;
     public bool IsAttackActive => _isAttackActive;
     public EnemyStats Stats => _stats;
-    public PlayerState State => CurrentState;
 
     private void Start()
     {
@@ -71,35 +70,33 @@ public class PlayerCombat : MonoBehaviour
     {
         if (!_canCombat) return;
 
-        // Idle 상태일 때만 입력 처리
-        if (CurrentState == PlayerState.Idle && _inputQueue.Count > 0)
+        if (State == PlayerState.Idle && _inputQueue.Count > 0)
         {
             var nextAction = _inputQueue.Dequeue();
             nextAction?.Invoke();
             return;
         }
 
-        if (CurrentState != PlayerState.Idle) return;
+        if (State != PlayerState.Idle) return;
 
         HandleInput();
     }
 
-    // 입력
     private void HandleInput()
     {
-        if (Input.GetMouseButtonDown(1))                // 우클릭: 공격
+        if (Input.GetMouseButtonDown(1))
             QueueAction(TryAttack);
 
-        if (Input.GetKeyDown(KeyCode.Space))            // 스페이스: 회피
+        if (Input.GetKeyDown(KeyCode.Space))
             QueueAction(() => StartCoroutine(Dodge()));
 
-        if (Input.GetKeyDown(KeyCode.LeftShift))        // 좌쉬프트: 방어
+        if (Input.GetKeyDown(KeyCode.LeftShift))
             QueueAction(() => StartCoroutine(Block()));
     }
 
     private void QueueAction(Action action)
     {
-        if (CurrentState == PlayerState.Idle)
+        if (State == PlayerState.Idle)
         {
             action?.Invoke();
         }
@@ -113,43 +110,33 @@ public class PlayerCombat : MonoBehaviour
     {
         if (Time.time - _lastAttackTime < _attackCooldown) return;
 
-        CurrentState = PlayerState.Attacking;
+        State = PlayerState.Attacking;
         _lastAttackTime = Time.time;
 
         _animator.SetTrigger("Attack");
-        //Debug.Log("기본 공격");
 
         StartCoroutine(PerformAttack());
-
         StartCoroutine(ResetStateAfter(_attackCooldown));
     }
+
     private IEnumerator PerformAttack()
     {
-        // 공격 시작 전 딜레이 (애니메이션 타이밍 맞춤)
-        yield return new WaitForSeconds(0.1f); // 필요에 따라 조절 가능
-
-        // 공격 시작
+        yield return new WaitForSeconds(0.1f);
         AttackStart();
-
+        yield return new WaitForSeconds(0.4f);
         PlaySlashEffect();
-
-        // 공격 활성화 지속 시간
-        yield return new WaitForSeconds(1f); // 필요에 따라 조절 가능
-
-        // 공격 종료
         AttackEnd();
     }
+
     public void AttackStart()
     {
         _isAttackActive = true;
         _hitbox?.ResetHitCache();
-        //Debug.Log("공격 시작!");
     }
 
     public void AttackEnd()
     {
         _isAttackActive = false;
-        //Debug.Log("공격 종료!");
     }
 
     private void PlaySlashEffect()
@@ -157,53 +144,69 @@ public class PlayerCombat : MonoBehaviour
         if (slashEffectPrefab != null && effectPoint != null)
         {
             GameObject effect = Instantiate(slashEffectPrefab, effectPoint.position, effectPoint.rotation);
-            Destroy(effect, 1f); // 2초 후 자동 삭제
+            Destroy(effect, 1f);
         }
     }
+
     private IEnumerator Dodge()
     {
-        CurrentState = PlayerState.Dodging;
+        State = PlayerState.Dodging;
         _isDodging = true;
 
-        Vector3 cachedDirection = transform.forward;
         _animator.SetTrigger("Dodge");
 
+        float duration = _animator.GetCurrentAnimatorStateInfo(0).length; // 애니메이션 길이
         float elapsed = 0f;
-        while (elapsed < _dodgeDuration)
+
+        Vector3 startPos = transform.position;
+        Vector3 targetPos = startPos + transform.forward * _dodgeDistance;
+
+        while (elapsed < duration)
         {
-            transform.position += _dodgeDirection.normalized * (_dodgeDistance / _dodgeDuration) * Time.deltaTime;
+            float t = elapsed / duration;             // 0 → 1
+            float curveValue = _dodgeCurve.Evaluate(t); // 가속/감속 반영
+            transform.position = Vector3.Lerp(startPos, targetPos, curveValue);
+
             elapsed += Time.deltaTime;
             yield return null;
         }
 
+        transform.position = targetPos; // 오차 보정
+
         _isDodging = false;
-        CurrentState = PlayerState.Idle;
+        State = PlayerState.Idle;
     }
 
     private IEnumerator Block()
     {
-        CurrentState = PlayerState.Blocking;
+        State = PlayerState.Blocking;
         _isBlocking = true;
 
         _animator.SetBool("isBlocking", true);
-        Debug.Log("방어 시작");
 
         yield return new WaitForSeconds(_blockDuration);
 
         _isBlocking = false;
         _animator.SetBool("isBlocking", false);
-        Debug.Log("방어 종료");
 
-        CurrentState = PlayerState.Idle;
+        State = PlayerState.Idle;
     }
 
     private IEnumerator ResetStateAfter(float delay)
     {
         yield return new WaitForSeconds(delay);
-        CurrentState = PlayerState.Idle;
+        if (State == PlayerState.Attacking)
+            State = PlayerState.Idle;
+    }
+
+    // 피격 처리: State 변경 + Animator 트리거
+    public void OnTakeHit()
+    {
+        State = PlayerState.GettingHit;
+        _animator.SetTrigger("GetHit");
+        _playerController.StopMovement(); // 이동 강제 중지
     }
 
     public bool IsBlocking() => _isBlocking;
     public bool IsDodging() => _isDodging;
 }
-

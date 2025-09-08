@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 _destPos;
     private Quaternion _lookTarget;
     private PlayerCombat _playerCombat;
+    private PlayerStats _playerStats;
     private PlayerSkillManager _skillManager;
 
     private bool _move = false;
@@ -24,6 +25,7 @@ public class PlayerController : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
         _playerCombat = GetComponent<PlayerCombat>();
+        _playerStats = GetComponent<PlayerStats>();
     }
 
     private void Update()
@@ -43,7 +45,8 @@ public class PlayerController : MonoBehaviour
 
     private void HandleMovement()
     {
-        if (_playerCombat.State != PlayerCombat.PlayerState.Idle) return;
+        if (_playerCombat.State != PlayerCombat.PlayerState.Idle && !_playerStats.IsInvincible)
+            return;
 
         if (Input.GetMouseButtonDown(0) && !EventSystem.current.IsPointerOverGameObject())
         {
@@ -59,8 +62,9 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // 공격/회피/방어 중 이동/회전 차단
-        if (!_move || _playerCombat.State != PlayerCombat.PlayerState.Idle) return;
+        if (!_move) return;
+        if (_playerCombat.State != PlayerCombat.PlayerState.Idle && !_playerStats.IsInvincible)
+            return;
 
         Vector3 dir = _destPos - transform.position;
         Vector3 flatDir = new Vector3(dir.x, 0f, dir.z);

@@ -20,11 +20,13 @@ public class PlayerStats : MonoBehaviour
     public int CurrentHp => _currentHp;
     public int CurrentMp => _currentMp;
     public bool IsDead => _isDead;
+    public bool IsInvincible => _isInvincible;
 
     private Animator _animator;
     private Rigidbody _rigidbody;
-    private PlayerController _playerController;
     private Collider _collider;
+    private PlayerController _playerController;
+    private PlayerCombat _playerCombat;
 
     void Start()
     {
@@ -33,18 +35,23 @@ public class PlayerStats : MonoBehaviour
 
         _animator = GetComponent<Animator>();
         _rigidbody = GetComponent<Rigidbody>();
-        _playerController = GetComponent<PlayerController>();
         _collider = GetComponent<Collider>();
+        _playerController = GetComponent<PlayerController>();
+        _playerCombat = GetComponent<PlayerCombat>();
+
     }
 
     public void TakeDamage(int damage, Vector3 hitDirection) // 적에 의해 데미지를 입을 경우
     {
         if (_isInvincible || _isDead ) return;
 
+        _playerCombat.OnTakeHit();
+        _playerController.StopMovement();
+
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0); // HP가 마이너스 값이 되지 않도록 하기 위해
-        _animator.SetTrigger("GetHit");
 
+        // 넉백 처리
         if (_rigidbody != null)
         {
             Vector3 dir = hitDirection;
@@ -72,8 +79,7 @@ public class PlayerStats : MonoBehaviour
     {
         _isInvincible = true;
 
-        if (_playerController != null)
-            _playerController.CanControl = false;
+        _playerController.CanControl = true;
 
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         float elapsed = 0f;
@@ -91,9 +97,6 @@ public class PlayerStats : MonoBehaviour
             r.enabled = true;
 
         _isInvincible = false;
-
-        if (_playerController != null)
-            _playerController.CanControl = true;
     }
 
     public void Heal(int amount) // HP 충전
@@ -106,7 +109,6 @@ public class PlayerStats : MonoBehaviour
     {
         _isDead = true;
         _animator.SetBool("isDead", true);
-        Debug.Log(_animator.speed);
         Debug.Log("Player died!");
 
         if (_playerController != null)
