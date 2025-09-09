@@ -213,7 +213,6 @@ public class PlayerCombat : MonoBehaviour
     {
         State = PlayerState.GettingHit;
         _animator.SetTrigger("GetHit");
-        _playerController.StopMovement(); // 이동 강제 중지
     }
 
     public bool IsBlocking() => _isBlocking;

@@ -65,6 +65,10 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // 넉백 중이면 플레이어 이동 막기
+        if (_playerStats.IsInvincible && _playerCombat.State == PlayerCombat.PlayerState.GettingHit)
+            return;
+
         if (!_move) return;
         if (_playerCombat.State != PlayerCombat.PlayerState.Idle && !_playerStats.IsInvincible)
             return;

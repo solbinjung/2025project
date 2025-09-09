@@ -46,7 +46,7 @@ public class PlayerStats : MonoBehaviour
         if (_isInvincible || _isDead ) return;
 
         _playerCombat.OnTakeHit();
-        _playerController.StopMovement();
+        _playerController.StopMovement(); // 이동 중지
 
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0); // HP가 마이너스 값이 되지 않도록 하기 위해
@@ -55,7 +55,7 @@ public class PlayerStats : MonoBehaviour
         if (_rigidbody != null)
         {
             Vector3 dir = hitDirection;
-            dir.y = 0f; // 위로 튀는 것 방지
+            dir.y = 0.2f;
             if (dir.sqrMagnitude > 0.001f) // 0 벡터 방지
             {
                 _rigidbody.velocity = Vector3.zero; // 기존 힘 초기화
@@ -73,6 +73,8 @@ public class PlayerStats : MonoBehaviour
         {
             StartCoroutine(InvincibleCoroutine());
         }
+
+        _playerCombat.State = PlayerCombat.PlayerState.Idle;
     }
 
     private IEnumerator InvincibleCoroutine()
