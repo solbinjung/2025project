@@ -7,9 +7,11 @@ public class PlayerSkillManager : MonoBehaviour
 {
     public Dictionary<KeyCode, SkillData> skillMap = new();
 
+    [Header("References")]
     public Animator animator;
+    public Transform effectPoint;
 
-    // UI 슬롯 이미지 매핑
+    [Header("UI Slots")]
     public Image QSlotImage;
     public Image WSlotImage;
     public Image ESlotImage;
@@ -62,12 +64,30 @@ public class PlayerSkillManager : MonoBehaviour
     {
         if (skillMap.TryGetValue(key, out SkillData skill))
         {
+            var stats = GetComponent<PlayerStats>();
+
+            if (stats.CurrentMp < skill.mpCost)
+            {
+                Debug.Log("마나가 부족합니다!");
+                return;
+            }
+
             Debug.Log($"기술 사용: {skill.skillName}");
             // 애니메이션 실행
             if (animator && !string.IsNullOrEmpty(skill.animationTriggerName))
             {
                 animator.SetTrigger(skill.animationTriggerName);
             }
+            PlayEffect(skill);
         }
     }
+    private void PlayEffect(SkillData skill)
+    {
+        if (skill.effectPrefab != null && effectPoint != null)
+        {
+            GameObject effect = Instantiate(skill.effectPrefab, effectPoint.position, effectPoint.rotation);
+            Destroy(effect, 1f);
+        }
+    }
+
 }

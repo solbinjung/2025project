@@ -106,12 +106,23 @@ public class PlayerStats : MonoBehaviour
         _isInvincible = value;
     }
 
+    public void CostMp(int mpCost) // MP 소모
+    {
+        _currentMp -= mpCost;
+        _currentMp = Mathf.Max(_currentMp, 0);
+    }
+
     public void Heal(int amount) // HP 충전
     {
         _currentHp += amount;
         _currentHp = Mathf.Min(_currentHp, _maxHp); // HP가 최대 HP 값을 초과하지 않도록 하기 위해
     }
 
+    public void RestoreMp(int amount) // MP 충전
+    {
+        _currentMp += amount;
+        _currentMp = Mathf.Min(_currentMp, _maxMp);
+    }
     private void Die()
     {
         _isDead = true;

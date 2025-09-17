@@ -11,6 +11,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] private bool _canCombat = true;
     [SerializeField] private float _attackCooldown = 0.5f;
     [SerializeField] private int _damage = 10;
+    [SerializeField] private int _mpCost = 10;
     [SerializeField] private MeleeHitBox _hitbox;
 
     [SerializeField] private float _dodgeDistance = 5f;
@@ -119,6 +120,8 @@ public class PlayerCombat : MonoBehaviour
 
         _animator.SetTrigger("Attack");
 
+        _playerStats.CostMp(_mpCost);
+
         StartCoroutine(PerformAttack());
         StartCoroutine(ResetStateAfter(_attackCooldown));
     }
@@ -208,7 +211,7 @@ public class PlayerCombat : MonoBehaviour
             State = PlayerState.Idle;
     }
 
-    // 피격 처리: State 변경 + Animator 트리거
+    // 피격 처리
     public void OnTakeHit()
     {
         State = PlayerState.GettingHit;
