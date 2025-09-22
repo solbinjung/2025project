@@ -19,15 +19,15 @@ public class PlayerUI : MonoBehaviour
         hpBar.value = hpPercent;
         mpBar.value = mpPercent;
 
-        // HP바 색상 변경
-        if (hpPercent > 0.5f) // 50% ~ 100%
-            hpFillImage.color = Color.green;
-        else if (hpPercent > 0.2f) // 20% ~ 50%
-            hpFillImage.color = Color.yellow;
-        else if (hpPercent > 0f) // 0% ~ 20%
-            hpFillImage.color = Color.red;
-        else // 0%
-            hpFillImage.color = Color.white;
+        //// HP바 색상 변경
+        //if (hpPercent > 0.5f) // 50% ~ 100%
+        //    hpFillImage.color = Color.green;
+        //else if (hpPercent > 0.2f) // 20% ~ 50%
+        //    hpFillImage.color = Color.yellow;
+        //else if (hpPercent > 0f) // 0% ~ 20%
+        //    hpFillImage.color = Color.red;
+        //else // 0%
+        //    hpFillImage.color = Color.white;
     }
 
 }
