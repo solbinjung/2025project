@@ -45,6 +45,7 @@ GameObject:
   - component: {fileID: 8999144515911806677}
   - component: {fileID: 4834636160702742121}
   - component: {fileID: 5145188147614976547}
+  - component: {fileID: 699904994736146842}
   m_Layer: 5
   m_Name: EnemyUI
   m_TagString: Untagged
@@ -151,6 +152,18 @@ MonoBehaviour:
   _enemyStats: {fileID: 4869734914614276308}
   hpBar: {fileID: 5834892234876760881}
   hpFillImage: {fileID: 7029939757823912570}
+--- !u!114 &699904994736146842
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 161651297686265273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8220de5be9f6c5748906ccf9ab906f51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &398511471248227754
 GameObject:
   m_ObjectHideFlags: 0
