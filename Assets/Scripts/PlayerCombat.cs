@@ -9,11 +9,11 @@ public class PlayerCombat : MonoBehaviour
 
     [Header("Settings")]
     [SerializeField] private bool _canCombat = true;
-    [SerializeField] private float _attackCooldown = 0.5f;
+    [SerializeField] private float _attackCooldown = 2f;
     [SerializeField] private int _damage = 10;
     [SerializeField] private int _mpCost = 10;
     [SerializeField] private MeleeHitBox _hitbox;
-
+    
     [SerializeField] private float _dodgeDistance = 5f;
     [SerializeField] private float _dodgeDuration = 0.3f;
     [SerializeField] private float dodgeCooldown = 1f;

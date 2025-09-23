@@ -10,24 +10,21 @@ public class PlayerUI : MonoBehaviour
     [SerializeField] private Slider mpBar;
 
     [SerializeField] private Image hpFillImage;
-
+    [SerializeField] private Image mpFillImage;
     void Update()
     {
-        float hpPercent = (float)_playerStats.CurrentHp / _playerStats.MaxHp;
-        float mpPercent = (float)_playerStats.CurrentMp / _playerStats.MaxMp;
+        hpBar.value = (float)_playerStats.CurrentHp / _playerStats.MaxHp;
+        mpBar.value = (float)_playerStats.CurrentMp / _playerStats.MaxMp;
 
-        hpBar.value = hpPercent;
-        mpBar.value = mpPercent;
+        if (hpBar.value > 0)
+            hpFillImage.color = new Color32(147, 0, 0, 255);
+        else
+            hpFillImage.color = new Color32(28, 22, 21, 255);
 
-        //// HP바 색상 변경
-        //if (hpPercent > 0.5f) // 50% ~ 100%
-        //    hpFillImage.color = Color.green;
-        //else if (hpPercent > 0.2f) // 20% ~ 50%
-        //    hpFillImage.color = Color.yellow;
-        //else if (hpPercent > 0f) // 0% ~ 20%
-        //    hpFillImage.color = Color.red;
-        //else // 0%
-        //    hpFillImage.color = Color.white;
+        if (mpBar.value > 0)
+            mpFillImage.color = new Color32(0, 11, 93, 255);
+        else
+            mpFillImage.color = new Color32(28, 22, 21, 255);
+
     }
-
 }

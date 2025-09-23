@@ -128,6 +128,7 @@ public class PlayerStats : MonoBehaviour
         _isDead = true;
         _animator.SetBool("isDead", true);
         Debug.Log("Player died!");
+        _playerController.StopMovement();
 
         if (_playerController != null)
             _playerController.CanControl = false;
