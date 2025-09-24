@@ -16,7 +16,9 @@ MonoBehaviour:
   skillDescription: skill description
   icon: {fileID: 21300000, guid: 61dab0b6e506c6a43b12d9fde15b2393, type: 3}
   animationTriggerName: HeavyStrike
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 8145502431507700120, guid: 000832214335ffd4782827d2a4510f4a,
+    type: 3}
   damage: 500
   mpCost: 300
   skillCooldown: 25
+  attackRange: 8

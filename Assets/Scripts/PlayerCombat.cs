@@ -150,7 +150,8 @@ public class PlayerCombat : MonoBehaviour
     {
         if (slashEffectPrefab != null && effectPoint != null)
         {
-            GameObject effect = Instantiate(slashEffectPrefab, effectPoint.position, effectPoint.rotation);
+            GameObject effect = Instantiate(slashEffectPrefab, effectPoint.position, Quaternion.identity);
+            effect.transform.forward = transform.forward;  
             Destroy(effect, 1f);
         }
     }

@@ -16,7 +16,9 @@ MonoBehaviour:
   skillDescription: skill description
   icon: {fileID: 21300000, guid: 0389074d1deba1c448d45812db40c0df, type: 3}
   animationTriggerName: Slash
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 161766660727748596, guid: 05ce920d629922a4eb4795ef7494ce5c,
+    type: 3}
   damage: 240
   mpCost: 100
   skillCooldown: 5
+  attackRange: 8

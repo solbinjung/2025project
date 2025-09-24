@@ -16,7 +16,9 @@ MonoBehaviour:
   skillDescription: skill description
   icon: {fileID: 21300000, guid: 0825dfa25de4551469e65496af7b3c71, type: 3}
   animationTriggerName: Poison
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 8915312667134092580, guid: 8a43d9f68490c374a93a9e8085555c02,
+    type: 3}
   damage: 320
   mpCost: 180
   skillCooldown: 7
+  attackRange: 8

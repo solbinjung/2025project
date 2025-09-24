@@ -16,7 +16,9 @@ MonoBehaviour:
   skillDescription: skill description
   icon: {fileID: 21300000, guid: b450d0b398880cb458f83d1a01b399ca, type: 3}
   animationTriggerName: LightningBolt
-  effectPrefab: {fileID: 0}
+  effectPrefab: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045,
+    type: 3}
   damage: 380
   mpCost: 180
   skillCooldown: 10
+  attackRange: 8

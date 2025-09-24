@@ -3688,7 +3688,7 @@ Transform:
   m_GameObject: {fileID: 2086913247067365975}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.167, y: 0.575, z: -0.047}
+  m_LocalPosition: {x: 0.067, y: 0.11, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4914,7 +4914,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 11.260393, y: 0, z: 2.6647663}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7004837309479207868}
@@ -4961,7 +4961,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 9beced82abcf0ff438fa87760dd2916d, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -5046,10 +5046,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a57027b54167a744fb9b628396d530cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
+  _speed: 7
   _groundMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   CanControl: 1
 --- !u!114 &6544700685630267579
 MonoBehaviour:
@@ -5063,10 +5063,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747ee1dc4e50afa44b96199728996231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 100
-  _maxMp: 100
+  _maxHp: 2000
+  _maxMp: 1000
   _invincibleDuration: 2
-  _knockbackForce: 5
+  _knockbackForce: 40
 --- !u!114 &2282902339230102073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5081,10 +5081,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canCombat: 1
   _attackCooldown: 0.5
-  _damage: 10
+  _damage: 30
+  _mpCost: 0
   _hitbox: {fileID: 2025479915343212810}
-  _dodgeDistance: 10
-  _dodgeDuration: 3
+  _dodgeDistance: 5
+  _dodgeDuration: 2
+  dodgeCooldown: 1
   _blockDuration: 1
   slashEffectPrefab: {fileID: 5503505460791601945, guid: 74c549d1b06b6b140a1fd9536eea637f,
     type: 3}
@@ -5101,12 +5103,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d87f1be9b3d12942b4996a7fe6a8da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 0}
+  animator: {fileID: 990803751556671489}
+  effectPoint: {fileID: 4831695321987443793}
   QSlotImage: {fileID: 0}
   WSlotImage: {fileID: 0}
   ESlotImage: {fileID: 0}
   RSlotImage: {fileID: 0}
   TSlotImage: {fileID: 0}
+  QCooldownOverlay: {fileID: 0}
+  WCooldownOverlay: {fileID: 0}
+  ECooldownOverlay: {fileID: 0}
+  RCooldownOverlay: {fileID: 0}
+  TCooldownOverlay: {fileID: 0}
 --- !u!1 &6053396040631332859
 GameObject:
   m_ObjectHideFlags: 0
@@ -6394,6 +6402,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 2025479915343212810}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: afbecd5bd7bdf5645939b6778b81260a,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2974321076535942624}
   m_SourcePrefab: {fileID: 100100000, guid: afbecd5bd7bdf5645939b6778b81260a, type: 3}
 --- !u!4 &3953810953711939015 stripped
 Transform:
@@ -6426,8 +6438,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.25103885, y: 1.4544959, z: 0.28870147}
-  m_Center: {x: 0.021076584, y: 0.7276223, z: -0.008343167}
+  m_Size: {x: 0.39821827, y: 1.3838221, z: 0.5137175}
+  m_Center: {x: -0.022937102, y: 0.69228494, z: 0.013390349}
 --- !u!114 &2025479915343212810
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6440,6 +6452,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93b2307591e60b4a83767d57d8538f0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!54 &2974321076535942624
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4437473562076133245}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1001 &4463754083460342365
 PrefabInstance:
   m_ObjectHideFlags: 0

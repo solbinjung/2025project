@@ -15,7 +15,8 @@ public class SkillData : ScriptableObject
     public GameObject effectPrefab;
 
     [Header("Stats")]
-    public float damage;
+    public int damage;
     public int mpCost;
     public float skillCooldown;
+    public float attackRange;
 }

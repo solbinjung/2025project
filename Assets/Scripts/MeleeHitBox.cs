@@ -25,7 +25,8 @@ public class MeleeHitBox : MonoBehaviour
         EnemyStats targetStats = other.GetComponentInParent<EnemyStats>();
         if (targetStats != null && targetStats != _owner.Stats)
         {
-            targetStats.TakeDamage(_owner.Damage);
+            Vector3 hitDirection = (targetStats.transform.position - transform.position).normalized;
+            targetStats.TakeDamage(_owner.Damage, hitDirection);
             _hitThisSwing.Add(other);
         }
     }

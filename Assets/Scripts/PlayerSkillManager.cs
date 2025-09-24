@@ -98,7 +98,7 @@ public class PlayerSkillManager : MonoBehaviour
         {
             var stats = GetComponent<PlayerStats>();
 
-            // 쿨다운 체크
+            // 쿨다운
             if (cooldownTimers.TryGetValue(key, out float readyTime))
             {
                 if (Time.time < readyTime)
@@ -109,13 +109,12 @@ public class PlayerSkillManager : MonoBehaviour
                 }
             }
 
-            // 마나 체크
+            // 마나 소비
             if (stats.CurrentMp < skill.mpCost)
             {
                 Debug.Log("마나가 부족합니다!");
                 return;
             }
-
             _playerStats.CostMp(skill.mpCost);
 
             Debug.Log($"기술 사용: {skill.skillName}");
@@ -126,7 +125,11 @@ public class PlayerSkillManager : MonoBehaviour
                 animator.SetTrigger(skill.animationTriggerName);
             }
 
+            // 기술 이펙트
             PlayEffect(skill);
+
+            // 데미지 처리
+            ApplySkillDamage(skill);
 
             // 쿨다운 등록
             cooldownTimers[key] = Time.time + skill.skillCooldown;
@@ -164,12 +167,26 @@ public class PlayerSkillManager : MonoBehaviour
             }
         }
     }
-
+    private void ApplySkillDamage(SkillData skill)
+    {
+        // 공격 범위 내 적 찾기
+        Collider[] hits = Physics.OverlapSphere(transform.position, skill.attackRange);
+        foreach (Collider hit in hits)
+        {
+            EnemyStats enemyStats = hit.GetComponent<EnemyStats>();
+            if (enemyStats != null)
+            {
+                Vector3 hitDir = (enemyStats.transform.position - transform.position).normalized;
+                enemyStats.TakeDamage(skill.damage, hitDir);
+            }
+        }
+    }
     private void PlayEffect(SkillData skill)
     {
         if (skill.effectPrefab != null && effectPoint != null)
         {
             GameObject effect = Instantiate(skill.effectPrefab, effectPoint.position, effectPoint.rotation);
+            effect.transform.forward = transform.forward;
             Destroy(effect, 1f);
         }
     }
