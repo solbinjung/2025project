@@ -80,23 +80,38 @@ public class PlayerStats : MonoBehaviour
     private IEnumerator InvincibleCoroutine()
     {
         _isInvincible = true;
-
         _playerController.CanControl = true;
 
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
         float elapsed = 0f;
 
+        // 원래 색상 저장
+        Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>();
+        foreach (var r in renderers)
+        {
+            originalColors[r] = r.material.color;
+        }
+
         while (elapsed < _invincibleDuration)
         {
             foreach (var r in renderers)
-                r.enabled = !r.enabled;
+            {
+                // 빨강 or 원래색 번갈아가면서 적용
+                if (Mathf.FloorToInt(elapsed * 5f) % 2 == 0) // 0.2초 간격
+                    r.material.color = Color.red;
+                else
+                    r.material.color = originalColors[r];
+            }
 
             yield return new WaitForSeconds(0.2f);
             elapsed += 0.2f;
         }
 
+        // 끝난 뒤 원래 색상 복원
         foreach (var r in renderers)
-            r.enabled = true;
+        {
+            r.material.color = originalColors[r];
+        }
 
         _isInvincible = false;
     }
@@ -115,7 +130,7 @@ public class PlayerStats : MonoBehaviour
     public void Heal(int amount) // HP 충전
     {
         _currentHp += amount;
-        _currentHp = Mathf.Min(_currentHp, _maxHp); // HP가 최대 HP 값을 초과하지 않도록 하기 위해
+        _currentHp = Mathf.Min(_currentHp, _maxHp);
     }
 
     public void RestoreMp(int amount) // MP 충전

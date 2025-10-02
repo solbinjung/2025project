@@ -21,4 +21,4 @@ MonoBehaviour:
   damage: 380
   mpCost: 180
   skillCooldown: 10
-  attackRange: 8
+  attackRange: 10

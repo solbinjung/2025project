@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -65,8 +66,30 @@ public class EnemyStats : MonoBehaviour
         if (effectPrefab != null && hitPoint != null)
         {
             GameObject effect = Instantiate(effectPrefab, hitPoint.position, Quaternion.identity);
-            effect.transform.forward = transform.forward;
-            Destroy(effect, 1f);
+            Destroy(effect, 2f);
+        }
+        StartCoroutine(HitFlashCoroutine());
+    }
+
+    private IEnumerator HitFlashCoroutine()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        // 원래 색상 저장
+        Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>();
+        foreach (var r in renderers)
+        {
+            originalColors[r] = r.material.color;
+            r.material.color = Color.red; 
+        }
+
+        // 잠깐 대기
+        yield return new WaitForSeconds(0.2f);
+
+        // 원래 색상 복원
+        foreach (var r in renderers)
+        {
+            r.material.color = originalColors[r];
         }
     }
 
