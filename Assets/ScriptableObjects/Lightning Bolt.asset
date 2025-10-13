@@ -12,8 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9228a3d674c59b40a68b84c6e6c0f26, type: 3}
   m_Name: Lightning Bolt
   m_EditorClassIdentifier: 
-  skillName: Lightning Bolt
-  skillDescription: skill description
+  skillName: "Lightning Bolt(3\uB2E8\uACC4)"
+  skillDescription: "\uD558\uB298\uC5D0\uC11C \uBC88\uAC1C\uB97C \uB0B4\uB824 \uC801\uC744
+    \uAC10\uC804\uC2DC\uD0A8\uB2E4."
+  skillEffectDescription: "\uC7AC\uC0AC\uC6A9 \uB300\uAE30 \uC2DC\uAC04 10\uCD08
+    \uD53C\uD574\uB7C9 380 \uBC94\uC704 10"
   icon: {fileID: 21300000, guid: b450d0b398880cb458f83d1a01b399ca, type: 3}
   animationTriggerName: LightningBolt
   effectPrefab: {fileID: 7478731271839673279, guid: 4d3c8045dd8857a4b8d34c2361c61045,

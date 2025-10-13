@@ -8,6 +8,7 @@ public class SkillData : ScriptableObject
     [Header("Info")]
     public string skillName;
     public string skillDescription;
+    public string skillEffectDescription;
     public Sprite icon;
 
     [Header("Animation")]

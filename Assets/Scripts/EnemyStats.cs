@@ -23,6 +23,9 @@ public class EnemyStats : MonoBehaviour
     private EnemyAI _ai;
     private Rigidbody _rigidbody;
 
+    private Coroutine hitFlashRoutine;
+    private Material[] _cachedMaterials;
+
     void Awake()
     {
         _currentHp = _maxHp;
@@ -31,6 +34,14 @@ public class EnemyStats : MonoBehaviour
         _agent = GetComponent<NavMeshAgent>();
         _ai = GetComponent<EnemyAI>();
         _rigidbody = GetComponent<Rigidbody>();
+
+        // material 캐싱
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        _cachedMaterials = new Material[renderers.Length];
+        for (int i = 0; i < renderers.Length; i++)
+        {
+            _cachedMaterials[i] = renderers[i].material;
+        }
     }
 
     public void TakeDamage(int damage, Vector3 hitDirection)
@@ -68,29 +79,26 @@ public class EnemyStats : MonoBehaviour
             GameObject effect = Instantiate(effectPrefab, hitPoint.position, Quaternion.identity);
             Destroy(effect, 2f);
         }
-        StartCoroutine(HitFlashCoroutine());
+        if (hitFlashRoutine != null)
+            StopCoroutine(hitFlashRoutine);
+
+        hitFlashRoutine = StartCoroutine(HitFlashCoroutine());
     }
 
     private IEnumerator HitFlashCoroutine()
     {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        // 색 변경
+        foreach (var m in _cachedMaterials)
+            m.color = Color.red;
 
-        // 원래 색상 저장
-        Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>();
-        foreach (var r in renderers)
-        {
-            originalColors[r] = r.material.color;
-            r.material.color = Color.red; 
-        }
-
-        // 잠깐 대기
+        // 0.2초 대기
         yield return new WaitForSeconds(0.2f);
 
         // 원래 색상 복원
-        foreach (var r in renderers)
-        {
-            r.material.color = originalColors[r];
-        }
+        foreach (var m in _cachedMaterials)
+            m.color = Color.white;
+
+        hitFlashRoutine = null;
     }
 
     private void Die()

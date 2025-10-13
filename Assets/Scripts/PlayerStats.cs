@@ -97,13 +97,13 @@ public class PlayerStats : MonoBehaviour
             foreach (var r in renderers)
             {
                 // 빨강 or 원래색 번갈아가면서 적용
-                if (Mathf.FloorToInt(elapsed * 5f) % 2 == 0) // 0.2초 간격
+                if (Mathf.FloorToInt(elapsed * 5f) % 2 == 0) 
                     r.material.color = Color.red;
                 else
                     r.material.color = originalColors[r];
             }
 
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(0.15f); // 0.15초 간격
             elapsed += 0.2f;
         }
 

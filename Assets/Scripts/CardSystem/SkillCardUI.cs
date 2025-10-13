@@ -9,6 +9,7 @@ public class SkillCardUI : MonoBehaviour
     public Image iconImage;
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI descriptionText;
+    public TextMeshProUGUI effectDescriptionText;
     public Button selectButton;
 
     private SkillData skillData;
@@ -19,6 +20,7 @@ public class SkillCardUI : MonoBehaviour
         iconImage.sprite = data.icon;
         nameText.text = data.skillName;
         descriptionText.text = data.skillDescription;
+        effectDescriptionText.text = data.skillEffectDescription;
 
         selectButton.onClick.RemoveAllListeners();
         selectButton.onClick.AddListener(() => onSelect?.Invoke(skillData));
