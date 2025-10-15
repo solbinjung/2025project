@@ -6,25 +6,25 @@ using UnityEngine.AI;
 public class EnemyAI : MonoBehaviour
 {
     [Header("Stats")]
-    [SerializeField] private int _contactDamage = 10;
-    [SerializeField] private float _contactDamageCooldown = 3f;
+    [SerializeField] protected int _contactDamage = 10;
+    [SerializeField] protected float _contactDamageCooldown = 3f;
 
-    [SerializeField] private int _attackDamage = 20;
-    [SerializeField] private float _attackRange = 7f;
-    [SerializeField] private float _attackCooldown = 2f;
-    [SerializeField] private float _detectionRange = 15f;
+    [SerializeField] protected int _attackDamage = 20;
+    [SerializeField] protected float _attackRange = 7f;
+    [SerializeField] protected float _attackCooldown = 2f;
+    [SerializeField] protected float _detectionRange = 15f;
 
     [Header("Patrol Settings")]
-    [SerializeField] private float _patrolRadius = 10f;   // 랜덤 순찰 반경
-    [SerializeField] private float _patrolWaitTime = 3f;  // 순찰 지점에서 대기 시간
-    private bool _waitingAtPoint = false;
+    [SerializeField] protected float _patrolRadius = 10f;   // 랜덤 순찰 반경
+    [SerializeField] protected float _patrolWaitTime = 3f;  // 순찰 지점에서 대기 시간
+    protected bool _waitingAtPoint = false;
 
-    private Transform _player;
-    private NavMeshAgent _agent;
-    private Animator _animator;
-    private bool _canDealContactDamage = true;
-    private bool _canAttack = true;
-    private bool _isDead = false;
+    protected Transform _player;
+    protected NavMeshAgent _agent;
+    protected Animator _animator;
+    protected bool _canDealContactDamage = true;
+    protected bool _canAttack = true;
+    protected bool _isDead = false;
 
     private void Awake()
     {

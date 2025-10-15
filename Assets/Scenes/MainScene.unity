@@ -32699,6 +32699,36 @@ PrefabInstance:
       propertyPath: _damage
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 0.46275875
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1.8583174
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 0.759806
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Center.x
+      value: -0.013695207
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.92953235
+      objectReference: {fileID: 0}
+    - target: {fileID: 3717479972697231597, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Center.z
+      value: 0.03322415
+      objectReference: {fileID: 0}
     - target: {fileID: 4046918471710944720, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: ESlotImage
