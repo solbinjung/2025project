@@ -240,7 +240,8 @@ MonoBehaviour:
   _specialAttackBConeWarningPrefab: {fileID: 3567066349314122732, guid: 546b499cd7e962a4c975217ee31897f1,
     type: 3}
   _specialAttackBWarningDuration: 3
-  _specialAttackBFirePrefab: {fileID: 0}
+  _specialAttackBFirePrefab: {fileID: 1000011113172478, guid: 4b9e1e5074422484cb2d2aca777ef525,
+    type: 3}
   _specialAttackBCooldown: 8
 --- !u!114 &300676638
 MonoBehaviour:
