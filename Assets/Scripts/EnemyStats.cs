@@ -5,10 +5,15 @@ using UnityEngine.AI;
 
 public class EnemyStats : MonoBehaviour
 {
+    [Header("Stats")]
     [SerializeField] private int _maxHp = 100;
-    [SerializeField] private float _destroyDelay = 3f;
     [SerializeField] private float _knockbackForce = 5f;
+    [SerializeField] private bool _isKnockbackImmune = false; 
 
+    [Header("Death")]
+    [SerializeField] private float _destroyDelay = 3f;
+
+    [Header("Effects")]
     [SerializeField] private GameObject effectPrefab;
     [SerializeField] private Transform hitPoint;
 
@@ -16,6 +21,13 @@ public class EnemyStats : MonoBehaviour
 
     public int MaxHp => _maxHp;
     public int CurrentHp => _currentHp;
+
+    // 0.7f = 70%
+    public float HealthPercentage => (float)_currentHp / _maxHp;
+
+    public bool IsInvincible { get; set; } = false;
+
+    public bool IsDead { get; private set; } = false;
 
     private Animator _animator;
     private Collider _collider;
@@ -26,7 +38,7 @@ public class EnemyStats : MonoBehaviour
     private Coroutine hitFlashRoutine;
     private Material[] _cachedMaterials;
 
-    void Awake()
+    protected virtual void Awake()
     {
         _currentHp = _maxHp;
         _animator = GetComponent<Animator>();
@@ -44,8 +56,10 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage, Vector3 hitDirection)
+    public virtual void TakeDamage(int damage, Vector3 hitDirection)
     {
+        if (IsInvincible || IsDead) return;
+
         _currentHp -= damage;
         _currentHp = Mathf.Max(_currentHp, 0);
 
@@ -55,7 +69,7 @@ public class EnemyStats : MonoBehaviour
         Debug.Log($"{gameObject.name} took {damage} damage. Current HP: {_currentHp}");
 
         // 넉백 처리
-        if (_rigidbody != null)
+        if (_rigidbody != null && !_isKnockbackImmune)
         {
             Vector3 dir = hitDirection;
             dir.y = 0.2f;
@@ -72,7 +86,7 @@ public class EnemyStats : MonoBehaviour
         }
     }
 
-    private void HitEffect()
+    protected virtual void HitEffect()
     {
         if (effectPrefab != null && hitPoint != null)
         {
@@ -85,7 +99,7 @@ public class EnemyStats : MonoBehaviour
         hitFlashRoutine = StartCoroutine(HitFlashCoroutine());
     }
 
-    private IEnumerator HitFlashCoroutine()
+    protected virtual IEnumerator HitFlashCoroutine()
     {
         // 색 변경
         foreach (var m in _cachedMaterials)
@@ -101,8 +115,11 @@ public class EnemyStats : MonoBehaviour
         hitFlashRoutine = null;
     }
 
-    private void Die()
+    protected virtual void Die()
     {
+        if (IsDead) return;
+        IsDead = true;
+
         Debug.Log($"{gameObject.name} died!");
         _animator.SetBool("isDead", true);
 
@@ -113,7 +130,7 @@ public class EnemyStats : MonoBehaviour
         StartCoroutine(RemoveAfterDelay());
     }
 
-    IEnumerator RemoveAfterDelay()
+    protected virtual IEnumerator RemoveAfterDelay()
     {
         yield return new WaitForSeconds(_destroyDelay);
         Destroy(gameObject);

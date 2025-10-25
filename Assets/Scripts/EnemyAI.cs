@@ -20,22 +20,30 @@ public class EnemyAI : MonoBehaviour
     protected bool _waitingAtPoint = false;
 
     protected Transform _player;
+    protected PlayerStats _playerStats;
     protected NavMeshAgent _agent;
     protected Animator _animator;
+    protected EnemyStats _stats;
+
     protected bool _canDealContactDamage = true;
     protected bool _canAttack = true;
     protected bool _isDead = false;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         _agent = GetComponent<NavMeshAgent>();
         _animator = GetComponent<Animator>();
+        _stats = GetComponent<EnemyStats>();
+
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
+        {
             _player = playerObj.transform;
+            _playerStats = playerObj.GetComponent<PlayerStats>();
+        }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if (_isDead) return;
         if (_player == null) return;
@@ -52,23 +60,23 @@ public class EnemyAI : MonoBehaviour
 
         if (distance > _detectionRange)
         {
-            // 플레이어가 탐지 범위 밖 → 랜덤 순찰
+            // 플레이어가 탐지 범위 밖 -> 랜덤 순찰
             PatrolRandom();
         }
         else if (distance > _attackRange)
         {
-            // 플레이어 탐지됨, 공격 범위 밖 → 추적
+            // 플레이어 탐지됨, 공격 범위 밖 -> 추적
             SetMovement(_player.position, 5f, false); // Run
         }
         else
         {
-            // 플레이어 공격 범위 안 → 공격
+            // 플레이어 공격 범위 안 -> 공격
             SetMovement(Vector3.zero, 0f, true); // Idle
             TryAttack();
         }
     }
     // 랜덤 순찰 로직
-    private void PatrolRandom()
+    protected virtual void PatrolRandom()
     {
         if (!_waitingAtPoint && (!_agent.hasPath || _agent.remainingDistance <= _agent.stoppingDistance))
         {
@@ -80,7 +88,7 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private IEnumerator WaitAtPatrolPoint()
+    protected virtual IEnumerator WaitAtPatrolPoint()
     {
         _waitingAtPoint = true;
         yield return new WaitForSeconds(_patrolWaitTime);
@@ -88,7 +96,7 @@ public class EnemyAI : MonoBehaviour
     }
 
     // NavMesh 위의 랜덤 지점 반환
-    private Vector3 GetRandomNavMeshPosition(float radius)
+    protected Vector3 GetRandomNavMeshPosition(float radius)
     {
         Vector3 randomDirection = Random.insideUnitSphere * radius + transform.position;
 
@@ -101,11 +109,14 @@ public class EnemyAI : MonoBehaviour
     }
 
     // 이동 + 애니메이션 제어
-    private void SetMovement(Vector3 targetPos, float speed, bool stop)
+    protected void SetMovement(Vector3 targetPos, float speed, bool stop)
     {
+        if (_agent.enabled == false || _isDead) return;
+
         if (stop)
         {
             _agent.isStopped = true;
+            _agent.velocity = Vector3.zero;
             _animator.SetFloat("MoveSpeed", 0f);
         }
         else
@@ -113,34 +124,33 @@ public class EnemyAI : MonoBehaviour
             _agent.isStopped = false;
             _agent.speed = speed;
             _agent.SetDestination(targetPos);
-            _animator.SetFloat("MoveSpeed", speed > 3f ? 1f : 0.5f);
+            _animator.SetFloat("MoveSpeed", _agent.velocity.magnitude / _agent.speed);
             // 1f = 달리기, 0.5f = 걷기
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void OnCollisionEnter(Collision collision)
     {
         if (_canDealContactDamage && collision.gameObject.CompareTag("Player"))
         {
-            PlayerStats playerStats = collision.gameObject.GetComponent<PlayerStats>();
-            if (playerStats != null && !playerStats.IsDead)
+            if (_playerStats != null && !_playerStats.IsDead)
             {
-                Vector3 hitDirection = (playerStats.transform.position - transform.position).normalized;
-                playerStats.TakeDamage(_contactDamage, hitDirection);
+                Vector3 hitDirection = (_playerStats.transform.position - transform.position).normalized;
+                _playerStats.TakeDamage(_contactDamage, hitDirection);
 
                 StartCoroutine(ContactDamageCooldown());
             }
         }
     }
 
-    private IEnumerator ContactDamageCooldown()
+    protected virtual IEnumerator ContactDamageCooldown()
     {
         _canDealContactDamage = false;
         yield return new WaitForSeconds(_contactDamageCooldown);
         _canDealContactDamage = true;
     }
 
-    private void TryAttack()
+    protected virtual void TryAttack()
     {
         if (_canAttack)
         {
@@ -148,30 +158,35 @@ public class EnemyAI : MonoBehaviour
         }
     }
 
-    private IEnumerator AttackRoutine()
+    protected virtual IEnumerator AttackRoutine()
     {
         _canAttack = false;
+        transform.LookAt(_player);
         _animator.SetTrigger("Attack");
 
         yield return new WaitForSeconds(0.5f);
 
         if (Vector3.Distance(transform.position, _player.position) <= _attackRange + 0.5f)
         {
-            PlayerStats playerStats = _player.GetComponent<PlayerStats>();
-            if (playerStats != null && !playerStats.IsDead)
+            if (_playerStats != null && !_playerStats.IsDead)
             {
-                Vector3 hitDirection = (playerStats.transform.position - transform.position).normalized;
-                playerStats.TakeDamage(_attackDamage, hitDirection);
+                Vector3 hitDirection = (_playerStats.transform.position - transform.position).normalized;
+                _playerStats.TakeDamage(_attackDamage, hitDirection);
             }
         }
 
         yield return new WaitForSeconds(_attackCooldown);
         _canAttack = true;
     }
-    public void OnDeath()
+    public virtual void OnDeath()
     {
         _isDead = true;
-        if (_agent != null) _agent.enabled = false;
+        StopAllCoroutines(); // 모든 행동(공격, 순찰) 중지
+        if (_agent != null)
+        {
+            _agent.isStopped = true;
+            _agent.enabled = false;
+        }
     }
 }
 
