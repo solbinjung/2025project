@@ -32694,6 +32694,16 @@ PrefabInstance:
       propertyPath: m_ApplyRootMotion
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 1021785256128063408, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Height
+      value: 1.8924804
+      objectReference: {fileID: 0}
+    - target: {fileID: 1021785256128063408, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Center.y
+      value: 0.8963524
+      objectReference: {fileID: 0}
     - target: {fileID: 2282902339230102073, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: _damage
@@ -32827,7 +32837,7 @@ PrefabInstance:
     - target: {fileID: 8065941298958236617, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
       propertyPath: m_Constraints
-      value: 116
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 9059288849706489097, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}
