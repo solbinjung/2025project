@@ -15,6 +15,8 @@ public class UIInventory : MonoBehaviour
         InventoryManager.OnInventoryChanged += UpdateInventoryUI;
 
         UpdateInventoryUI();
+
+        gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -36,6 +38,25 @@ public class UIInventory : MonoBehaviour
             {
                 slots[i].ClearSlot();
             }
+        }
+    }
+    public void OpenInventoryPanel()
+    {
+        gameObject.SetActive(true);
+        UpdateInventoryUI(); 
+    }
+    public void CloseInventoryPanel()
+    {
+        gameObject.SetActive(false);
+    }
+
+    public void ToggleInventoryPanel()
+    {
+        gameObject.SetActive(!gameObject.activeSelf);
+
+        if (gameObject.activeSelf)
+        {
+            UpdateInventoryUI();
         }
     }
 }
