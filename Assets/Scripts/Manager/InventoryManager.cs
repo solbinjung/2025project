@@ -93,4 +93,52 @@ public class InventoryManager : MonoBehaviour
 
         return false;
     }
+    public void SwapSlots(int indexA, int indexB)
+    {
+        // 1. 두 인덱스가 유효한지 확인
+        if (indexA < 0 || indexA >= inventory.Count ||
+            indexB < 0 || indexB >= inventory.Count)
+        {
+            return;
+        }
+
+        // 2. 데이터 교환
+        ItemSlot temp = inventory[indexA];
+        inventory[indexA] = inventory[indexB];
+        inventory[indexB] = temp;
+
+        // 3. UI 업데이트 방송! (인벤토리 + 핫바 동시 갱신)
+        OnInventoryChanged?.Invoke();
+    }
+    public void UseItem(int slotIndex)
+    {
+        // 1. 슬롯 인덱스가 유효한지, 아이템이 있는지 확인
+        if (slotIndex < 0 || slotIndex >= inventory.Count ||
+            inventory[slotIndex] == null || inventory[slotIndex].item == null)
+        {
+            Debug.Log($"[Inventory] {slotIndex}번 슬롯은 비어있습니다.");
+            return;
+        }
+        // 2. 아이템 데이터 가져오기
+        ItemData itemToUse = inventory[slotIndex].item;
+
+        // 3. (수정) 아이템 타입 체크(if) 제거 -> 바로 효과 실행
+        Debug.Log($"[Inventory] {itemToUse.itemName} 아이템 사용!");
+
+        // 4. (예시) 플레이어 체력 회복
+        if (itemToUse.healAmount > 0)
+        {
+            // PlayerStats.Instance.Heal(itemToUse.healAmount);
+            Debug.Log($"체력이 {itemToUse.healAmount} 회복되었습니다.");
+        }
+        else
+        {
+            // 사용할 수 있지만 아무 효과가 없는 아이템일 경우
+            Debug.Log($"[Inventory] {itemToUse.itemName} 아이템은 특별한 효과가 없습니다.");
+        }
+
+        // 5. 아이템 1개 소모
+        RemoveItem(itemToUse, 1);
+    }
+
 }

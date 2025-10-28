@@ -32,6 +32,7 @@ public class PlayerController : MonoBehaviour
     {
         HandleMovement();
         HandleSkillInput();
+        HandleItemInput();
     }
 
     private void HandleSkillInput()
@@ -41,6 +42,15 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E)) _skillManager.UseSkill(KeyCode.E);
         if (Input.GetKeyDown(KeyCode.R)) _skillManager.UseSkill(KeyCode.R);
         if (Input.GetKeyDown(KeyCode.T)) _skillManager.UseSkill(KeyCode.T);
+    }
+
+    private void HandleItemInput()
+    {
+        if (Input.GetKeyDown(KeyCode.A)) InventoryManager.Instance.UseItem(0);
+        if (Input.GetKeyDown(KeyCode.S)) InventoryManager.Instance.UseItem(1);
+        if (Input.GetKeyDown(KeyCode.D)) InventoryManager.Instance.UseItem(2);
+        if (Input.GetKeyDown(KeyCode.Z)) InventoryManager.Instance.UseItem(3);
+        if (Input.GetKeyDown(KeyCode.X)) InventoryManager.Instance.UseItem(4);
     }
 
     private void HandleMovement()
