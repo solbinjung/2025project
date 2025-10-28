@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using System;
 
 public class EnemyStats : MonoBehaviour
 {
     [Header("Stats")]
     [SerializeField] private int _maxHp = 100;
     [SerializeField] private float _knockbackForce = 5f;
-    [SerializeField] private bool _isKnockbackImmune = false; 
+    [SerializeField] private bool _isKnockbackImmune = false;
+    [SerializeField] private int enemyID;
 
     [Header("Death")]
     [SerializeField] private float _destroyDelay = 3f;
@@ -16,6 +18,8 @@ public class EnemyStats : MonoBehaviour
     [Header("Effects")]
     [SerializeField] private GameObject effectPrefab;
     [SerializeField] private Transform hitPoint;
+
+    public static event Action<int> OnEnemyDied;
 
     private int _currentHp;
 
@@ -126,6 +130,8 @@ public class EnemyStats : MonoBehaviour
         if (_collider != null) _collider.enabled = false;
         if (_agent != null) _agent.enabled = false;
         if (_ai != null) _ai.OnDeath();
+
+        OnEnemyDied?.Invoke(enemyID);
 
         StartCoroutine(RemoveAfterDelay());
     }

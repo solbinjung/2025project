@@ -1110,6 +1110,7 @@ MonoBehaviour:
   _maxHp: 8000
   _knockbackForce: 5
   _isKnockbackImmune: 1
+  enemyID: 2001
   _destroyDelay: 3
   effectPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8,
     type: 3}

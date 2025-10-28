@@ -1711,8 +1711,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _maxHp: 2400
-  _destroyDelay: 3
   _knockbackForce: 5
+  _isKnockbackImmune: 0
+  enemyID: 1001
+  _destroyDelay: 3
   effectPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8,
     type: 3}
   hitPoint: {fileID: 5929301461688610822}
