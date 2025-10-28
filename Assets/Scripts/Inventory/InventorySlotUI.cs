@@ -15,6 +15,11 @@ public class InventorySlotUI : MonoBehaviour
 
     public void DrawSlot(ItemSlot slotData)
     {
+        if (slotData == null || slotData.item == null)
+        {
+            ClearSlot();
+            return;
+        }
         // 아이콘 표시
         itemIcon.enabled = true;
         itemIcon.sprite = slotData.item.icon;

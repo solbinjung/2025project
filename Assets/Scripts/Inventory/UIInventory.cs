@@ -1,20 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class UIInventory : MonoBehaviour
+public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
     [SerializeField] private GameObject itemsGrid;
 
     private InventorySlotUI[] slots;
 
+    private RectTransform rectTransform;
+    private CanvasGroup canvasGroup;
+
     void Start()
     {
         slots = itemsGrid.GetComponentsInChildren<InventorySlotUI>();
-
         InventoryManager.OnInventoryChanged += UpdateInventoryUI;
-
         UpdateInventoryUI();
+
+        rectTransform = GetComponent<RectTransform>();
+        canvasGroup = GetComponent<CanvasGroup>();
 
         gameObject.SetActive(false);
     }
@@ -58,5 +63,21 @@ public class UIInventory : MonoBehaviour
         {
             UpdateInventoryUI();
         }
+    }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        canvasGroup.alpha = 0.8f;
+        canvasGroup.blocksRaycasts = false;
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        rectTransform.anchoredPosition += eventData.delta;
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        canvasGroup.alpha = 1f;
+        canvasGroup.blocksRaycasts = true;
     }
 }

@@ -2644,14 +2644,14 @@ RectTransform:
   m_GameObject: {fileID: 187684160}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.019953344, y: 0.27337477, z: 0.7970668}
+  m_LocalScale: {x: 0.024185449, y: 0.33135757, z: 0.9661247}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2108951205}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 41.911407, y: 37.908813}
+  m_AnchoredPosition: {x: 41, y: 36.4}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &187684162
@@ -2697,7 +2697,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 187684163}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1109765571}
+        m_TargetAssemblyTypeName: UIInventory, Assembly-CSharp
+        m_MethodName: CloseInventoryPanel
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &187684163
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3610,9 +3622,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1719630298}
-        m_TargetAssemblyTypeName: SkillDrawUIManager, Assembly-CSharp
-        m_MethodName: OpenSkillDrawPanel
+      - m_Target: {fileID: 1109765571}
+        m_TargetAssemblyTypeName: UIInventory, Assembly-CSharp
+        m_MethodName: ToggleInventoryPanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -17359,6 +17371,7 @@ GameObject:
   - component: {fileID: 1109765570}
   - component: {fileID: 1109765569}
   - component: {fileID: 1109765571}
+  - component: {fileID: 1109765572}
   m_Layer: 5
   m_Name: Inventory Panel
   m_TagString: Untagged
@@ -17437,7 +17450,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d837f60f46e30348889a6d642c89aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemsGrid: {fileID: 2108951204}
+  itemsGrid: {fileID: 1177784046}
+--- !u!225 &1109765572
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109765567}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1001 &1110060075
 PrefabInstance:
   m_ObjectHideFlags: 0
