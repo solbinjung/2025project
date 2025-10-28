@@ -13,4 +13,5 @@ public class ItemData : ScriptableObject
     public Sprite icon;
 
     public int maxStack;
+    public bool isStackable=true;
 }
