@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c76da86f14201e45a6e4cf851465226, type: 3}
   m_Name: HealthPotionLv02
   m_EditorClassIdentifier: 
-  itemId: 1002
   itemName: "\uC911\uAE09 \uCCB4\uB825 \uBB3C\uC57D"
   itemDescription: "\uBD89\uC740\uBE5B\uC774 \uAC10\uB3C4\uB294 \uC2E0\uBE44\uD55C
     \uBB3C\uC57D"
   itemEffectDescription: "\uC0AC\uC6A9 \uC2DC \uCCB4\uB825\uC744 120 \uC989\uC2DC
     \uD68C\uBCF5\uD569\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 743bdacffa4d28347a3686ab66c5cc04, type: 3}
-  maxStack: 64
+  isStackable: 1
+  healAmount: 120
+  restoreMpAmount: 0

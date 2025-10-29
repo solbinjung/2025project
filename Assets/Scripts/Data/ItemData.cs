@@ -14,4 +14,5 @@ public class ItemData : ScriptableObject
 
     [Header("Item Effect")]
     public int healAmount = 0;
+    public int restoreMpAmount = 0;
 }

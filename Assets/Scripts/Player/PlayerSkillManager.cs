@@ -2,10 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class PlayerSkillManager : MonoBehaviour
 {
     public Dictionary<KeyCode, SkillData> skillMap = new();
+
+    public List<SkillData> ownedSkills = new List<SkillData>();
+    public static event Action<int> OnOwnedSkillsChanged;
 
     [Header("References")]
     public Animator animator;
@@ -67,11 +71,17 @@ public class PlayerSkillManager : MonoBehaviour
 
     public void AddSkill(SkillData skill)
     {
-        if (skillMap.ContainsValue(skill))
+
+        if (ownedSkills.Contains(skill))
         {
-            Debug.LogWarning($"{skill.skillName} 기술이 이미 등록되어 있습니다.");
+            Debug.LogWarning($"{skill.skillName} 스킬은 이미 보유 중입니다.");
             return;
         }
+
+        ownedSkills.Add(skill);
+
+        OnOwnedSkillsChanged?.Invoke(ownedSkills.Count);
+
 
         var keys = new List<KeyCode> { KeyCode.Q, KeyCode.W, KeyCode.E, KeyCode.R, KeyCode.T };
         foreach (var key in keys)
@@ -86,10 +96,10 @@ public class PlayerSkillManager : MonoBehaviour
                 {
                     slotImage.sprite = skill.icon;
                 }
-
-                return;
+                return; 
             }
         }
+        Debug.LogWarning($"보유 스킬 {skill.skillName} 추가. (핫바가 꽉 차서 장착은 못함)");
     }
 
     public void UseSkill(KeyCode key)

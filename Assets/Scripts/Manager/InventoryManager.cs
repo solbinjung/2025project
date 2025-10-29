@@ -43,6 +43,20 @@ public class InventoryManager : MonoBehaviour
 
     public List<ItemSlot> inventory = new List<ItemSlot>();
 
+    private PlayerStats _playerStats;
+
+    private void Start()
+    {
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+        if (playerObj != null)
+        {
+            _playerStats = playerObj.GetComponent<PlayerStats>();
+        }
+        if (_playerStats == null)
+        {
+            Debug.LogError("Error");
+        }
+    }
 
     public void AddItem(ItemData itemToAdd, int amountToAdd)
     {
@@ -119,24 +133,28 @@ public class InventoryManager : MonoBehaviour
             Debug.Log($"[Inventory] {slotIndex}번 슬롯은 비어있습니다.");
             return;
         }
-        // 2. 아이템 데이터 가져오기
+        // 아이템 데이터 가져오기
         ItemData itemToUse = inventory[slotIndex].item;
 
-        // 3. (수정) 아이템 타입 체크(if) 제거 -> 바로 효과 실행
+        //아이템 타입 체크(if) 제거 -> 바로 효과 실행
         Debug.Log($"[Inventory] {itemToUse.itemName} 아이템 사용!");
 
-        // 4. (예시) 플레이어 체력 회복
-        if (itemToUse.healAmount > 0)
+        if (itemToUse.healAmount > 0) // 체력
         {
-            // PlayerStats.Instance.Heal(itemToUse.healAmount);
+            _playerStats.Heal(itemToUse.healAmount);
             Debug.Log($"체력이 {itemToUse.healAmount} 회복되었습니다.");
+        }
+        else if (itemToUse.restoreMpAmount > 0) // 마나
+        {
+            _playerStats.RestoreMp(itemToUse.restoreMpAmount);
+            Debug.Log($"마나가 {itemToUse.restoreMpAmount} 회복되었습니다.");
         }
         else
         {
             // 사용할 수 있지만 아무 효과가 없는 아이템일 경우
             Debug.Log($"[Inventory] {itemToUse.itemName} 아이템은 특별한 효과가 없습니다.");
         }
-
+        
         // 5. 아이템 1개 소모
         RemoveItem(itemToUse, 1);
     }

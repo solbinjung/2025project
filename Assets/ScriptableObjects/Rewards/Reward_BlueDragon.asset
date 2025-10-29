@@ -10,6 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60292f9d43d4d94a922152614951b0b, type: 3}
-  m_Name: New Reward
+  m_Name: Reward_BlueDragon
   m_EditorClassIdentifier: 
-  itemRewards: []
+  itemRewards:
+  - item: {fileID: 11400000, guid: f0893fd9345f0ea449a97467cc8847f0, type: 2}
+    amount: 5
+  cardDrawVouchers: 1

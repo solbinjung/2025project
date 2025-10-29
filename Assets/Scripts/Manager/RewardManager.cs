@@ -6,7 +6,6 @@ public class RewardManager : MonoBehaviour
 {
     #region Singleton
     public static RewardManager Instance { get; private set; }
-
     private void Awake()
     {
         if (Instance == null)
@@ -21,6 +20,18 @@ public class RewardManager : MonoBehaviour
     }
     #endregion
 
+    private PlayerSkillManager playerSkillManager;
+
+    private void Start()
+    {
+        playerSkillManager = FindObjectOfType<PlayerSkillManager>();
+
+        if (playerSkillManager == null)
+        {
+            Debug.LogError("[RewardManager] PlayerSkillManager를 씬에서 찾을 수 없습니다!");
+        }
+    }
+
     public void GiveReward(RewardData reward)
     {
         if (reward == null)
@@ -29,15 +40,18 @@ public class RewardManager : MonoBehaviour
             return;
         }
 
-        // 아이템 지급
         if (reward.itemRewards != null && reward.itemRewards.Count > 0)
         {
             foreach (var itemReward in reward.itemRewards)
             {
-                // InventoryManager.AddItem() 호출
                 InventoryManager.Instance.AddItem(itemReward.item, itemReward.amount);
                 Debug.Log($"[RewardManager] 아이템 {itemReward.item.itemName} {itemReward.amount}개 획득!");
             }
+        }
+
+        if (reward.cardDrawVouchers > 0)
+        {
+            CardRewardManager.Instance.AddVouchers(reward.cardDrawVouchers);
         }
     }
 }

@@ -176,25 +176,34 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    // 퀘스트를 완료하고 보상을 지급하는 함수 (NPC 대화 등에서 호출)
-    public void CompleteQuest(ActiveQuest quest)
+    public void CompleteQuest(QuestData questData)
     {
-        if (!quest.IsAllObjectivesCompleted())
+        // 1. 진행 중인 퀘스트 리스트에서 해당 퀘스트를 찾음
+        ActiveQuest questToComplete = activeQuests.Find(q => q.data == questData);
+
+        if (questToComplete == null)
+        {
+            Debug.LogWarning($"완료하려는 퀘스트({questData.questName})가 진행 중이지 않습니다.");
+            return;
+        }
+
+        // 2. 모든 목표가 완료되었는지 확인
+        if (!questToComplete.IsAllObjectivesCompleted())
         {
             Debug.LogWarning("퀘스트 목표가 아직 완료되지 않았습니다.");
             return;
         }
 
-        // 1. 보상 지급
-        RewardManager.Instance.GiveReward(quest.data.reward);
+        // 3. 보상 지급
+        RewardManager.Instance.GiveReward(questToComplete.data.reward);
 
-        // 2. 퀘스트 목록 변경
-        activeQuests.Remove(quest);
-        completedQuests.Add(quest.data);
+        // 4. 퀘스트 목록 변경
+        activeQuests.Remove(questToComplete);
+        completedQuests.Add(questToComplete.data);
 
-        Debug.Log($"[QuestManager] 퀘스트 완료: {quest.data.questName}");
+        Debug.Log($"[QuestManager] 퀘스트 완료: {questToComplete.data.questName}");
 
-        // TODO: 퀘스트 완료 시 필요한 아이템 제거 (예: "고블린 귀 5개 가져오기")
-        // RemoveQuestItems(quest);
+        // TODO: (선택) 퀘스트 완료 시 필요한 수집 아이템 제거 로직
+        // RemoveQuestItems(questToComplete);
     }
 }
