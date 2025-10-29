@@ -123,4 +123,3 @@ public class PlayerController : MonoBehaviour
         _animator.SetBool("isRunning", false);
     }
 }
-

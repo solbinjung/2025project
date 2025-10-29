@@ -56,6 +56,8 @@ public class QuestManager : MonoBehaviour
     }
     #endregion
 
+    public static event Action OnQuestProgressChanged;
+
     // 퀘스트 진행 상황을 관리하는 리스트
     public List<ActiveQuest> activeQuests = new List<ActiveQuest>();
     public List<QuestData> completedQuests = new List<QuestData>();
@@ -83,6 +85,7 @@ public class QuestManager : MonoBehaviour
     // 몬스터가 죽었을 때 호출될 함수
     public void OnEnemyKilled_CheckQuest(int enemyID)
     {
+        bool changed = false;
         // 모든 진행 중인 퀘스트를 순회
         foreach (var quest in activeQuests)
         {
@@ -93,16 +96,19 @@ public class QuestManager : MonoBehaviour
                 if (objective.type == ObjectiveType.Kill && objective.targetEnemyID == enemyID)
                 {
                     objective.currentAmount++;
+                    changed = true;
                     Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
                     CheckQuestCompletion(quest);
                 }
             }
         }
+        if (changed) OnQuestProgressChanged?.Invoke();
     }
 
     // 인벤토리에 아이템이 추가될 때 호출될 함수
     private void OnItemAdded_CheckQuest()
-    { 
+    {
+        bool changed = false;
         // 모든 진행 중인 퀘스트를 순회
         foreach (var quest in activeQuests)
         {
@@ -119,6 +125,7 @@ public class QuestManager : MonoBehaviour
                     {
                         // 현재 소지량을 퀘스트 진행도에 업데이트
                         objective.currentAmount = slot.amount;
+                        changed = true;
                     }
                     else
                     {
@@ -129,9 +136,12 @@ public class QuestManager : MonoBehaviour
                 }
             }
         }
+        if (changed) OnQuestProgressChanged?.Invoke();
     }
     public void OnNpcTalked_CheckQuest(int npcID)
     {
+        bool changed = false;
+
         // 모든 진행 중인 퀘스트를 순회
         foreach (var quest in activeQuests)
         {
@@ -143,6 +153,7 @@ public class QuestManager : MonoBehaviour
                     !objective.IsCompleted)
                 {
                     objective.currentAmount++; // 대화 횟수 1 증가
+                    changed = true;
                     Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
 
                     // 퀘스트 완료 여부 즉시 체크
@@ -150,6 +161,7 @@ public class QuestManager : MonoBehaviour
                 }
             }
         }
+        if (changed) OnQuestProgressChanged?.Invoke();
     }
     // 퀘스트를 수락하는 함수
     public void AcceptQuest(QuestData questData)
@@ -163,6 +175,8 @@ public class QuestManager : MonoBehaviour
         ActiveQuest newQuest = new ActiveQuest(questData);
         activeQuests.Add(newQuest);
         Debug.Log($"[QuestManager] 퀘스트 수락: {questData.questName}");
+
+        OnQuestProgressChanged?.Invoke();
     }
 
     // 특정 퀘스트가 완료되었는지 확인
@@ -203,6 +217,7 @@ public class QuestManager : MonoBehaviour
 
         Debug.Log($"[QuestManager] 퀘스트 완료: {questToComplete.data.questName}");
 
+        OnQuestProgressChanged?.Invoke();
         // TODO: (선택) 퀘스트 완료 시 필요한 수집 아이템 제거 로직
         // RemoveQuestItems(questToComplete);
     }

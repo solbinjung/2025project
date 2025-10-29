@@ -20,7 +20,7 @@ MonoBehaviour:
     \uCC98\uCE58\uD574\uC8FC\uC2ED\uC2DC\uC624."
   objectives:
   - type: 0
-    description: "\uBE14\uB8E8 \uB4DC\uB798\uACE4 \uCC98\uCE58(0/3)"
+    description: "\uBE14\uB8E8 \uB4DC\uB798\uACE4 \uCC98\uCE58"
     targetItem: {fileID: 0}
     targetEnemyID: 1001
     targetNpcID: 0

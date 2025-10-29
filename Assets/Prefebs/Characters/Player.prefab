@@ -3687,8 +3687,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2086913247067365975}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.47051764, y: -0.5663223, z: -0.42900127, w: 0.5233069}
-  m_LocalPosition: {x: -0.024486065, y: -0.11123186, z: 0.09649404}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.298, z: 0.168}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4947,7 +4947,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 80
+  m_Constraints: 112
   m_CollisionDetection: 0
 --- !u!95 &990803751556671489
 Animator:
@@ -5032,9 +5032,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.1885671
-  m_Height: 1.8328732
+  m_Height: 1.8924804
   m_Direction: 1
-  m_Center: {x: 0.0049752593, y: 0.92615515, z: -0.0008663535}
+  m_Center: {x: 0.0049752593, y: 0.8963524, z: -0.0008663535}
 --- !u!114 &7122399978497676833
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5064,7 +5064,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 747ee1dc4e50afa44b96199728996231, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 2000
+  _maxHp: 5000
   _maxMp: 1000
   _invincibleDuration: 2
   _knockbackForce: 40
@@ -5082,7 +5082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _canCombat: 1
   _attackCooldown: 0.5
-  _damage: 30
+  _damage: 200
   _mpCost: 0
   _hitbox: {fileID: 2025479915343212810}
   _dodgeDistance: 5
@@ -5104,6 +5104,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d87f1be9b3d12942b4996a7fe6a8da4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ownedSkills: []
   animator: {fileID: 990803751556671489}
   effectPoint: {fileID: 4831695321987443793}
   QSlotImage: {fileID: 0}
@@ -6435,8 +6436,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.39821827, y: 1.739063, z: 0.5137175}
-  m_Center: {x: -0.02293651, y: 0.86990607, z: 0.013390459}
+  m_Size: {x: 0.46275875, y: 2.355534, z: 1.1399381}
+  m_Center: {x: -0.013693707, y: 1.0258803, z: 0.22329038}
 --- !u!114 &2025479915343212810
 MonoBehaviour:
   m_ObjectHideFlags: 0
