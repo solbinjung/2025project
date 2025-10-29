@@ -20,7 +20,7 @@ public class CardRewardManager : MonoBehaviour
     #endregion
 
     //  현재 보유 중인 '카드 뽑기권' 개수
-    private int currentVouchers = 0;
+    [SerializeField] private int currentVouchers = 0;
 
     // 뽑기권 개수가 변경될 때마다 UI에 알릴 이벤트
     public static event Action<int> OnVoucherCountChanged;

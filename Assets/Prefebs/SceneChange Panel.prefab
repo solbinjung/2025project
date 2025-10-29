@@ -658,6 +658,7 @@ GameObject:
   - component: {fileID: 4249352283903422317}
   - component: {fileID: 4096664937673779839}
   - component: {fileID: 4182544455021496238}
+  - component: {fileID: 4852560309082143611}
   m_Layer: 5
   m_Name: SceneChange Panel
   m_TagString: Untagged
@@ -723,6 +724,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4852560309082143611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6896981916841495072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd43e38b4496e4408001419039b368d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questionText: {fileID: 2452836010027202014}
+  yesButton: {fileID: 2495056645287869846}
+  noButton: {fileID: 8117990339044924247}
 --- !u!1 &8673581919098653099
 GameObject:
   m_ObjectHideFlags: 0

@@ -16,16 +16,16 @@ public class BossAI : EnemyAI
     [Header("Special Attack A")]
     // 점프 범위 공격
     [SerializeField] private int _specialAttackADamage = 600;
-    [SerializeField] private GameObject _specialAttackAWarningPrefab;     // 경고 프리팹
-    [SerializeField] private float _specialAttackAWarningDuration = 2.0f; // 경고 프리팹 지속 시간
+    //[SerializeField] private GameObject _specialAttackAWarningPrefab;     // 경고 프리팹
+    //[SerializeField] private float _specialAttackAWarningDuration = 2.0f; // 경고 프리팹 지속 시간
     [SerializeField] private float _specialAttackARadius = 5f;            // 공격 범위
     [SerializeField] private float _specialAttackACooldown = 5f;          // A 스킬 쿨타임
 
     [Header("Special Attack B")]
     // 광역 공격
     [SerializeField] private int _specialAttackBDamage = 800;
-    [SerializeField] private GameObject _specialAttackBConeWarningPrefab; // 경고 프리팹
-    [SerializeField] private float _specialAttackBWarningDuration = 3.0f; // 경고 프리팹 지속 시간
+    //[SerializeField] private GameObject _specialAttackBConeWarningPrefab; // 경고 프리팹
+    //[SerializeField] private float _specialAttackBWarningDuration = 3.0f; // 경고 프리팹 지속 시간
     [SerializeField] private GameObject _specialAttackBFirePrefab;        // 불 프리팹(공격 이펙트)
     [SerializeField] private float _specialAttackBCooldown = 8f;          // B 스킬 쿨타임
     
@@ -225,26 +225,57 @@ public class BossAI : EnemyAI
         _canAttack = true;
     }
 
-    // 특수 공격 A
+    // 특수 공격 A (점프 공격)
     protected virtual IEnumerator SpecialAttackA()
     {
         _canAttack = false;
         _specialACooldownTimer = _specialAttackACooldown; // 쿨타임 시작
 
-        _animator.SetTrigger("ClawAttack");
+        // 1. 잠깐 멈춤 (예: 0.5초) + 애니메이션 준비
+        SetMovement(Vector3.zero, 0f, true); // 이동 멈춤
+        _animator.SetTrigger("ClawAttack"); // 점프 준비 또는 공격 애니메이션 트리거
+        yield return new WaitForSeconds(0.5f); // 공격 전 잠시 멈춤
 
-        // TODO: (선택) 점프 로직 (NavMeshAgent.Jump 또는 Rigidbody.AddForce)
-        // 지금은 제자리에서 시전한다고 가정합니다.
+        // 2. 점프 목표 지점 설정 (현재 플레이어 위치)
+        Vector3 startPosition = transform.position; // 보스 현재 위치
+        Vector3 targetPosition = _player.position; // 플레이어 현재 위치
+        // (선택) targetPosition.y = transform.position.y; // 바닥으로 점프하려면 y값 고정
 
-        // 2. 플레이어 위치에 경고 프리팹 2초간
-        Vector3 targetPosition = _player.position;
-        GameObject warningMarker = Instantiate(_specialAttackAWarningPrefab, targetPosition, Quaternion.identity);
+        // 3. 점프 시작 전 NavMeshAgent 비활성화 (물리적 이동을 위해)
+        if (_agent.enabled)
+        {
+            _agent.enabled = false;
+        }
 
-        // 3. 경고 프리팹 2초간 (시전 시간)
-        yield return new WaitForSeconds(_specialAttackAWarningDuration);
+        // --- 4. 점프 이동 (Lerp 사용) ---
+        float jumpDuration = 0.8f; // 점프에 걸리는 시간 (애니메이션 길이에 맞추세요)
+        float jumpHeight = 3.0f;   // 점프 높이
+        float elapsedTime = 0f;
 
-        // 4. 데미지 판정 (OverlapSphere 사용)
-        Collider[] hits = Physics.OverlapSphere(targetPosition, _specialAttackARadius);
+        while (elapsedTime < jumpDuration)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / jumpDuration; // 진행률 (0 -> 1)
+
+            // 수평 이동 (Lerp)
+            Vector3 currentHorizontalPos = Vector3.Lerp(startPosition, targetPosition, t);
+
+            // 수직 이동 (포물선)
+            float currentHeight = jumpHeight * 4 * (t - t * t); // 간단한 포물선 공식
+
+            // 최종 위치 설정
+            transform.position = new Vector3(currentHorizontalPos.x, startPosition.y + currentHeight, currentHorizontalPos.z);
+
+            // 다음 프레임까지 대기
+            yield return null;
+        }
+        // --- 점프 끝 ---
+
+        // 5. 착지 위치 보정
+        transform.position = targetPosition; // 목표 지점에 정확히 착지
+
+        // 6. 착지 지점에 데미지 판정 (OverlapSphere 사용)
+        Collider[] hits = Physics.OverlapSphere(transform.position, _specialAttackARadius); // 현재 위치 기준
         foreach (var hit in hits)
         {
             if (hit.CompareTag("Player"))
@@ -257,15 +288,21 @@ public class BossAI : EnemyAI
             }
         }
 
-        // 5. 화면 진동 효과
-        // TODO: 여기에 화면 진동 효과를 호출하는 코드를 넣으세요.
-        // 예: CameraShaker.Instance.Shake(0.5f, 0.2f);
+        // 7. 화면 진동 효과
         Debug.Log("화면 진동! (Special Attack A)");
+        // CameraShaker.Instance.Shake(0.5f, 0.2f); // 실제 진동 코드
 
+        // 8. NavMeshAgent 다시 활성화 (잠시 후)
+        yield return new WaitForSeconds(0.1f); // 착지 후 잠시 대기
+        if (!_agent.enabled)
+        {
+            _agent.enabled = true;
+            // (선택) 에이전트 위치를 현재 위치로 동기화 (필요시)
+            // if (_agent.isOnNavMesh) _agent.Warp(transform.position); 
+        }
 
-        Destroy(warningMarker, 2.0f);
-        yield return new WaitForSeconds(1.0f);
-
+        // 9. 공격 후딜레이 및 상태 복귀
+        yield return new WaitForSeconds(1.0f); // 후딜레이
         _canAttack = true;
     }
     // 특수 공격 B
@@ -274,27 +311,25 @@ public class BossAI : EnemyAI
         _canAttack = false;
         _specialBCooldownTimer = _specialAttackBCooldown;
 
+        //// 2. 보스 앞에 부채꼴 경고 프리팹 3초간
+        //// (프리팹이 보스를 따라다니도록 자식으로 붙임)
+        //GameObject warningMarker = Instantiate(_specialAttackBConeWarningPrefab, transform.position, transform.rotation, transform);
+
+        //// 3. 경고 프리팹 3초간
+        //yield return new WaitForSeconds(_specialAttackBWarningDuration);
+
+        //// 4. 경고 마커 제거
+        //Destroy(warningMarker);
+
+        yield return new WaitForSeconds(3f);
+
         _animator.SetTrigger("FlameAttack");
-
-        // 2. 보스 앞에 부채꼴 경고 프리팹 3초간
-        // (프리팹이 보스를 따라다니도록 자식으로 붙임)
-        GameObject warningMarker = Instantiate(_specialAttackBConeWarningPrefab, transform.position, transform.rotation, transform);
-
-        // 3. 경고 프리팹 3초간
-        yield return new WaitForSeconds(_specialAttackBWarningDuration);
-
-        // 4. 경고 마커 제거
-        Destroy(warningMarker);
-
         // 5. 불 프리팹 생성
         if (_specialAttackBFirePrefab != null)
         {
             Instantiate(_specialAttackBFirePrefab, transform.position, transform.rotation, transform);
         }
 
-        // 6. (간이) 부채꼴 데미지 판정 (만약 불 프리팹에 로직이 없다면)
-        // TODO: 정확한 부채꼴 판정 로직 구현
-        // (임시로 전방 박스 판정)
         Collider[] hits = Physics.OverlapBox(transform.position + transform.forward * 5f, new Vector3(3f, 2f, 5f), transform.rotation);
         foreach (var hit in hits)
         {
@@ -303,7 +338,7 @@ public class BossAI : EnemyAI
                 PlayerStats playerStats = hit.GetComponent<PlayerStats>();
                 if (playerStats != null && !playerStats.IsDead)
                 {
-                    // 기획: 데미지 800
+                    // 데미지 800
                     playerStats.TakeDamage(_specialAttackBDamage, Vector3.zero);
                 }
             }
@@ -311,7 +346,7 @@ public class BossAI : EnemyAI
 
         Debug.Log("불 내뿜기! (Special Attack B)");
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(2f);
 
         _canAttack = true;
     }

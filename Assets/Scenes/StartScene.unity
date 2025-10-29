@@ -9143,6 +9143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11385099039444245a6b0a56c10b82bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentVouchers: 10
 --- !u!114 &1872448066
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9456,6 +9457,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 7122399978497676833, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: _speed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8065941298958236617, guid: c089cb84799b0cf4f97272cc0d823481,
+        type: 3}
+      propertyPath: m_Constraints
+      value: 112
       objectReference: {fileID: 0}
     - target: {fileID: 9059288849706489097, guid: c089cb84799b0cf4f97272cc0d823481,
         type: 3}

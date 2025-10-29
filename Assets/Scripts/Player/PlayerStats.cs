@@ -55,7 +55,7 @@ public class PlayerStats : MonoBehaviour
         if (_rigidbody != null)
         {
             Vector3 dir = hitDirection;
-            dir.y = 0.2f;
+            dir.y = 0f;
             if (dir.sqrMagnitude > 0.001f) // 0 벡터 방지
             {
                 _rigidbody.velocity = Vector3.zero; // 기존 힘 초기화

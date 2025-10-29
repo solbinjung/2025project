@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 
         if (_animator == null) Debug.LogError("PlayerController: Animator 컴포넌트를 찾을 수 없습니다!");
         if (_rigidbody == null) Debug.LogError("PlayerController: Rigidbody 컴포넌트를 찾을 수 없습니다!");
+
     }
 
     private void Update()
@@ -97,7 +98,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // 이동
-        transform.position += flatDir.normalized * _speed * Time.deltaTime;
+        //transform.position += flatDir.normalized * _speed * Time.deltaTime;
+        Vector3 newPosition = transform.position + flatDir.normalized * _speed * Time.deltaTime;
+        _rigidbody.MovePosition(newPosition);
 
         // 목적지 도착 시 멈춤
         if (flatDir.magnitude <= 0.05f)
