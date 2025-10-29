@@ -2466,7 +2466,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   itemsGrid: {fileID: 466489265}
-  dragIconImage: {fileID: 0}
+  dragIconImage: {fileID: 963717883}
 --- !u!225 &494738416
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -9116,7 +9116,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inventorySize: 14
-  inventory: []
+  inventory:
+  - item: {fileID: 11400000, guid: f0893fd9345f0ea449a97467cc8847f0, type: 2}
+    amount: 20
+  - item: {fileID: 11400000, guid: cdf9d0ce052f7bc4a853a85bf3aaad76, type: 2}
+    amount: 20
+  - item: {fileID: 11400000, guid: fcdc612a42fc6544ead4b783c3d75399, type: 2}
+    amount: 20
+  - item: {fileID: 11400000, guid: b6a989c53b1e8524a8b0b4f1864517d5, type: 2}
+    amount: 20
 --- !u!114 &1872448064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9143,7 +9151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11385099039444245a6b0a56c10b82bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentVouchers: 10
+  currentVouchers: 20
 --- !u!114 &1872448066
 MonoBehaviour:
   m_ObjectHideFlags: 0

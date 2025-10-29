@@ -4622,6 +4622,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11385099039444245a6b0a56c10b82bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  currentVouchers: 0
 --- !u!114 &280575322
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -37820,7 +37821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30d7e5d367793334d96c949330d8f1df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneToLoad: FinalScene
+  sceneToLoad: ForestScene
   locationName: "\uBD81\uCABD \uC232"
   sceneChangePopupPrefab: {fileID: 6896981916841495072, guid: 7cb10c9c248ba6341816f9270e880fbd,
     type: 3}
@@ -38957,7 +38958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d2c43a2280cbe41a9af9f99f153bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questToGive: {fileID: 11400000, guid: bd249ffc66d7bac4ebf3193a11c60cd2, type: 2}
+  questToGive: {fileID: 11400000, guid: d0aebe50a26ca2c408a71098d5cd5ebb, type: 2}
   npcName: "\uB9C8\uC744 \uC8FC\uBBFC"
   interactPrompt: {fileID: 58610840}
   dialogueCamera: {fileID: 14119077}
