@@ -19,13 +19,16 @@ public class PlayerController : MonoBehaviour
     private bool _move = false;
     public bool CanControl = true;
 
-    private void Start()
+    private void Awake()
     {
-        _skillManager = GetComponent<PlayerSkillManager>();
-        _rigidbody = GetComponent<Rigidbody>();
         _animator = GetComponent<Animator>();
+        _rigidbody = GetComponent<Rigidbody>();
         _playerCombat = GetComponent<PlayerCombat>();
         _playerStats = GetComponent<PlayerStats>();
+        _skillManager = GetComponent<PlayerSkillManager>();
+
+        if (_animator == null) Debug.LogError("PlayerController: Animator 컴포넌트를 찾을 수 없습니다!");
+        if (_rigidbody == null) Debug.LogError("PlayerController: Rigidbody 컴포넌트를 찾을 수 없습니다!");
     }
 
     private void Update()
@@ -120,6 +123,13 @@ public class PlayerController : MonoBehaviour
     public void StopMovement()
     {
         _move = false;
-        _animator.SetBool("isRunning", false);
+        if (_animator != null)
+        {
+            _animator.SetBool("isRunning", false);
+        }
+        else
+        {
+            Debug.LogError("PlayerController의 _animator가 null입니다! Animator 컴포넌트가 있는지 확인하세요.");
+        }
     }
 }

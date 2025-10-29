@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
 
     [Header("Persistent References")]
-    [Tooltip("씬이 바뀌어도 유지할 오브젝트들")]
     public List<GameObject> persistentObjects = new List<GameObject>();
+
+    private EventSystem currentEventSystem;
 
     void Awake()
     {
@@ -18,7 +20,18 @@ public class GameManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            // 등록된 오브젝트들을 전부 유지
+            currentEventSystem = FindObjectOfType<EventSystem>();
+
+            if (currentEventSystem != null)
+            {
+                DontDestroyOnLoad(currentEventSystem.gameObject);
+                Debug.Log("[GameManager] EventSystem을 DontDestroyOnLoad 처리했습니다.");
+            }
+            else
+            {
+                Debug.LogError("[GameManager] 시작 씬에 EventSystem이 없습니다! UI가 작동하지 않을 수 있습니다.");
+            }
+
             foreach (var obj in persistentObjects)
             {
                 if (obj != null)
@@ -38,6 +51,20 @@ public class GameManager : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"[GameManager] Scene Loaded: {scene.name}");
+
+        EventSystem[] sceneEventSystems = FindObjectsOfType<EventSystem>();
+
+        if (sceneEventSystems.Length > 1)
+        {
+            foreach (EventSystem es in sceneEventSystems)
+            {
+                if (es != currentEventSystem)
+                {
+                    Debug.LogWarning($"[GameManager] 새로 로드된 씬 '{scene.name}'에서 중복 EventSystem을 제거합니다.");
+                    Destroy(es.gameObject);
+                }
+            }
+        }
 
         // 태그 기반으로 SpawnPoint 찾기
         GameObject spawn = GameObject.FindGameObjectWithTag("SpawnPoint");

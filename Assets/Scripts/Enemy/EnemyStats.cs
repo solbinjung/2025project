@@ -128,11 +128,10 @@ public class EnemyStats : MonoBehaviour
         _animator.SetBool("isDead", true);
 
         if (_collider != null) _collider.enabled = false;
-        if (_agent != null) _agent.enabled = false;
         if (_ai != null) _ai.OnDeath();
-
+        if (_agent != null) _agent.enabled = false;
+        
         OnEnemyDied?.Invoke(enemyID);
-
         StartCoroutine(RemoveAfterDelay());
     }
 

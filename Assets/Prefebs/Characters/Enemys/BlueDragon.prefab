@@ -1710,7 +1710,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7d63014f474b8418491f1f45a02688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 2400
+  _maxHp: 1000
   _knockbackForce: 5
   _isKnockbackImmune: 0
   enemyID: 1001

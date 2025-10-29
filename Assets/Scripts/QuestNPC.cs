@@ -13,11 +13,10 @@ public class QuestNPC : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject interactPrompt;
-    [SerializeField] private GameObject dialoguePanel;
-    [SerializeField] private TextMeshProUGUI npcNameText;
-    [SerializeField] private TextMeshProUGUI dialogueText;
-    [SerializeField] private Button nextButton; 
-
+    private GameObject dialoguePanel;
+    private TextMeshProUGUI npcNameText;
+    private TextMeshProUGUI dialogueText;
+    private Button nextButton; 
 
     [Header("Camera")]
     [SerializeField] private CinemachineVirtualCamera dialogueCamera;
@@ -38,14 +37,34 @@ public class QuestNPC : MonoBehaviour
         {
             defaultPriority = dialogueCamera.Priority;
         }
-        if (dialoguePanel != null)
+        if (dialogueCamera != null)
         {
-            dialoguePanel.SetActive(false);
-            if (nextButton != null)
+            defaultPriority = dialogueCamera.Priority;
+        }
+
+        if (UIManager.Instance != null)
+        {
+            dialoguePanel = UIManager.Instance.dialoguePanel;
+            npcNameText = UIManager.Instance.npcNameText;
+            dialogueText = UIManager.Instance.dialogueText;
+            nextButton = UIManager.Instance.nextButton;
+
+            // 찾아온 UI 요소들이 null이 아닌지 확인 (UIManager 설정 누락 방지)
+            if (dialoguePanel == null || npcNameText == null || dialogueText == null || nextButton == null)
             {
+                Debug.LogError($"[QuestNPC] UIManager에 Dialogue UI 요소 중 일부가 연결되지 않았습니다!");
+            }
+            else
+            {
+                // UI 요소들을 찾았으면 초기 상태 설정
+                dialoguePanel.SetActive(false);
                 nextButton.onClick.RemoveAllListeners();
                 nextButton.onClick.AddListener(CloseDialogue);
             }
+        }
+        else
+        {
+            Debug.LogError("[QuestNPC] UIManager.Instance를 찾을 수 없습니다!");
         }
     }
 
@@ -99,26 +118,30 @@ public class QuestNPC : MonoBehaviour
         QuestManager qm = QuestManager.Instance;
         ActiveQuest activeQuest = qm.activeQuests.Find(q => q.data == questToGive);
 
-        if (activeQuest != null)
+        if (activeQuest != null) // 퀘스트가 '진행 중'일 때
         {
-            if (activeQuest.IsAllObjectivesCompleted())
+            // 1. 목표 달성 & '보고 가능' 상태인가? (isReadyToComplete 체크)
+            if (activeQuest.isReadyToComplete)
             {
-                qm.CompleteQuest(questToGive);
-                ShowDialogue("훌륭하군요! 여기 보상입니다.");
+                qm.CompleteQuest(questToGive); // 퀘스트 완료 처리 (보상 지급)
+                ShowDialogue("훌륭하군요! 여기 보상입니다."); // 완료 대화
             }
+            // 2. 아직 진행 중인가?
             else
             {
-                ShowDialogue("아직 퀘스트를 완료하지 못했군요. 어서 가보세요.");
+                ShowDialogue("아직 퀘스트를 완료하지 못했군요. 어서 가보세요."); // 진행 중 대화
             }
         }
-        else if (qm.completedQuests.Contains(questToGive))
+        else if (qm.completedQuests.Contains(questToGive)) // 퀘스트가 '이미 완료'되었는지 확인
         {
-            ShowDialogue("도와주셔서 정말 감사합니다.");
+            // 3. 이미 완료한 퀘스트인가?
+            ShowDialogue("도와주셔서 정말 감사합니다."); // 완료 후 대화
         }
-        else
+        else // 퀘스트가 '새 퀘스트'일 때
         {
+            // 4. 새로운 퀘스트인가?
             qm.AcceptQuest(questToGive);
-            ShowDialogue(questToGive.description);
+            ShowDialogue(questToGive.description); // 퀘스트 수락 (설명문 표시)
         }
     }
 
@@ -155,7 +178,12 @@ public class QuestNPC : MonoBehaviour
         {
             playerController.CanControl = true;
         }
-        isInteracting = false; 
+        isInteracting = false;
+
+        if (playerIsNearby && interactPrompt != null)
+        {
+            interactPrompt.SetActive(true);
+        }
     }
 
     private void StartDialogueCamera()

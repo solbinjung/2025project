@@ -28,9 +28,6 @@ public class UIQuestList : MonoBehaviour
         QuestManager.OnQuestProgressChanged -= UpdateQuestLog;
     }
 
-    /// <summary>
-    /// 퀘스트 매니저가 변경될 때마다 호출되어 UI 텍스트를 새로고침
-    /// </summary>
     void UpdateQuestLog()
     {
         // 1. QuestManager에서 현재 진행 중인 퀘스트 목록을 가져옴
@@ -49,16 +46,19 @@ public class UIQuestList : MonoBehaviour
             // 4. 모든 퀘스트를 순회
             foreach (var quest in activeQuests)
             {
-                // 퀘스트 제목 추가
-                sb.AppendLine($"<b>{quest.data.questName}</b>"); // <b> 태그로 굵게
+                sb.Append($"<b>{quest.data.questName}</b>");
+                if (quest.isReadyToComplete)
+                {
+                    sb.Append(" <color=yellow>(완료!)</color>"); // 노란색으로 (완료!) 표시
+                }
+                sb.AppendLine(); // 줄바꿈
 
-                // 퀘스트의 모든 목표를 순회
+                // 목표 진행도 표시 (기존과 동일)
                 foreach (var objective in quest.runtimeObjectives)
                 {
-                    // 5."블루 드래곤 처치 (1/3)" 형식으로 목표 추가
                     sb.AppendLine($"  - {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
                 }
-                sb.AppendLine(); // 퀘스트 사이에 한 줄 띄우기
+                sb.AppendLine();
             }
         }
 

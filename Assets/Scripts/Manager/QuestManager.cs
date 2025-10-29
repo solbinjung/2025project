@@ -12,6 +12,9 @@ public class ActiveQuest
     // 실시간 진행도를 저장
     public List<QuestObjective> runtimeObjectives;
 
+    // 목표 달성 후 NPC에게 보고하지 않은 상태
+    public bool isReadyToComplete = false;
+
     public ActiveQuest(QuestData questData)
     {
         data = questData;
@@ -98,7 +101,7 @@ public class QuestManager : MonoBehaviour
                     objective.currentAmount++;
                     changed = true;
                     Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
-                    CheckQuestCompletion(quest);
+                    CheckIfReadyToComplete(quest);
                 }
             }
         }
@@ -109,35 +112,28 @@ public class QuestManager : MonoBehaviour
     private void OnItemAdded_CheckQuest()
     {
         bool changed = false;
-        // 모든 진행 중인 퀘스트를 순회
         foreach (var quest in activeQuests)
         {
-            // 퀘스트의 모든 목표를 순회
             foreach (var objective in quest.runtimeObjectives)
             {
-                // 아직 완료되지 않았을 경우
                 if (objective.type == ObjectiveType.Collect && !objective.IsCompleted)
                 {
-                    // 인벤토리에서 해당 아이템을 몇 개 가지고 있는지 확인
                     ItemSlot slot = InventoryManager.Instance.inventory.Find(s => s.item == objective.targetItem);
+                    int currentAmountInInventory = (slot != null) ? slot.amount : 0;
 
-                    if (slot != null)
+                    if (objective.currentAmount != currentAmountInInventory)
                     {
-                        // 현재 소지량을 퀘스트 진행도에 업데이트
-                        objective.currentAmount = slot.amount;
+                        objective.currentAmount = currentAmountInInventory;
                         changed = true;
+                        Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
+                        CheckIfReadyToComplete(quest);
                     }
-                    else
-                    {
-                        objective.currentAmount = 0;
-                    }
-                    Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
-                    CheckQuestCompletion(quest);
                 }
             }
         }
         if (changed) OnQuestProgressChanged?.Invoke();
     }
+
     public void OnNpcTalked_CheckQuest(int npcID)
     {
         bool changed = false;
@@ -156,8 +152,7 @@ public class QuestManager : MonoBehaviour
                     changed = true;
                     Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
 
-                    // 퀘스트 완료 여부 즉시 체크
-                    CheckQuestCompletion(quest);
+                    CheckIfReadyToComplete(quest);
                 }
             }
         }
@@ -180,14 +175,18 @@ public class QuestManager : MonoBehaviour
     }
 
     // 특정 퀘스트가 완료되었는지 확인
-    private void CheckQuestCompletion(ActiveQuest quest)
+    private void CheckIfReadyToComplete(ActiveQuest quest)
     {
-        if (quest.IsAllObjectivesCompleted())
+        // 이미 보고 가능 상태이거나, 아직 목표 달성을 못했으면 아무것도 안 함
+        if (quest.isReadyToComplete || !quest.IsAllObjectivesCompleted())
         {
-            Debug.LogWarning($"[QuestManager] 퀘스트 목표 달성!: {quest.data.questName}. NPC에게 돌아가세요.");
-            // TODO: 여기서 바로 보상을 주거나, NPC에게 완료 버튼을 활성화하라는 신호를 보냄
-            // 예: CompleteQuest(quest); // (즉시 완료 및 보상 지급 시)
+            return;
         }
+
+        quest.isReadyToComplete = true;
+        Debug.LogWarning($"[QuestManager] 퀘스트 목표 달성!: {quest.data.questName}. NPC에게 돌아가세요.");
+
+        OnQuestProgressChanged?.Invoke();
     }
 
     public void CompleteQuest(QuestData questData)
