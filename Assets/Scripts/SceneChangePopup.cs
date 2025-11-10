@@ -30,15 +30,23 @@ public class SceneChangePopup : MonoBehaviour
 
     public void OnYesClicked()
     {
-        Time.timeScale = 1f;
-        SceneManager.LoadScene(sceneToLoad);
+        Debug.Log(sceneToLoad + " 씬으로 이동을 시작합니다.");
 
+        if (yesButton != null) yesButton.interactable = false;
+        if (noButton != null) noButton.interactable = false;
+
+        gameObject.SetActive(false);
+
+        if (playerController != null)
+        {
+            playerController.CanControl = true;
+        }
+
+        UIManager.Instance.LoadSceneWithLoadingScreen(sceneToLoad);
     }
 
     public void OnNoClicked()
     {
-        Time.timeScale = 1f;
-
         if (playerController != null)
         {
             playerController.CanControl = true;

@@ -43,8 +43,6 @@ public class ChangeScene : MonoBehaviour
                 return;
             }
 
-            Time.timeScale = 0f;
-
             if (playerController != null)
             {
                 playerController.StopMovement();
