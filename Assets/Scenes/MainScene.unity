@@ -28416,7 +28416,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d2c43a2280cbe41a9af9f99f153bef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  questToGive: {fileID: 11400000, guid: d0aebe50a26ca2c408a71098d5cd5ebb, type: 2}
+  questToGive: {fileID: 11400000, guid: bd249ffc66d7bac4ebf3193a11c60cd2, type: 2}
   npcName: "\uB9C8\uC744 \uC8FC\uBBFC"
   interactPrompt: {fileID: 58610840}
   dialogueCamera: {fileID: 14119077}

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;    
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 #if UNITY_EDITOR 
 using UnityEditor;
@@ -26,7 +26,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject loadingPanel;
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameEndingPanel;
+    [SerializeField] private GameObject gameStopPanel;
 
+    private bool isGameStopped = false;
 
     [SerializeField] private float minimumLoadingTime = 1.5f;
     void Start()
@@ -34,10 +36,52 @@ public class UIManager : MonoBehaviour
         if (loadingPanel != null) loadingPanel.SetActive(false);
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (gameEndingPanel != null) gameEndingPanel.SetActive(false);
+        if (gameStopPanel != null) gameStopPanel.SetActive(false);
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if ((loadingPanel != null && loadingPanel.activeSelf) ||
+                (gameOverPanel != null && gameOverPanel.activeSelf) ||
+                (gameEndingPanel != null && gameEndingPanel.activeSelf))
+            {
+                return; 
+            }
+            ToggleGameStopPanel();
+        }
+    }
+    public void ToggleGameStopPanel()
+    {
+        isGameStopped = !isGameStopped;
+
+        if (isGameStopped) // 게임을 멈춰야 한다면
+        {
+            if (gameStopPanel != null) gameStopPanel.SetActive(true);
+            Time.timeScale = 0f;
+
+            //// (선택) 핫바 숨기기
+            //if (InventoryUIManager.Instance != null)
+            //    InventoryUIManager.Instance.SetPlayerHUDActive(false);
+        }
+        else // 게임을 재개해야 한다면
+        {
+            if (gameStopPanel != null) gameStopPanel.SetActive(false);
+            Time.timeScale = 1f;
+
+            //// (선택) 핫바 다시 보이기
+            //if (InventoryUIManager.Instance != null)
+            //    InventoryUIManager.Instance.SetPlayerHUDActive(true);
+        }
     }
     public void ShowGameOverPanel()
     {
-        Debug.Log("UI: 게임 오버 패널 표시");
+        Debug.Log("UI: Show GameOver Panel");
+
+        if (InventoryUIManager.Instance != null)
+        {
+            InventoryUIManager.Instance.SetPlayerHUDActive(false);
+        }
 
         GameObject sceneCanvas = GameObject.FindWithTag("SceneCanvas");
         if (sceneCanvas != null)
@@ -45,18 +89,23 @@ public class UIManager : MonoBehaviour
             sceneCanvas.SetActive(false);
         }
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
+        Time.timeScale = 0f;
     }
 
     public void ShowGameEndingPanel()
     {
-        Debug.Log("UI: 게임 엔딩 패널 표시");
+        Debug.Log("UI: Show GameEnding Panel");
+
+        if (InventoryUIManager.Instance != null)
+        {
+            InventoryUIManager.Instance.SetPlayerHUDActive(false);
+        }
 
         GameObject sceneCanvas = GameObject.FindWithTag("SceneCanvas");
         if (sceneCanvas != null)
         {
             sceneCanvas.SetActive(false);
         }
-
         if (gameEndingPanel != null) gameEndingPanel.SetActive(true);
     }
     public void LoadSceneWithLoadingScreen(string sceneName)
@@ -70,11 +119,11 @@ public class UIManager : MonoBehaviour
     {
         if (loadingPanel == null)
         {
-            Debug.LogError("Loading Panel이 UIManager에 할당되지 않았습니다! 씬을 그냥 로드합니다.");
-            SceneManager.LoadScene(sceneName); 
+            Debug.LogError("Loading Panel is not assigned! Loading scene directly.");
+            SceneManager.LoadScene(sceneName);
             yield break;
         }
-        
+
         float startTime = Time.realtimeSinceStartup;
 
         loadingPanel.SetActive(true);
@@ -93,24 +142,26 @@ public class UIManager : MonoBehaviour
         }
         loadingPanel.SetActive(false);
     }
-    // '불러오기' 버튼
-    public void OnClick_LoadGame()
-    {
-        Debug.Log("MainScene(마을)으로 이동합니다.");
 
-        LoadSceneWithLoadingScreen("MainScene");
-    }
-    // '메인으로' 버튼
     public void OnClick_GoToMainMenu()
     {
-        Debug.Log("MainMenuScene으로 이동합니다.");
+        Debug.Log("Going to MainMenuScene...");
+
+        PlayerStats player = FindObjectOfType<PlayerStats>();
+        if (player != null)
+        {
+            player.RevivePlayer();
+        }
+
+        Time.timeScale = 1f;
+
         LoadSceneWithLoadingScreen("MainMenuScene");
     }
-    // '종료하기' 버튼
-    public void OnClick_ExitGame() 
+
+    public void OnClick_ExitGame()
     {
 #if UNITY_EDITOR
-            EditorApplication.isPlaying = false;
+        EditorApplication.isPlaying = false;
 #else
         Application.Quit();
 #endif

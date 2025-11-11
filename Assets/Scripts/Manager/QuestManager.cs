@@ -85,6 +85,18 @@ public class QuestManager : MonoBehaviour
         DialogueManager.OnNpcTalked -= OnNpcTalked_CheckQuest;
     }
 
+    public void ResetQuests()
+    {
+        Debug.Log("[QuestManager] 모든 퀘스트를 초기화합니다.");
+
+        // 모든 퀘스트 데이터 리스트를 비우기
+        activeQuests.Clear();
+        completedQuests.Clear();
+
+        // 퀘스트 UI(UIQuestList) 새로고침
+        OnQuestProgressChanged?.Invoke();
+    }
+
     // 몬스터가 죽었을 때 호출될 함수
     public void OnEnemyKilled_CheckQuest(int enemyID)
     {

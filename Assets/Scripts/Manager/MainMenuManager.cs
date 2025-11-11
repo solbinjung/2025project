@@ -2,7 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; // 씬 관리
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 #if UNITY_EDITOR
 using UnityEditor; 
 #endif
@@ -19,12 +20,42 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float paragraphDelay = 1.5f;
     [SerializeField] private float fadeInDuration = 1.0f;
 
-    // '게임 시작' 버튼
+    private void Start()
+    {
+        // 다른 패널들은 비활성화
+        if (explanationPanel != null) explanationPanel.SetActive(false);
+        if (controlsPanel != null) controlsPanel.SetActive(false);
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+    }
+
+    // '새 게임 시작' 버튼
     public void OnClick_GameStart()
     {
         Debug.Log("게임 시작 버튼 클릭");
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
 
+        if (SaveLoadManager.Instance != null)
+        {
+            SaveLoadManager.Instance.StartNewGame();
+        }
+        else
+        {
+            Debug.LogError("SaveLoadManager was not found!");
+        }
+
+        Time.timeScale = 1f;
+
+        PlayerStats player = FindObjectOfType<PlayerStats>();
+        if (player != null)
+        {
+            player.RevivePlayer();
+        }
+        else
+        {
+            Debug.LogWarning("플레이어를 부활시킬 수 없습니다.");
+        }
+
+        // 설명
+        if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
         if (explanationPanel != null)
         {
             explanationPanel.SetActive(true);
@@ -66,13 +97,15 @@ public class MainMenuManager : MonoBehaviour
             yield return new WaitForSeconds(paragraphDelay);
         }
         Debug.Log("모든 설명 문단 표시 완료");
-        SceneManager.LoadScene("StartScene");
-    }
 
-    // '불러오기' 버튼
-    public void OnClick_LoadGame()
-    {
-        Debug.Log("불러오기 버튼 클릭");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.LoadSceneWithLoadingScreen("MainScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("MainScene");
+        }
     }
 
     // '조작 방법' 버튼
@@ -110,8 +143,14 @@ public class MainMenuManager : MonoBehaviour
 
     public void OnClick_ExplanationContinue()
     {
-        Debug.Log("설명 확인 -> StartScene 로드 시작");
-        SceneManager.LoadScene("StartScene");
+        if (UIManager.Instance != null)
+        {
+            UIManager.Instance.LoadSceneWithLoadingScreen("MainScene");
+        }
+        else
+        {
+            SceneManager.LoadScene("MainScene");
+        }
     }
 
     public void OnClick_BackToMain()

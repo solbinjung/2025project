@@ -74,6 +74,36 @@ public class PlayerSkillManager : MonoBehaviour
         }
     }
 
+    // 새 게임
+    public void ResetSkills()
+    {
+        Debug.Log("PlayerSkillManager: Resetting all skills and UI...");
+
+        // 모든 스킬 데이터 초기화
+        ownedSkills.Clear();
+        skillMap.Clear();
+        cooldownTimers.Clear();
+
+        // 핫바 UI 이미지 초기화 (아이콘 제거)
+        foreach (var key in keyToSlotImage.Keys)
+        {
+            if (keyToSlotImage[key] != null)
+            {
+                keyToSlotImage[key].sprite = null;
+                keyToSlotImage[key].enabled = false; // 아이콘 이미지 자체를 비활성화
+            }
+        }
+
+        // 쿨다운 UI 초기화
+        foreach (var key in keyToCooldownOverlay.Keys)
+        {
+            if (keyToCooldownOverlay[key] != null)
+            {
+                keyToCooldownOverlay[key].fillAmount = 0;
+            }
+        }
+    }
+
     public void AddSkill(SkillData skill)
     {
 

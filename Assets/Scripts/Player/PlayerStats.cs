@@ -168,4 +168,32 @@ public class PlayerStats : MonoBehaviour
             InventoryManager.Instance.UnregisterPlayerStats();
         }
     }
+    // 게임을 다시 불러올 경우
+    public void RevivePlayer()
+    {
+        Debug.Log("플레이어 상태 리셋 (부활)");
+
+        // 상태 플래그 리셋
+        _isDead = false;
+
+        // 체력/마나 최대치로 복구
+        _currentHp = _maxHp;
+        _currentMp = _maxMp;
+        // (참고: 체력바/마나바 UI도 여기서 갱신 신호를 보내야 합니다)
+        // 예: OnHealthChanged?.Invoke(_currentHp, _maxHp);
+
+        // 애니메이터 리셋
+        if (_animator != null)
+        {
+            _animator.SetBool("isDead", false);
+            _animator.Play("Idle");
+        }
+
+        // 물리/컨트롤 리셋
+        if (_rigidbody != null)
+            _rigidbody.isKinematic = false;
+
+        if (_playerController != null)
+            _playerController.CanControl = true;
+    }
 }
