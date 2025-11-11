@@ -6,6 +6,8 @@ using System;
 
 public class PlayerSkillManager : MonoBehaviour
 {
+    public static PlayerSkillManager Instance { get; private set; }
+
     public Dictionary<KeyCode, SkillData> skillMap = new();
 
     public List<SkillData> ownedSkills = new List<SkillData>();
@@ -44,6 +46,9 @@ public class PlayerSkillManager : MonoBehaviour
     }
     private void Awake()
     {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+
         keyToSlotImage = new Dictionary<KeyCode, Image>
         {
             { KeyCode.Q, QSlotImage },

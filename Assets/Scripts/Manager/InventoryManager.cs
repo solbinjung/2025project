@@ -60,7 +60,7 @@ public class InventoryManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    private void InitializeInventory()
+    public void InitializeInventory()
     {
         inventory = new List<ItemSlot>(inventorySize);
         for (int i = 0; i < inventorySize; i++)

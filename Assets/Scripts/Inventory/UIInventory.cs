@@ -47,16 +47,27 @@ public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
 
     public void UpdateInventoryUI()
     {
+        // InventoryManager의 데이터 리스트
         List<ItemSlot> itemList = InventoryManager.Instance.inventory;
 
+        // UI 슬롯 개수와 데이터 리스트 개수가 같은지 체크
+        if (slots.Length != itemList.Count)
+        {
+            Debug.LogError($"UI 슬롯 개수({slots.Length})와 인벤토리 데이터 개수({itemList.Count})가 일치하지 않습니다!");
+            return;
+        }
+
+        // 모든 UI 슬롯 순회
         for (int i = 0; i < slots.Length; i++)
         {
-            if (i < itemList.Count)
+            // 아이템이 있으면 DrawSlot
+            if (itemList[i].item != null)
             {
                 slots[i].DrawSlot(itemList[i]);
             }
             else
             {
+                // 아이템이 없으면 ClearSlot
                 slots[i].ClearSlot();
             }
         }
@@ -64,7 +75,7 @@ public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
     public void OpenInventoryPanel()
     {
         gameObject.SetActive(true);
-        UpdateInventoryUI(); 
+        UpdateInventoryUI();
     }
     public void CloseInventoryPanel()
     {

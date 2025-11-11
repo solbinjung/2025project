@@ -57,17 +57,17 @@ public class UIHotbar : MonoBehaviour
     {
         List<ItemSlot> inventory = InventoryManager.Instance.inventory;
 
-        for (int i = 0; i < hotbarSlotsUI.Length; i++) // 핫바 5칸(0~4) 순회
+        for (int i = 0; i < hotbarSlotsUI.Length; i++) // 핫바 순회(5칸)
         {
-            // 1. 인벤토리에 i번째 아이템이 있고, 그 아이템이 null이 아니면
+            // 인벤토리에 i번째 아이템이 있고, 그 아이템이 null이 아니면
             if (i < inventory.Count && inventory[i] != null && inventory[i].item != null)
             {
-                // 2. 핫바 UI에 그 아이템을 그림
+                // 핫바 UI에 아이템 그리기
                 hotbarSlotsUI[i].Draw(inventory[i]);
             }
             else
             {
-                // 3. 인벤토리 슬롯이 비어있으면 핫바 UI도 비움
+                // 인벤토리 슬롯이 비어있으면 핫바 UI도 비우기
                 hotbarSlotsUI[i].Clear();
             }
         }
