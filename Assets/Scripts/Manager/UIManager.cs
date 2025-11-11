@@ -2,7 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;    
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+#if UNITY_EDITOR 
+using UnityEditor;
+#endif
 
 public class UIManager : MonoBehaviour
 {
@@ -35,11 +38,25 @@ public class UIManager : MonoBehaviour
     public void ShowGameOverPanel()
     {
         Debug.Log("UI: 게임 오버 패널 표시");
+
+        GameObject sceneCanvas = GameObject.FindWithTag("SceneCanvas");
+        if (sceneCanvas != null)
+        {
+            sceneCanvas.SetActive(false);
+        }
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
     }
+
     public void ShowGameEndingPanel()
     {
         Debug.Log("UI: 게임 엔딩 패널 표시");
+
+        GameObject sceneCanvas = GameObject.FindWithTag("SceneCanvas");
+        if (sceneCanvas != null)
+        {
+            sceneCanvas.SetActive(false);
+        }
+
         if (gameEndingPanel != null) gameEndingPanel.SetActive(true);
     }
     public void LoadSceneWithLoadingScreen(string sceneName)
@@ -75,5 +92,27 @@ public class UIManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(remainingTime);
         }
         loadingPanel.SetActive(false);
+    }
+    // '불러오기' 버튼
+    public void OnClick_LoadGame()
+    {
+        Debug.Log("MainScene(마을)으로 이동합니다.");
+
+        LoadSceneWithLoadingScreen("MainScene");
+    }
+    // '메인으로' 버튼
+    public void OnClick_GoToMainMenu()
+    {
+        Debug.Log("MainMenuScene으로 이동합니다.");
+        LoadSceneWithLoadingScreen("MainMenuScene");
+    }
+    // '종료하기' 버튼
+    public void OnClick_ExitGame() 
+    {
+#if UNITY_EDITOR
+            EditorApplication.isPlaying = false;
+#else
+        Application.Quit();
+#endif
     }
 }

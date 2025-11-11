@@ -45,7 +45,7 @@ public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         InventoryManager.OnInventoryChanged -= UpdateInventoryUI;
     }
 
-    private void UpdateInventoryUI()
+    public void UpdateInventoryUI()
     {
         List<ItemSlot> itemList = InventoryManager.Instance.inventory;
 

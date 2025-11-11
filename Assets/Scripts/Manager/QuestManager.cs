@@ -35,7 +35,7 @@ public class ActiveQuest
     }
     public bool IsAllObjectivesCompleted()
     {
-        // Linq를 사용하여 모든 목표가 완료되었는지 확인
+        // 모든 목표가 완료되었는지 확인
         return runtimeObjectives.All(obj => obj.IsCompleted);
     }
 }
@@ -217,7 +217,5 @@ public class QuestManager : MonoBehaviour
         Debug.Log($"[QuestManager] 퀘스트 완료: {questToComplete.data.questName}");
 
         OnQuestProgressChanged?.Invoke();
-        // TODO: (선택) 퀘스트 완료 시 필요한 수집 아이템 제거 로직
-        // RemoveQuestItems(questToComplete);
     }
 }

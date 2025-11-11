@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// 핫바 슬롯의 UI 요소들을 묶는 클래스 (Inspector에서 편하게 설정)
+// 핫바 슬롯의 UI 요소들을 묶는 클래스
 [System.Serializable]
 public class HotbarSlotUI
 {
@@ -53,10 +53,7 @@ public class UIHotbar : MonoBehaviour
         InventoryManager.OnInventoryChanged -= UpdateHotbarUI;
     }
 
-    /// <summary>
-    /// 인벤토리 매니저의 0~4번 데이터를 가져와 핫바에 그립니다.
-    /// </summary>
-    void UpdateHotbarUI()
+    public void UpdateHotbarUI()
     {
         List<ItemSlot> inventory = InventoryManager.Instance.inventory;
 

@@ -983,6 +983,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8853818172948801458, guid: a8a348703b35776429486a45580913b4,
+        type: 3}
+      propertyPath: m_TagString
+      value: SceneCanvas
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

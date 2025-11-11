@@ -30,6 +30,11 @@ public class PlayerStats : MonoBehaviour
 
     void Start()
     {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.RegisterPlayerStats(this);
+        }
+
         _currentHp = _maxHp;
         _currentMp = _maxMp;
 
@@ -140,6 +145,8 @@ public class PlayerStats : MonoBehaviour
     }
     private void Die()
     {
+        UIManager.Instance.ShowGameOverPanel(); // 게임 오버 화면
+
         _isDead = true;
         _animator.SetBool("isDead", true);
         Debug.Log("Player died!");
@@ -153,5 +160,12 @@ public class PlayerStats : MonoBehaviour
 
         //if (_collider != null)
         //    _collider.enabled = false;
+    }
+    private void OnDestroy()
+    {
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.UnregisterPlayerStats();
+        }
     }
 }
