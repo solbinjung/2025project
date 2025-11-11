@@ -10,15 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c60292f9d43d4d94a922152614951b0b, type: 3}
-  m_Name: Reward_BlueDragon
+  m_Name: Reward_BossRedDragon
   m_EditorClassIdentifier: 
   itemRewards:
-  - item: {fileID: 11400000, guid: f0893fd9345f0ea449a97467cc8847f0, type: 2}
+  - item: {fileID: 11400000, guid: fcdc612a42fc6544ead4b783c3d75399, type: 2}
     amount: 20
-  - item: {fileID: 11400000, guid: f780696776077354d9517f9ba4342563, type: 2}
-    amount: 10
-  - item: {fileID: 11400000, guid: 46880570d6df8dc47aacee5fdf5b79b8, type: 2}
-    amount: 10
-  - item: {fileID: 11400000, guid: cdf9d0ce052f7bc4a853a85bf3aaad76, type: 2}
+  - item: {fileID: 11400000, guid: b6a989c53b1e8524a8b0b4f1864517d5, type: 2}
     amount: 20
-  cardDrawVouchers: 20
+  cardDrawVouchers: 0

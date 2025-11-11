@@ -1083,15 +1083,9 @@ MonoBehaviour:
   _phaseTransitionDuration: 5
   _basicAttackDamage: 400
   _specialAttackADamage: 600
-  _specialAttackAWarningPrefab: {fileID: 4868017103966541416, guid: 4ac107dee86f03e48820e87968528865,
-    type: 3}
-  _specialAttackAWarningDuration: 2
   _specialAttackARadius: 5
   _specialAttackACooldown: 5
   _specialAttackBDamage: 800
-  _specialAttackBConeWarningPrefab: {fileID: 3567066349314122732, guid: 546b499cd7e962a4c975217ee31897f1,
-    type: 3}
-  _specialAttackBWarningDuration: 3
   _specialAttackBFirePrefab: {fileID: 1000011113172478, guid: 4b9e1e5074422484cb2d2aca777ef525,
     type: 3}
   _specialAttackBCooldown: 8
@@ -1107,7 +1101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7d63014f474b8418491f1f45a02688, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHp: 8000
+  _maxHp: 7000
   _knockbackForce: 5
   _isKnockbackImmune: 1
   enemyID: 2001

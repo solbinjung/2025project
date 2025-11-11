@@ -27,6 +27,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject gameOverPanel;
     [SerializeField] private GameObject gameEndingPanel;
     [SerializeField] private GameObject gameStopPanel;
+    [SerializeField] private GameObject controlsPanel;
 
     private bool isGameStopped = false;
 
@@ -157,7 +158,25 @@ public class UIManager : MonoBehaviour
 
         LoadSceneWithLoadingScreen("MainMenuScene");
     }
+    // '조작 방법' 버튼
+    public void OnClick_ControlsToggle()
+    {
+        Debug.Log("조작 방법 토글 버튼 클릭");
 
+        bool isCurrentlyActive = controlsPanel.activeSelf;
+
+        controlsPanel.SetActive(!isCurrentlyActive);
+    }
+
+    public void OnClick_ControlsEnd()
+    {
+        Debug.Log("조작 방법 끄기 버튼 클릭");
+
+        if (controlsPanel != null)
+        {
+            controlsPanel.SetActive(false);
+        }
+    }
     public void OnClick_ExitGame()
     {
 #if UNITY_EDITOR
