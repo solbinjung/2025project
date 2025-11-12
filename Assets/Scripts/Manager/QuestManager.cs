@@ -61,6 +61,8 @@ public class QuestManager : MonoBehaviour
 
     public static event Action OnQuestProgressChanged;
 
+    [SerializeField] private QuestData finalBossQuest;
+
     // 퀘스트 진행 상황을 관리하는 리스트
     public List<ActiveQuest> activeQuests = new List<ActiveQuest>();
     public List<QuestData> completedQuests = new List<QuestData>();
@@ -227,6 +229,12 @@ public class QuestManager : MonoBehaviour
         completedQuests.Add(questToComplete.data);
 
         Debug.Log($"[QuestManager] 퀘스트 완료: {questToComplete.data.questName}");
+
+        if (questData == finalBossQuest && UIManager.Instance != null)
+        {
+            Debug.Log("게임 완료 엔딩");
+            UIManager.Instance.ShowGameEndingPanel();
+        }
 
         OnQuestProgressChanged?.Invoke();
     }

@@ -35,6 +35,8 @@ public class PlayerSkillManager : MonoBehaviour
     private Dictionary<KeyCode, Image> keyToSlotImage;
     private Dictionary<KeyCode, Image> keyToCooldownOverlay;
 
+    private Dictionary<KeyCode, Sprite> defaultSlotSprites = new Dictionary<KeyCode, Sprite>();
+
     // 각 키의 쿨다운 종료 시간 저장
     private Dictionary<KeyCode, float> cooldownTimers = new();
 
@@ -43,6 +45,23 @@ public class PlayerSkillManager : MonoBehaviour
     private void Start()
     {
         _playerStats = GetComponent<PlayerStats>();
+
+        Debug.Log("기본 슬롯 스프라이트 백업 중...");
+        foreach (var kvp in keyToSlotImage)
+        {
+            KeyCode key = kvp.Key;
+            Image image = kvp.Value;
+
+            if (image != null && image.sprite != null)
+            {
+                // 현재 설정된 스프라이트('Q' 배경 등)를 기본값으로 저장
+                defaultSlotSprites[key] = image.sprite;
+            }
+            else
+            {
+                Debug.LogWarning($"PlayerSkillManager: {key} 키의 슬롯 이미지 또는 스프라이트가 설정되지 않았습니다.");
+            }
+        }
     }
     private void Awake()
     {
@@ -84,13 +103,24 @@ public class PlayerSkillManager : MonoBehaviour
         skillMap.Clear();
         cooldownTimers.Clear();
 
-        // 핫바 UI 이미지 초기화 (아이콘 제거)
+        // 핫바 UI 이미지 초기화 (아이콘 제거 -> 기본 배경으로 복원)
         foreach (var key in keyToSlotImage.Keys)
         {
             if (keyToSlotImage[key] != null)
             {
-                keyToSlotImage[key].sprite = null;
-                keyToSlotImage[key].enabled = false; // 아이콘 이미지 자체를 비활성화
+                // [수정 1] null 대신 저장해둔 '기본 스프라이트'로 변경
+                if (defaultSlotSprites.ContainsKey(key))
+                {
+                    keyToSlotImage[key].sprite = defaultSlotSprites[key];
+                }
+                else
+                {
+                    // (예외 처리) 백업된 스프라이트가 없으면 일단 null로
+                    keyToSlotImage[key].sprite = null;
+                }
+
+                // [수정 2] 이미지를 '활성화'해야 배경이 보임
+                keyToSlotImage[key].enabled = true;
             }
         }
 

@@ -100,6 +100,7 @@ public class UIManager : MonoBehaviour
         if (InventoryUIManager.Instance != null)
         {
             InventoryUIManager.Instance.SetPlayerHUDActive(false);
+            
         }
 
         GameObject sceneCanvas = GameObject.FindWithTag("SceneCanvas");
@@ -108,6 +109,16 @@ public class UIManager : MonoBehaviour
             sceneCanvas.SetActive(false);
         }
         if (gameEndingPanel != null) gameEndingPanel.SetActive(true);
+
+        StartCoroutine(EndGameSequence());
+    }
+    private IEnumerator EndGameSequence()
+    {
+        Time.timeScale = 1f;
+
+        yield return new WaitForSecondsRealtime(5f);
+
+        OnClick_GoToMainMenu();
     }
     public void LoadSceneWithLoadingScreen(string sceneName)
     {
