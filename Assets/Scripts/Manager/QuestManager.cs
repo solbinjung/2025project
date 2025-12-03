@@ -29,7 +29,7 @@ public class ActiveQuest
                 targetItem = obj.targetItem,
                 targetEnemyID = obj.targetEnemyID,
                 requiredAmount = obj.requiredAmount,
-                currentAmount = 0 // 진행도는 0에서 시작
+                currentAmount = 0 // 진행도 0으로 초기화
             });
         }
     }
@@ -69,6 +69,7 @@ public class QuestManager : MonoBehaviour
 
     private void Start()
     {
+        // ======퀘스트 종류======
         // 1. 인벤토리 이벤트 구독
         InventoryManager.OnInventoryChanged += OnItemAdded_CheckQuest;
 
@@ -76,7 +77,7 @@ public class QuestManager : MonoBehaviour
         EnemyStats.OnEnemyDied += OnEnemyKilled_CheckQuest;
 
         // 3. NPC 대화 이벤트 구독
-        // (DialogueManager 같은 다른 스크립트에서 이 이벤트를 방송해야 함)
+        // DialogueManager에서 이 이벤트를 방송
         DialogueManager.OnNpcTalked += OnNpcTalked_CheckQuest;
     }
 
@@ -89,7 +90,7 @@ public class QuestManager : MonoBehaviour
 
     public void ResetQuests()
     {
-        Debug.Log("[QuestManager] 모든 퀘스트를 초기화합니다.");
+        Debug.Log("모든 퀘스트를 초기화합니다");
 
         // 모든 퀘스트 데이터 리스트를 비우기
         activeQuests.Clear();
@@ -114,7 +115,7 @@ public class QuestManager : MonoBehaviour
                 {
                     objective.currentAmount++;
                     changed = true;
-                    Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
+                    Debug.Log($"퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
                     CheckIfReadyToComplete(quest);
                 }
             }
@@ -139,7 +140,7 @@ public class QuestManager : MonoBehaviour
                     {
                         objective.currentAmount = currentAmountInInventory;
                         changed = true;
-                        Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
+                        Debug.Log($"퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
                         CheckIfReadyToComplete(quest);
                     }
                 }
@@ -164,7 +165,7 @@ public class QuestManager : MonoBehaviour
                 {
                     objective.currentAmount++; // 대화 횟수 1 증가
                     changed = true;
-                    Debug.Log($"[QuestManager] 퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
+                    Debug.Log($"퀘스트 진행: {objective.description} ({objective.currentAmount}/{objective.requiredAmount})");
 
                     CheckIfReadyToComplete(quest);
                 }
@@ -183,7 +184,7 @@ public class QuestManager : MonoBehaviour
 
         ActiveQuest newQuest = new ActiveQuest(questData);
         activeQuests.Add(newQuest);
-        Debug.Log($"[QuestManager] 퀘스트 수락: {questData.questName}");
+        Debug.Log($"퀘스트 수락: {questData.questName}");
 
         OnQuestProgressChanged?.Invoke();
     }
@@ -191,21 +192,20 @@ public class QuestManager : MonoBehaviour
     // 특정 퀘스트가 완료되었는지 확인
     private void CheckIfReadyToComplete(ActiveQuest quest)
     {
-        // 이미 보고 가능 상태이거나, 아직 목표 달성을 못했으면 아무것도 안 함
         if (quest.isReadyToComplete || !quest.IsAllObjectivesCompleted())
         {
             return;
         }
 
         quest.isReadyToComplete = true;
-        Debug.LogWarning($"[QuestManager] 퀘스트 목표 달성!: {quest.data.questName}. NPC에게 돌아가세요.");
+        Debug.LogWarning($"퀘스트 목표 달성: {quest.data.questName}. NPC에게 돌아가세요.");
 
         OnQuestProgressChanged?.Invoke();
     }
 
     public void CompleteQuest(QuestData questData)
     {
-        // 1. 진행 중인 퀘스트 리스트에서 해당 퀘스트를 찾음
+        // 진행 중인 퀘스트 리스트에서 해당 퀘스트를 찾음
         ActiveQuest questToComplete = activeQuests.Find(q => q.data == questData);
 
         if (questToComplete == null)
@@ -214,22 +214,23 @@ public class QuestManager : MonoBehaviour
             return;
         }
 
-        // 2. 모든 목표가 완료되었는지 확인
+        // 모든 목표가 완료되었는지 확인
         if (!questToComplete.IsAllObjectivesCompleted())
         {
             Debug.LogWarning("퀘스트 목표가 아직 완료되지 않았습니다.");
             return;
         }
 
-        // 3. 보상 지급
+        // 보상 지급
         RewardManager.Instance.GiveReward(questToComplete.data.reward);
 
-        // 4. 퀘스트 목록 변경
+        // 퀘스트 목록 변경(완료 퀘스트 제거)
         activeQuests.Remove(questToComplete);
         completedQuests.Add(questToComplete.data);
 
         Debug.Log($"[QuestManager] 퀘스트 완료: {questToComplete.data.questName}");
 
+        // 최종 퀘스트 후 게임 엔딩
         if (questData == finalBossQuest && UIManager.Instance != null)
         {
             Debug.Log("게임 완료 엔딩");
@@ -237,5 +238,50 @@ public class QuestManager : MonoBehaviour
         }
 
         OnQuestProgressChanged?.Invoke();
+    }
+
+    public void LoadQuestState(List<int> savedCompletedIDs, List<ActiveQuestSaveData> savedActiveQuests, List<QuestData> questDatabase)
+    {
+        // 초기화
+        activeQuests.Clear();
+        completedQuests.Clear();
+
+        // 완료된 퀘스트 복구
+        foreach (int id in savedCompletedIDs)
+        {
+            QuestData data = questDatabase.Find(x => x.id == id);
+            if (data != null)
+            {
+                completedQuests.Add(data);
+            }
+        }
+
+        // 진행 중인 퀘스트 복구
+        foreach (var saveData in savedActiveQuests)
+        {
+            QuestData data = questDatabase.Find(x => x.id == saveData.questID);
+            if (data != null)
+            {
+                // 새 활성 퀘스트 생성
+                ActiveQuest newQuest = new ActiveQuest(data);
+
+                newQuest.isReadyToComplete = saveData.isReadyToComplete;
+
+                // 각 목표(Objective)의 진행 수치(currentAmount) 덮어쓰기
+                if (saveData.objectiveProgressCounts != null && saveData.objectiveProgressCounts.Count == newQuest.runtimeObjectives.Count)
+                {
+                    for (int i = 0; i < newQuest.runtimeObjectives.Count; i++)
+                    {
+                        newQuest.runtimeObjectives[i].currentAmount = saveData.objectiveProgressCounts[i];
+                    }
+                }
+
+                activeQuests.Add(newQuest);
+            }
+        }
+
+        // 4. UI 갱신
+        OnQuestProgressChanged?.Invoke();
+        Debug.Log($"로드 완료");
     }
 }

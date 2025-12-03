@@ -16,7 +16,6 @@ public class InventoryUIManager : MonoBehaviour
 
     void Awake()
     {
-        // 싱글톤 설정
         if (Instance == null)
         {
             Instance = this;
@@ -61,11 +60,6 @@ public class InventoryUIManager : MonoBehaviour
     // UIManager가 게임오버/엔딩 시 호출
     public void SetPlayerHUDActive(bool isActive)
     {
-        //if (uiHotbar != null)
-        //{
-        //    uiHotbar.gameObject.SetActive(isActive);
-        //}
-
         // 만약 게임 오버/엔딩 시 인벤토리가 열려있었다면 강제로 닫기
         if (!isActive && uiInventory != null)
         {

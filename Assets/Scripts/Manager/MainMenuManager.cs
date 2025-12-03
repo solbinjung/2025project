@@ -20,15 +20,29 @@ public class MainMenuManager : MonoBehaviour
     [SerializeField] private float paragraphDelay = 1.5f;
     [SerializeField] private float fadeInDuration = 1.0f;
 
+    public Button loadButton;
+
     private void Start()
     {
         // 다른 패널들은 비활성화
         if (explanationPanel != null) explanationPanel.SetActive(false);
         if (controlsPanel != null) controlsPanel.SetActive(false);
         if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+
+        // 게임 시작 시 저장 데이터가 있는지 확인
+        if (SaveLoadManager.Instance.HasSaveData)
+        {
+            // 데이터가 있으면 버튼 활성화
+            loadButton.interactable = true;
+        }
+        else
+        {
+            // 데이터가 없으면 버튼 비활성화
+            loadButton.interactable = false;
+        }
     }
 
-    // '새 게임 시작' 버튼
+    // 새 게임 버튼
     public void OnClick_GameStart()
     {
         Debug.Log("게임 시작 버튼 클릭");
@@ -54,7 +68,7 @@ public class MainMenuManager : MonoBehaviour
             Debug.LogWarning("플레이어를 부활시킬 수 없습니다.");
         }
 
-        // 설명
+        // 게임 오프닝 설명 텍스트 출력
         if (mainMenuPanel != null) mainMenuPanel.SetActive(false);
         if (explanationPanel != null)
         {
@@ -62,6 +76,7 @@ public class MainMenuManager : MonoBehaviour
             StartCoroutine(ShowExplanationText());
         }
     }
+    // 인트로 화면 설명 문단 시간차 출력
     private IEnumerator ShowExplanationText()
     {
         foreach (GameObject paragraph in explanationParagraphs)
@@ -108,7 +123,36 @@ public class MainMenuManager : MonoBehaviour
         }
     }
 
-    // '조작 방법' 버튼
+    // 불러오기 버튼
+    public void OnClick_LoadGame()
+    {
+        // 데이터 파일 읽기 시도
+        if (SaveLoadManager.Instance.LoadGame())
+        {
+            // 저장된 데이터에서 씬 이름 가져오기
+            string savedSceneName = SaveLoadManager.Instance.currentSaveData.sceneName;
+
+            Debug.Log($"저장된 씬({savedSceneName})으로 이동합니다.");
+
+            // 로딩 화면을 띄우며 씬 이동
+            if (UIManager.Instance != null)
+            {
+                UIManager.Instance.LoadSceneWithLoadingScreen(savedSceneName);
+            }
+            else
+            {
+                // UIManager가 없을 경우
+                SceneManager.LoadScene(savedSceneName);
+            }
+        }
+        else
+        {
+            Debug.LogError("파일 로드 실패");
+            loadButton.interactable = false; // 에러 발생 시 버튼 끄기
+        }
+    }
+
+    // 조작 방법 버튼
     public void OnClick_ControlsToggle()
     {
         Debug.Log("조작 방법 토글 버튼 클릭");
@@ -132,32 +176,17 @@ public class MainMenuManager : MonoBehaviour
     {
         Debug.Log("게임 종료 버튼 클릭");
 
-        // 유니티 에디터에서 실행 중일 경우
 #if UNITY_EDITOR
             EditorApplication.isPlaying = false;
-        // 실제 빌드된 게임에서 실행 중일 경우
 #else
         Application.Quit();
 #endif
     }
-
-    public void OnClick_ExplanationContinue()
-    {
-        if (UIManager.Instance != null)
-        {
-            UIManager.Instance.LoadSceneWithLoadingScreen("MainScene");
-        }
-        else
-        {
-            SceneManager.LoadScene("MainScene");
-        }
-    }
-
-    public void OnClick_BackToMain()
-    {
-        Debug.Log("메인 메뉴로 복귀");
-        if (controlsPanel != null) controlsPanel.SetActive(false);
-        if (explanationPanel != null) explanationPanel.SetActive(false);
-        if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
-    }
+    //public void OnClick_BackToMain()
+    //{
+    //    Debug.Log("메인 메뉴로 복귀");
+    //    if (controlsPanel != null) controlsPanel.SetActive(false);
+    //    if (explanationPanel != null) explanationPanel.SetActive(false);
+    //    if (mainMenuPanel != null) mainMenuPanel.SetActive(true);
+    //}
 }

@@ -52,29 +52,23 @@ public class UIManager : MonoBehaviour
             ToggleGameStopPanel();
         }
     }
+    // 일시정지 패널
     public void ToggleGameStopPanel()
     {
         isGameStopped = !isGameStopped;
 
-        if (isGameStopped) // 게임을 멈춰야 한다면
+        if (isGameStopped) // 게임 일시정지
         {
             if (gameStopPanel != null) gameStopPanel.SetActive(true);
             Time.timeScale = 0f;
-
-            //// (선택) 핫바 숨기기
-            //if (InventoryUIManager.Instance != null)
-            //    InventoryUIManager.Instance.SetPlayerHUDActive(false);
         }
-        else // 게임을 재개해야 한다면
+        else // 게임 일시정지 해제
         {
             if (gameStopPanel != null) gameStopPanel.SetActive(false);
             Time.timeScale = 1f;
-
-            //// (선택) 핫바 다시 보이기
-            //if (InventoryUIManager.Instance != null)
-            //    InventoryUIManager.Instance.SetPlayerHUDActive(true);
         }
     }
+    // 게임오버 패널
     public void ShowGameOverPanel()
     {
         Debug.Log("UI: Show GameOver Panel");
@@ -92,7 +86,7 @@ public class UIManager : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         Time.timeScale = 0f;
     }
-
+    // 게임엔딩 패널
     public void ShowGameEndingPanel()
     {
         Debug.Log("UI: Show GameEnding Panel");
@@ -112,6 +106,7 @@ public class UIManager : MonoBehaviour
 
         StartCoroutine(EndGameSequence());
     }
+    // 엔딩 화면 5초 후 메인으로
     private IEnumerator EndGameSequence()
     {
         Time.timeScale = 1f;
@@ -120,6 +115,7 @@ public class UIManager : MonoBehaviour
 
         OnClick_GoToMainMenu();
     }
+    // 씬전환 로딩 패널
     public void LoadSceneWithLoadingScreen(string sceneName)
     {
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
@@ -154,7 +150,9 @@ public class UIManager : MonoBehaviour
         }
         loadingPanel.SetActive(false);
     }
-
+    
+    // ===============버튼===============
+    // 메인메뉴로 이동 버튼
     public void OnClick_GoToMainMenu()
     {
         Debug.Log("Going to MainMenuScene...");
@@ -169,7 +167,7 @@ public class UIManager : MonoBehaviour
 
         LoadSceneWithLoadingScreen("MainMenuScene");
     }
-    // '조작 방법' 버튼
+    // 조작 방법 창 열기 버튼
     public void OnClick_ControlsToggle()
     {
         Debug.Log("조작 방법 토글 버튼 클릭");
@@ -178,7 +176,7 @@ public class UIManager : MonoBehaviour
 
         controlsPanel.SetActive(!isCurrentlyActive);
     }
-
+    // 조작 방법 창 닫기 버튼
     public void OnClick_ControlsEnd()
     {
         Debug.Log("조작 방법 끄기 버튼 클릭");
@@ -188,6 +186,7 @@ public class UIManager : MonoBehaviour
             controlsPanel.SetActive(false);
         }
     }
+    // 게임 종료 버튼
     public void OnClick_ExitGame()
     {
 #if UNITY_EDITOR

@@ -43,8 +43,7 @@ public class PlayerCombat : MonoBehaviour
         GettingHit
     }
 
-    public PlayerState State { get; set; } = PlayerState.Idle; // 외부에서도 변경 가능
-    // 내부용 필드 필요 없음, 시스템 그대로 유지
+    public PlayerState State { get; set; } = PlayerState.Idle; 
 
     // 프로퍼티
     public bool CanCombat => _canCombat;

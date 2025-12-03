@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c76da86f14201e45a6e4cf851465226, type: 3}
   m_Name: ManaPotionLv03
   m_EditorClassIdentifier: 
+  id: 23
   itemName: "\uC0C1\uAE09 \uB9C8\uB098 \uBB3C\uC57D"
   itemDescription: "\uD478\uB978\uBE5B\uC774 \uAC10\uB3C4\uB294 \uC2E0\uBE44\uD55C
     \uBB3C\uC57D"

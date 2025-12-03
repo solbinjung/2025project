@@ -16,6 +16,7 @@ public class ChangeScene : MonoBehaviour
 
     private GameObject currentPopupInstance = null;
 
+    // 플레이어 감지 시 씬 전환 시작
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && currentPopupInstance == null)
@@ -29,6 +30,7 @@ public class ChangeScene : MonoBehaviour
                 return;
             }
 
+            // 씬 이동 팝업창
             currentPopupInstance = Instantiate(sceneChangePopupPrefab, targetCanvas.transform);
             SceneChangePopup popupScript = currentPopupInstance.GetComponent<SceneChangePopup>();
 

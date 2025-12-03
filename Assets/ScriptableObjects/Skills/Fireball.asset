@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9228a3d674c59b40a68b84c6e6c0f26, type: 3}
   m_Name: Fireball
   m_EditorClassIdentifier: 
+  id: 4
   skillName: "Fireball(4\uB2E8\uACC4)"
   skillDescription: "\uBD88\uAF43 \uAD6C\uCCB4\uB97C \uB358\uC838 \uC801\uC5D0\uAC8C
     \uD3ED\uBC1C \uD53C\uD574\uB97C \uC900\uB2E4."

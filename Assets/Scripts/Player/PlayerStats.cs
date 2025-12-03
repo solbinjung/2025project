@@ -196,4 +196,25 @@ public class PlayerStats : MonoBehaviour
         if (_playerController != null)
             _playerController.CanControl = true;
     }
+    public void LoadStatus(int loadedHp, int loadedMp, Vector3 loadedPosition)
+    {
+        // 데이터 적용
+        _currentHp = loadedHp;
+        _currentMp = loadedMp;
+
+        // 위치 이동
+        transform.position = loadedPosition;
+
+        if (_rigidbody != null)
+        {
+            _rigidbody.position = loadedPosition; // 물리 엔진 동기화
+            _rigidbody.velocity = Vector3.zero;   // 떨어지거나 날아가던 힘 제거
+        }
+        if (_playerController != null)
+        {
+            _playerController.StopMovement(); // 로드 시 이동 멈춤
+        }
+
+        Debug.Log($"플레이어 로드 완료: HP({_currentHp}), MP({_currentMp}), Pos({loadedPosition})");
+    }
 }

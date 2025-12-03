@@ -6,6 +6,7 @@ using UnityEngine;
 public class ItemData : ScriptableObject
 {
     [Header("Info")]
+    public int id;
     public string itemName;
     public string itemDescription;
     public string itemEffectDescription;

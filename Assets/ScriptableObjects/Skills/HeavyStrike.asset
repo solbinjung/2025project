@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9228a3d674c59b40a68b84c6e6c0f26, type: 3}
   m_Name: HeavyStrike
   m_EditorClassIdentifier: 
+  id: 5
   skillName: "Heavy Strike(5\uB2E8\uACC4)"
   skillDescription: "\uAC15\uD55C \uB0B4\uB824\uCE58\uAE30\uB85C \uC801\uC744 \uD06C\uAC8C
     \uBC00\uCCD0\uB0B8\uB2E4."

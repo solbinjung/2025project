@@ -47,7 +47,6 @@ public class GameManager : MonoBehaviour
             return;
         }
     }
-
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         Debug.Log($"[GameManager] Scene Loaded: {scene.name}");

@@ -36,7 +36,7 @@ public class QuestObjective
 public class QuestData : ScriptableObject
 {
     [Header("Quest Info")]
-    public int questID;
+    public int id;
     public string questName;
     [TextArea(3, 5)]
     public string description;

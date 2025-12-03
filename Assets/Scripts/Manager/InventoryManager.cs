@@ -16,14 +16,14 @@ public class ItemSlot
         amount = _amount;
     }
 
-    // 슬롯을 비우는 함수
+    // 슬롯 비우기
     public void Clear()
     {
         item = null;
         amount = 0;
     }
 
-    // 데이터를 덮어쓰는 함수
+    // 데이터 덮어쓰기
     public void Set(ItemSlot slotData)
     {
         item = slotData.item;
@@ -44,6 +44,15 @@ public class InventoryManager : MonoBehaviour
     public List<ItemSlot> inventory = new List<ItemSlot>();
 
     private PlayerStats _playerStats;
+    
+    void Start()
+    {
+        // 저장된 데이터가 있다면 인벤토리 복구
+        if (SaveLoadManager.Instance.currentSaveData != null)
+        {
+            SaveLoadManager.Instance.ApplyInventoryHandler();
+        }
+    }
 
     private void Awake()
     {
@@ -69,12 +78,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    //PlayerStat 연결
     public void RegisterPlayerStats(PlayerStats stats)
     {
         _playerStats = stats;
-        Debug.Log("PlayerStats가 InventoryManager에 등록되었습니다.");
     }
-    // 씬이 파괴될 때 PlayerStats가 자신을 등록 해제하는 함수
+    // 씬이 파괴시 PlayerStats가 자신을 등록 해제
     public void UnregisterPlayerStats()
     {
         _playerStats = null;
@@ -86,7 +95,7 @@ public class InventoryManager : MonoBehaviour
 
         int addedAmount = 0; // 추가된 양
 
-        // 겹칠 수 있는 아이템이면, 기존 슬롯 먼저 검색
+        // 기존 슬롯 먼저 검색하여 동일 아이템 합치기
         if (itemToAdd.isStackable)
         {
             foreach (ItemSlot slot in inventory)
@@ -100,7 +109,7 @@ public class InventoryManager : MonoBehaviour
                 }
             }
         }
-        // 겹칠 수 없거나 기존 슬롯이 없으면 빈 슬롯 검색
+        // 기존 슬롯이 없으면 빈 슬롯 검색
         for (int j = 0; j < (itemToAdd.isStackable ? 1 : amountToAdd); j++)
         {
             int amountPerSlot = itemToAdd.isStackable ? amountToAdd : 1;
@@ -126,6 +135,7 @@ public class InventoryManager : MonoBehaviour
         if (addedAmount > 0) OnInventoryChanged?.Invoke();
     }
 
+    // 사용자가 마우스로 직접 특정 칸을 조작할 경우 > 아이템 소모 등
     public void RemoveItemAt(int slotIndex, int amountToRemove)
     {
         if (slotIndex < 0 || slotIndex >= inventorySize || inventory[slotIndex].item == null)
@@ -141,6 +151,7 @@ public class InventoryManager : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
+    // 시스템이 자동으로 아이템을 차감할 경우
     public void RemoveItem(ItemData itemToRemove, int amountToRemove)
     {
         ItemSlot slotToRemove = inventory.Find(slot => slot.item == itemToRemove);
@@ -156,6 +167,7 @@ public class InventoryManager : MonoBehaviour
         OnInventoryChanged?.Invoke();
     }
 
+    // 아이템 얻기
     public bool HasItem(ItemData itemToFind, int requiredAmount = 1)
     {
         ItemSlot slot = inventory.Find(s => s.item == itemToFind);
@@ -164,12 +176,13 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    // 아이템을 슬롯 내에서 위치 옮기기
     public void SwapSlots(int indexA, int indexB)
     {
         // 두 인덱스가 inventorySize 범위 내에 있는지 확인
         if (indexA < 0 || indexA >= inventorySize || indexB < 0 || indexB >= inventorySize)
         {
-            Debug.LogError($"SwapSlots: 인덱스 범위 오류. A:{indexA}, B:{indexB}");
+            Debug.LogError($"인덱스 범위 오류");
             return;
         }
         // 데이터 교환
@@ -185,18 +198,17 @@ public class InventoryManager : MonoBehaviour
     {
         if (_playerStats == null)
         {
-            Debug.LogError("PlayerStats가 등록되지 않아 아이템을 사용할 수 없습니다!");
+            Debug.LogError("아이템을 사용할 수 없습니다");
             return;
         }
         // 슬롯 인덱스가 유효한지, 아이템이 있는지 확인
         if (slotIndex < 0 || slotIndex >= inventorySize || inventory[slotIndex] == null || inventory[slotIndex].item == null)
         {
-            Debug.Log($"[Inventory] {slotIndex}번 슬롯은 비어있습니다.");
             return;
         }
 
         ItemData itemToUse = inventory[slotIndex].item;
-        Debug.Log($"[Inventory] {itemToUse.itemName} 아이템 사용!");
+        Debug.Log($"{itemToUse.itemName} 아이템 사용");
 
         if (itemToUse.healAmount > 0) // 체력
         {
@@ -206,11 +218,45 @@ public class InventoryManager : MonoBehaviour
         {
             _playerStats.RestoreMp(itemToUse.restoreMpAmount);
         }
-        else
+
+            // 아이템 1개 소모
+            RemoveItemAt(slotIndex, 1);
+    }
+
+    public void LoadInventory(List<int> loadedIDs, List<int> loadedAmounts, List<ItemData> itemDatabase)
+    {
+        // 기존 인벤토리 초기화
+        inventory.Clear();
+
+        // 저장된 개수만큼 반복하며 슬롯 재구축
+        for (int i = 0; i < loadedIDs.Count; i++)
         {
-            Debug.Log($"[Inventory] {itemToUse.itemName} 아이템은 특별한 효과가 없습니다.");
+            int id = loadedIDs[i];
+            int amount = loadedAmounts[i];
+
+            // 빈 슬롯(ID=-1)
+            if (id == -1)
+            {
+                inventory.Add(new ItemSlot(null, 0));
+            }
+            else
+            {
+                // DB에서 ID로 원본 아이템 데이터 찾기
+                ItemData data = itemDatabase.Find(x => x.id == id);
+
+                if (data != null)
+                {
+                    inventory.Add(new ItemSlot(data, amount));
+                }
+                else
+                {
+                    // ID는 있는데 DB에 없으면 빈 슬롯 처리
+                    inventory.Add(new ItemSlot(null, 0));
+                }
+            }
         }
-        // 아이템 1개 소모
-        RemoveItemAt(slotIndex, 1);
+
+        // 3. UI 강제 갱신
+        OnInventoryChanged?.Invoke();
     }
 }

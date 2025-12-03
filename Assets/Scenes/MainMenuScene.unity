@@ -235,7 +235,7 @@ MonoBehaviour:
   - {fileID: 1413559651}
   paragraphDelay: 1.5
   fadeInDuration: 1
-  loadGameButton: {fileID: 638582396}
+  loadButton: {fileID: 638582396}
 --- !u!4 &61958087
 Transform:
   m_ObjectHideFlags: 0
@@ -4481,7 +4481,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uAC8C\uC784 \uC885\uB8CC"
+  m_text: "\uC885\uB8CC\uD558\uAE30"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 009662cb44abdc94db249227f9ceeed9, type: 2}
   m_sharedMaterial: {fileID: -718827120978112967, guid: 009662cb44abdc94db249227f9ceeed9,

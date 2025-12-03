@@ -1,5 +1,5 @@
 using UnityEngine;
-using System; // Action (이벤트) 사용
+using System;
 
 public class CardRewardManager : MonoBehaviour
 {
@@ -19,15 +19,13 @@ public class CardRewardManager : MonoBehaviour
     }
     #endregion
 
-    //  현재 보유 중인 '카드 뽑기권' 개수
+    //  현재 보유 중인 카드 뽑기권 개수
     [SerializeField] private int currentVouchers = 0;
 
-    // 뽑기권 개수가 변경될 때마다 UI에 알릴 이벤트
+    // 뽑기권 개수 변경 => UI에 이벤트 알림
     public static event Action<int> OnVoucherCountChanged;
 
-    /// <summary>
-    /// (RewardManager가 호출) 퀘스트 보상으로 뽑기권 추가
-    /// </summary>
+    // RewardManager > 퀘스트 보상으로 뽑기권 추가
     public void AddVouchers(int amount)
     {
         if (amount <= 0) return;
@@ -35,14 +33,10 @@ public class CardRewardManager : MonoBehaviour
         currentVouchers += amount;
         Debug.Log($"[CardRewardManager] 카드 뽑기권 {amount}개 획득! 총: {currentVouchers}개");
 
-        // "뽑기권 개수가 바뀌었다!"고 방송
         OnVoucherCountChanged?.Invoke(currentVouchers);
     }
 
-    /// <summary>
-    /// (UI_CardButton이 호출) 카드 뽑기권 1개 사용
-    /// </summary>
-    /// <returns>사용에 성공하면 true, 뽑기권이 없으면 false</returns>
+    // UI_CardButton => 카드 뽑기권 1개 사용
     public bool UseVoucher()
     {
         if (currentVouchers > 0)
@@ -50,7 +44,6 @@ public class CardRewardManager : MonoBehaviour
             currentVouchers--;
             Debug.Log($"[CardRewardManager] 카드 뽑기권 1개 사용. 남은 개수: {currentVouchers}개");
 
-            // "뽑기권 개수가 바뀌었다!"고 방송
             OnVoucherCountChanged?.Invoke(currentVouchers);
             return true; // 사용 성공
         }
@@ -61,9 +54,7 @@ public class CardRewardManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// (UI가 호출) 현재 뽑기권 개수 확인
-    /// </summary>
+    // 현재 뽑기권 개수 확인
     public int GetCurrentVouchers()
     {
         return currentVouchers;

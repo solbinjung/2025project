@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14608183d934cdd47921fdd989d03e0d, type: 3}
   m_Name: Quest_BlueDragon
   m_EditorClassIdentifier: 
-  questID: 101
+  id: 101
   questName: "\uB098\uBB34\uAFBC\uC758 \uACE4\uACBD"
   description: "\uD734... \uBAA8\uD5D8\uAC00\uB2D8. \uC131 \uBD81\uBB38 \uCABD\uC740
     \uC694\uC998 \uD53C\uD574\uC11C \uB2E4\uB2C8\uC2DC\uB294 \uAC8C \uC88B\uC744

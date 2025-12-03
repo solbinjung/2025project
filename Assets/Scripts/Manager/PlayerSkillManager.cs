@@ -46,7 +46,6 @@ public class PlayerSkillManager : MonoBehaviour
     {
         _playerStats = GetComponent<PlayerStats>();
 
-        Debug.Log("기본 슬롯 스프라이트 백업 중...");
         foreach (var kvp in keyToSlotImage)
         {
             KeyCode key = kvp.Key;
@@ -61,6 +60,11 @@ public class PlayerSkillManager : MonoBehaviour
             {
                 Debug.LogWarning($"PlayerSkillManager: {key} 키의 슬롯 이미지 또는 스프라이트가 설정되지 않았습니다.");
             }
+        }
+        
+        if (SaveLoadManager.Instance.currentSaveData != null)
+        {
+            SaveLoadManager.Instance.ApplySkillHandler();
         }
     }
     private void Awake()
@@ -108,18 +112,15 @@ public class PlayerSkillManager : MonoBehaviour
         {
             if (keyToSlotImage[key] != null)
             {
-                // [수정 1] null 대신 저장해둔 '기본 스프라이트'로 변경
                 if (defaultSlotSprites.ContainsKey(key))
                 {
                     keyToSlotImage[key].sprite = defaultSlotSprites[key];
                 }
                 else
                 {
-                    // (예외 처리) 백업된 스프라이트가 없으면 일단 null로
+                    // 예외 처리
                     keyToSlotImage[key].sprite = null;
                 }
-
-                // [수정 2] 이미지를 '활성화'해야 배경이 보임
                 keyToSlotImage[key].enabled = true;
             }
         }
@@ -242,6 +243,7 @@ public class PlayerSkillManager : MonoBehaviour
             }
         }
     }
+    // 스킬별 데미지 처리
     private void ApplySkillDamage(SkillData skill)
     {
         // 공격 범위 내 적 찾기
@@ -256,6 +258,7 @@ public class PlayerSkillManager : MonoBehaviour
             }
         }
     }
+    // 스킬별 이펙트 처리
     private void PlayEffect(SkillData skill)
     {
         if (skill.effectPrefab != null && effectPoint != null)
@@ -264,6 +267,37 @@ public class PlayerSkillManager : MonoBehaviour
             effect.transform.forward = transform.forward;
             Destroy(effect, 1f);
         }
+    }
+    public void LoadSkills(List<SkillData> loadedOwnedSkills, Dictionary<KeyCode, SkillData> loadedSkillMap)
+    {
+        ResetSkills(); // 기존 상태 깔끔하게 비우기
+
+        // 보유 스킬 리스트 복구
+        ownedSkills = new List<SkillData>(loadedOwnedSkills);
+        OnOwnedSkillsChanged?.Invoke(ownedSkills.Count);
+
+        // 단축키 슬롯(Q,W,E,R,T) 복구
+        foreach (var pair in loadedSkillMap)
+        {
+            KeyCode key = pair.Key;
+            SkillData skill = pair.Value;
+
+            skillMap[key] = skill;
+
+            // UI 아이콘 복구
+            if (keyToSlotImage.TryGetValue(key, out var slotImage) && skill.icon != null)
+            {
+                slotImage.sprite = skill.icon;
+            }
+
+            // 쿨다운 초기화
+            if (keyToCooldownOverlay.TryGetValue(key, out var overlay))
+            {
+                overlay.fillAmount = 0;
+            }
+        }
+
+        Debug.Log($"[SkillManager] 스킬 로드 완료: 보유 {ownedSkills.Count}개, 슬롯 장착 {skillMap.Count}개");
     }
 }
 

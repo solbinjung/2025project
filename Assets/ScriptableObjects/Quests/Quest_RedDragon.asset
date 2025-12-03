@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14608183d934cdd47921fdd989d03e0d, type: 3}
   m_Name: Quest_RedDragon
   m_EditorClassIdentifier: 
-  questID: 102
+  id: 102
   questName: "\uCD5C\uD6C4\uC758 \uBD88\uAF43"
   description: "\uBAA8\uD5D8\uAC00\uB2D8! \uBE14\uB8E8 \uB4DC\uB798\uACE4\uC744 \uCC98\uCE58\uD574
     \uC8FC\uC154\uC11C \uC815\uB9D0 \uAC10\uC0AC\uD569\uB2C8\uB2E4. \uB355\uBD84\uC5D0
