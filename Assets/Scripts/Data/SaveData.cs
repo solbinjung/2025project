@@ -26,9 +26,7 @@ public class SaveData
 
     // 플레이어 상태
     public int currentHp;
-    public int maxHp;
     public int currentMp;
-    public int maxMp;
 
     // 3. 인벤토리: ID와 개수 리스트로 분리하여 저장
     public List<int> invItemIDs = new List<int>();      // 아이템 ID

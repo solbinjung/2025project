@@ -155,7 +155,7 @@ public class PlayerSkillManager : MonoBehaviour
             if (!skillMap.ContainsKey(key))
             {
                 skillMap[key] = skill;
-                Debug.Log($"기술 '{skill.skillName}' 이 {key}에 등록됨");
+                Debug.Log($"기술 '{skill.skillName}' 이 {key}에 등록");
 
                 // UI 슬롯 이미지 갱신
                 if (keyToSlotImage.TryGetValue(key, out var slotImage) && skill.icon != null)
@@ -165,7 +165,11 @@ public class PlayerSkillManager : MonoBehaviour
                 return; 
             }
         }
-        Debug.LogWarning($"보유 스킬 {skill.skillName} 추가. (핫바가 꽉 차서 장착은 못함)");
+        Debug.LogWarning($"보유 스킬 {skill.skillName} 추가");
+
+        // 저장
+        Debug.Log("저장 중...");
+        SaveLoadManager.Instance.SaveGame();
     }
 
     public void UseSkill(KeyCode key)
@@ -180,7 +184,7 @@ public class PlayerSkillManager : MonoBehaviour
                 if (Time.time < readyTime)
                 {
                     float remain = readyTime - Time.time;
-                    Debug.Log($"[{skill.skillName}] 아직 쿨다운 중... {remain:F1}초 남음");
+                    Debug.Log($"[{skill.skillName}] 쿨다운 중... {remain:F1}초 남음");
                     return;
                 }
             }
@@ -188,7 +192,7 @@ public class PlayerSkillManager : MonoBehaviour
             // 마나 소비
             if (stats.CurrentMp < skill.mpCost)
             {
-                Debug.Log("마나가 부족합니다!");
+                Debug.Log("마나가 부족합니다");
                 return;
             }
             _playerStats.CostMp(skill.mpCost);
@@ -297,7 +301,7 @@ public class PlayerSkillManager : MonoBehaviour
             }
         }
 
-        Debug.Log($"[SkillManager] 스킬 로드 완료: 보유 {ownedSkills.Count}개, 슬롯 장착 {skillMap.Count}개");
+        Debug.Log($"스킬 로드 완료: 보유 {ownedSkills.Count}개, 슬롯 장착 {skillMap.Count}개");
     }
 }
 

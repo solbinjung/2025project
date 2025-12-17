@@ -50,12 +50,6 @@ public class UIInventory : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndD
         // InventoryManager의 데이터 리스트
         List<ItemSlot> itemList = InventoryManager.Instance.inventory;
 
-        // UI 슬롯 개수와 데이터 리스트 개수가 같은지 체크
-        if (slots.Length != itemList.Count)
-        {
-            Debug.LogError($"UI 슬롯 개수({slots.Length})와 인벤토리 데이터 개수({itemList.Count})가 일치하지 않습니다!");
-            return;
-        }
 
         // 모든 UI 슬롯 순회
         for (int i = 0; i < slots.Length; i++)

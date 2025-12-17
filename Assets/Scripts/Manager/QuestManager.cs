@@ -238,6 +238,10 @@ public class QuestManager : MonoBehaviour
         }
 
         OnQuestProgressChanged?.Invoke();
+
+        // 게임 저장
+        Debug.Log("저장 중...");
+        SaveLoadManager.Instance.SaveGame();
     }
 
     public void LoadQuestState(List<int> savedCompletedIDs, List<ActiveQuestSaveData> savedActiveQuests, List<QuestData> questDatabase)

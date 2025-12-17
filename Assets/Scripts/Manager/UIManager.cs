@@ -118,6 +118,12 @@ public class UIManager : MonoBehaviour
     // 씬전환 로딩 패널
     public void LoadSceneWithLoadingScreen(string sceneName)
     {
+        if (sceneName != "MainMenuScene")
+        {
+            Debug.Log("저장 중...");
+            SaveLoadManager.Instance.SaveGame();
+        }
+
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (gameEndingPanel != null) gameEndingPanel.SetActive(false);
 
@@ -155,8 +161,6 @@ public class UIManager : MonoBehaviour
     // 메인메뉴로 이동 버튼
     public void OnClick_GoToMainMenu()
     {
-        Debug.Log("Going to MainMenuScene...");
-
         PlayerStats player = FindObjectOfType<PlayerStats>();
         if (player != null)
         {

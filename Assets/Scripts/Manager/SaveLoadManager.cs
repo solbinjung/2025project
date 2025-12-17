@@ -28,6 +28,22 @@ public class SaveLoadManager : MonoBehaviour
         }
     }
 
+    void Start()
+    {
+        // 5분마다 자동 저장 시작
+        StartCoroutine(AutoSaveRoutine());
+    }
+
+    IEnumerator AutoSaveRoutine()
+    {
+        while (true)
+        {
+            yield return new WaitForSeconds(300f); // 5분(300초) 대기
+            SaveGame();
+            Debug.Log("저장 중...");
+        }
+    }
+
     // 저장
     public void SaveGame()
     {
@@ -235,5 +251,11 @@ public class SaveLoadManager : MonoBehaviour
     public bool HasSaveData
     {
         get { return System.IO.File.Exists(saveFilePath); }
+    }
+
+    // 게임 종료시 자동 저장
+    private void OnApplicationQuit()
+    {
+        SaveGame();
     }
 }
