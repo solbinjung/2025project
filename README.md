@@ -112,7 +112,7 @@ Unity **NavMesh**를 활용하여 상태 기반 AI를 구현했습니다.
 
 ## 4. 인벤토리 시스템
 
-<img src="Images/inventory.gif" width="450" alt="Drag & Drop 기반 인벤토리">
+<img src="Images/inventory.gif" width="500" alt="Drag & Drop 기반 인벤토리">
 
 * Drag & Drop 기반 슬롯 이동
 * 실시간 아이템 수량 갱신
@@ -124,7 +124,7 @@ Unity **NavMesh**를 활용하여 상태 기반 AI를 구현했습니다.
 
 ## 5. 저장 시스템
 <p align="center">
-<img src="Images/saveloadmanager.png" width="450" alt="저장 및 불러오기 시스템 매니저">
+<img src="Images/saveloadmanager.png" width="500" alt="저장 및 불러오기 시스템 매니저">
 </p>
 
 * JSON Serialization 기반 저장
@@ -137,7 +137,7 @@ SaveLoadManager가 각 시스템으로부터 데이터를 수집하여 SaveData�
 그 결과, 씬 이동과 게임 재실행 이후에도 플레이어 상태와 진행 데이터를 복원할 수 있도록 구현했습니다.
 
 * gamedata.json 예시
-<img src="Images/gamedata.png" width="400" alt="저장된 게임 데이터 예시">
+<img src="Images/gamedata.png" width="500" alt="저장된 게임 데이터 예시">
 
 ---
 
