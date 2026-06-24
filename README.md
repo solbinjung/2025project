@@ -3,7 +3,7 @@
 > **개발 기간:** 2025.03 ~ 2025.10 (8개월)<br>
 > **개발 형태:** 1인 개발 (기획·프로그래밍·UI 구현)<br>
 > **기술 스택:** Unity 2022.3, C#<br>
-> **주요 기술:** Scriptable Object, NavMesh, JSON Serialization, Singleton Pattern, DontDestroyOnLoad
+> **주요 기술:** Scriptable Object, NavMesh, JSON Serialization, Singleton Pattern, DontDestroyOnLoad<br>
 > **시연 영상:** <https://youtu.be/-ZwJhN842nM><br>
 
 실시간 3D 액션 RPG의 전투 시스템에 카드 기반 스킬 획득 시스템을 결합한 하이브리드 RPG입니다.
@@ -13,8 +13,9 @@
 ---
 
 ## 🏗️ 시스템 아키텍처
-
-<img src="Images/systemarchitecture.png" width="450" alt="시스템 아키텍처">
+<p align="center">
+<img src="Images/systemarchitecture.png" width="600" alt="시스템 아키텍처">
+</p>
 
 프로젝트는 `GameManager`를 중심으로 각 시스템(플레이어, 전투, AI, 퀘스트, 인벤토리, UI)을 독립적으로 관리하는 Hub-and-Spoke 구조를 적용했습니다.
 
@@ -122,8 +123,9 @@ Unity **NavMesh**를 활용하여 상태 기반 AI를 구현했습니다.
 ---
 
 ## 5. 저장 시스템
-
+<p align="center">
 <img src="Images/saveloadmanager.png" width="450" alt="저장 및 불러오기 시스템 매니저">
+</p>
 
 * JSON Serialization 기반 저장
 * Singleton + DontDestroyOnLoad
