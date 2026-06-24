@@ -211,7 +211,7 @@ ScriptableObject를 직접 저장하지 않고 ID만 저장한 뒤 데이터베�
 
 ## 🚀 회고 및 성장
 
-이번 프로젝트를 통해 **Scriptable Object 기반 데이터 중심 설계(Data-Driven Design)**와 시스템을 Manager 단위로 분리하여 각 기능을 독립적으로 관리하는 구조를 경험했습니다.
+이번 프로젝트를 통해 **Scriptable Object 기반 데이터 중심 설계(Data-Driven Design)** 와 시스템을 Manager 단위로 분리하여 각 기능을 독립적으로 관리하는 구조를 경험했습니다.
 
 게임 데이터를 코드와 분리하여 관리함으로써 밸런스 조정이나 콘텐츠 수정 시 코드 변경 없이 Scriptable Object 에셋만 수정할 수 있었으며, 기능별 Manager를 통해 시스템 간 의존성을 낮춰 유지보수성과 확장성을 높일 수 있었습니다.
 
