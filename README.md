@@ -4,7 +4,7 @@
 > **개발 형태:** 1인 개발 (기획·프로그래밍·UI 구현)<br>
 > **기술 스택:** Unity 2022.3, C#<br>
 > **주요 기술:** Scriptable Object, NavMesh, JSON Serialization, Singleton Pattern, DontDestroyOnLoad<br>
-> **시연 영상:** <https://youtu.be/-ZwJhN842nM><br>
+> **시연 영상:** <https://youtu.be/bScAAD4Z810><br>
 
 실시간 3D 액션 RPG의 전투 시스템에 카드 기반 스킬 획득 시스템을 결합한 하이브리드 RPG입니다.
 
