@@ -1,14 +1,14 @@
 # 🐉 Shadow of the Dragon
 
 > **개발 기간:** 2025.03 ~ 2025.10 (8개월)<br>
-> **개발 형태:** 1인 개발 (기획·프로그래밍·UI 구현)<br>
+> **개발 형태:** 1인 개발 (기획·프로그래밍·UI 구성)<br>
 > **기술 스택:** Unity 2022.3, C#<br>
 > **주요 기술:** Scriptable Object, NavMesh, JSON Serialization, Singleton Pattern, DontDestroyOnLoad<br>
 > **시연 영상:** <https://youtu.be/bScAAD4Z810><br>
 
 실시간 3D 액션 RPG의 전투 시스템에 카드 기반 스킬 획득 시스템을 결합한 하이브리드 RPG입니다.
 
-전투, AI, 퀘스트, 인벤토리, 저장 시스템을 직접 구현했으며, Scriptable Object 기반 데이터 중심 구조를 적용하여 콘텐츠와 로직을 분리하고 유지보수성과 확장성을 높였습니다.
+전투, AI, 퀘스트, UI, 인벤토리, 저장 시스템을 직접 구현했으며, Scriptable Object 기반 데이터 중심 구조를 적용하여 콘텐츠와 로직을 분리하고 유지보수성과 확장성을 높였습니다.
 
 ---
 
